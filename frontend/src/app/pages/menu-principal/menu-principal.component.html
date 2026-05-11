@@ -1,0 +1,41 @@
+<div class="menu-page">
+  <app-header
+    userName="Dr. João Silva"
+    userRole="Administrador"
+  ></app-header>
+
+  <main class="menu-main">
+    <div class="menu-header-section">
+      <h1 class="menu-title">Menu Principal</h1>
+      <p class="menu-subtitle">Selecione <span class="highlight">uma opção</span> para acessar o módulo desejado</p>
+    </div>
+
+    <div class="menu-grid">
+      <div
+        *ngFor="let item of menuItems"
+        class="menu-card"
+        (click)="navigate(item.route)"
+        tabindex="0"
+        (keydown.enter)="navigate(item.route)"
+      >
+        <div class="menu-card__icon-wrapper" [style.background]="item.color">
+          <i [class]="'pi ' + item.icon"></i>
+        </div>
+        <div class="menu-card__content">
+          <h3 class="menu-card__title">{{ item.title }}</h3>
+          <p class="menu-card__desc">{{ item.description }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-welcome">
+      <div class="welcome-icon">
+        <i class="pi pi-lightbulb"></i>
+      </div>
+      <div>
+        <strong>Bem-vindo ao Sistema SIGMA</strong>
+        <p>Acesse qualquer módulo clicando nos cards acima. O sistema está organizado para facilitar sua navegação e aumentar sua produtividade no dia a dia.</p>
+      </div>
+    </div>
+  </main>
+</div>

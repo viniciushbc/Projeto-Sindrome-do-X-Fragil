@@ -1,0 +1,69 @@
+/* SIGMA – Estilos globais */
+
+:root {
+  --sigma-primary: #1e3a5f;
+  --sigma-primary-dark: #152d4a;
+  --sigma-primary-light: #2e5080;
+  --sigma-accent: #4a8fcc;
+  --sigma-accent-light: #6ab0e0;
+  --sigma-bg: #eef2f7;
+  --sigma-card-bg: #b8d4e8;
+  --sigma-card-bg-light: #d0e6f5;
+  --sigma-white: #ffffff;
+  --sigma-text: #1e3a5f;
+  --sigma-text-muted: #5a7a99;
+  --sigma-border: #c8dcea;
+  --sigma-success: #28a745;
+  --sigma-warning: #ffc107;
+  --sigma-danger: #dc3545;
+  --sigma-shadow: 0 2px 12px rgba(30, 58, 95, 0.12);
+  --sigma-shadow-lg: 0 8px 32px rgba(30, 58, 95, 0.18);
+  --sigma-radius: 12px;
+  --sigma-radius-sm: 8px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--sigma-bg);
+  color: var(--sigma-text);
+}
+
+/* PrimeNG overrides */
+.p-button.p-button-primary,
+.p-button:not(.p-button-outlined):not(.p-button-text):not(.p-button-secondary):not(.p-button-success):not(.p-button-danger) {
+  background: var(--sigma-primary) !important;
+  border-color: var(--sigma-primary) !important;
+  font-weight: 600;
+  border-radius: var(--sigma-radius-sm) !important;
+}
+
+.p-button.p-button-primary:hover {
+  background: var(--sigma-primary-light) !important;
+  border-color: var(--sigma-primary-light) !important;
+}
+
+.p-inputtext {
+  border-radius: var(--sigma-radius-sm) !important;
+  border-color: var(--sigma-border) !important;
+}
+
+.p-inputtext:focus {
+  border-color: var(--sigma-accent) !important;
+  box-shadow: 0 0 0 2px rgba(74, 143, 204, 0.2) !important;
+}
+
+.p-card {
+  border-radius: var(--sigma-radius) !important;
+  box-shadow: var(--sigma-shadow) !important;
+}
+
+.p-toast .p-toast-message {
+  border-radius: var(--sigma-radius-sm) !important;
+}
