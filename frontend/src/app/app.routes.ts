@@ -1,12 +1,14 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
+  
   // { path: '', redirectTo: '/login', pathMatch: 'full' },
   // {
   //   path: 'login',
   //   loadComponent: () =>
   //     import('./pages/login/login.component').then((m) => m.LoginComponent),
   // },
+
   {
     path: 'menu',
     loadComponent: () =>
@@ -14,13 +16,15 @@ export const routes: Routes = [
         (m) => m.MenuPrincipalComponent
       ),
   },
-  // {
-  //   path: 'pacientes',
-  //   loadComponent: () =>
-  //     import('./pages/pacientes/pacientes.component').then(
-  //       (m) => m.PacientesComponent
-  //     ),
-  // },
+
+  {
+    path: 'pacientes',
+    loadComponent: () =>
+      import('./pages/pacientes/pacientes.component').then(
+        (m) => m.PacientesComponent
+      ),
+  },
+
   {
     path: 'usuarios',
     loadComponent: () =>
@@ -28,19 +32,23 @@ export const routes: Routes = [
         (m) => m.UsuariosComponent
       ),
   },
-  // {
-  //   path: 'avaliacoes',
-  //   loadComponent: () =>
-  //     import('./pages/avaliacoes/avaliacoes.component').then(
-  //       (m) => m.AvaliacoesComponent
-  //     ),
-  // },
-  // {
-  //   path: 'relatorios',
-  //   loadComponent: () =>
-  //     import('./pages/relatorios/relatorios.component').then(
-  //       (m) => m.RelatoriosComponent
-  //     ),
-  // },
+
+  {
+    path: 'avaliacoes',
+    loadComponent: () =>
+      import('./pages/avaliacoes/avaliacoes.component').then(
+        (m) => m.AvaliacoesComponent
+      ),
+  },
+
+  {
+    path: 'relatorios',
+    loadComponent: () =>
+      import('./pages/relatorios/relatorios.component').then(
+        (m) => m.RelatoriosComponent
+      ),
+  },
+
   { path: '**', redirectTo: '/login' },
+
 ];
