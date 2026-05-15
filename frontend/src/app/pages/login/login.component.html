@@ -1,0 +1,28 @@
+
+<div class="linha-topo"></div>
+
+<div class="login-container">
+  <h1>Login de Acesso</h1>
+  <h2>Acesse sua conta</h2>
+    
+  <div class="field">
+    <label for="cpfEmail">Digite seu CPF ou Email:</label>
+    <input id="cpfEmail" type="text" pInputText class="input-field">
+  </div>
+
+  <div class="field">
+    <label for="senha">Digite sua senha:</label>
+    <input id="senha" type="password" pInputText class="input-field">
+  </div>
+  <div class="links">
+    <a routerLink="#">Esqueceu a senha?</a>
+  </div>
+
+  <p-button label="Entrar" (onClick)="fazerLogin()"></p-button>
+
+  <p class="criar1" >Não tem conta? </p>
+  <div class="criar">
+    <a routerLink="#">Crie uma agora</a>
+  </div>
+  
+</div>
