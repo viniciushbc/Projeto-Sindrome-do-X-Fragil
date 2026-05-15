@@ -28,6 +28,7 @@
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
               "node_modules/primeicons/primeicons.css"
+
             ],
             "scripts": []
           },
@@ -65,3 +66,9 @@
     "analytics": "d193f0a7-c359-46d7-9a0a-ae31d99666d7"
   }
 }
+
+
+
+
+
+
