@@ -2,6 +2,7 @@ USE sindrome_x_fragil;
 
 -- =========================================================
 -- Seed inicial do sistema
+-- Login temporário do admin para desenvolvimento: admin@sistemaxfragil.com
 -- Senha temporária do admin para desenvolvimento: Admin@123
 -- =========================================================
 
@@ -15,7 +16,7 @@ INSERT INTO usuarios (
 ) VALUES (
     'Administrador',
     'admin@sistemaxfragil.com',
-    SHA2('Admin@123', 256),
+    '$2b$10$TkKvo4rPLPOqjmNOey4K5eeuKANEEn7JGiGJxcPxtVs.Afk7V0Tc.',
     'ADMIN',
     TRUE
 ) AS novo
