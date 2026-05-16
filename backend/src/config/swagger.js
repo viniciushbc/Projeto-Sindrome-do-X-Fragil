@@ -6,14 +6,16 @@ const swaggerDefinition = {
     title: 'API Sistema de Triagem - Síndrome do X Frágil',
     version: '1.0.0',
     description:
-      'Documentação inicial da API do sistema de triagem para apoio ao encaminhamento de pacientes para teste genético confirmatório.',
+      'Documentação da API do sistema de triagem para apoio ao encaminhamento de pacientes para teste genético confirmatório.',
   },
+
   servers: [
     {
       url: 'http://localhost:3000',
       description: 'Servidor local',
     },
   ],
+
   tags: [
     {
       name: 'Health',
@@ -36,8 +38,27 @@ const swaggerDefinition = {
       description: 'Consulta de relatórios do sistema',
     },
   ],
+
   components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+    },
+
     schemas: {
+      ErrorResponse: {
+        type: 'object',
+        properties: {
+          message: {
+            type: 'string',
+            example: 'Mensagem de erro',
+          },
+        },
+      },
+
       Usuario: {
         type: 'object',
         properties: {
@@ -47,20 +68,74 @@ const swaggerDefinition = {
           },
           nome: {
             type: 'string',
-            example: 'Usuário Teste',
+            example: 'Administrador',
           },
           email: {
             type: 'string',
-            example: 'usuario@teste.com',
+            example: 'admin@sistemaxfragil.com',
           },
-          perfil: {
+          tipo_usuario: {
             type: 'string',
-            example: 'admin',
-            enum: ['admin', 'profissional'],
+            example: 'ADMIN',
+            enum: ['ADMIN', 'PROFISSIONAL'],
           },
           ativo: {
             type: 'boolean',
             example: true,
+          },
+        },
+      },
+
+      UsuarioLoginResponse: {
+        type: 'object',
+        properties: {
+          id_usuario: {
+            type: 'integer',
+            example: 1,
+          },
+          nome: {
+            type: 'string',
+            example: 'Administrador',
+          },
+          email: {
+            type: 'string',
+            example: 'admin@sistemaxfragil.com',
+          },
+          tipo_usuario: {
+            type: 'string',
+            example: 'ADMIN',
+            enum: ['ADMIN', 'PROFISSIONAL'],
+          },
+        },
+      },
+
+      LoginRequest: {
+        type: 'object',
+        required: ['login', 'senha'],
+        properties: {
+          login: {
+            type: 'string',
+            description: 'E-mail ou CPF do usuário',
+            example: 'admin@sistemaxfragil.com',
+          },
+          senha: {
+            type: 'string',
+            description: 'Senha do usuário',
+            example: 'Admin@123',
+          },
+        },
+      },
+
+      LoginResponse: {
+        type: 'object',
+        properties: {
+          token: {
+            type: 'string',
+            description: 'Token JWT gerado após autenticação',
+            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+          },
+          usuario: {
+            $ref: '#/components/schemas/UsuarioLoginResponse',
           },
         },
       },
@@ -113,7 +188,8 @@ const swaggerDefinition = {
           },
           descricao: {
             type: 'string',
-            example: 'Indica presença de deficiência intelectual observada no paciente.',
+            example:
+              'Indica presença de deficiência intelectual observada no paciente.',
           },
           ativo: {
             type: 'boolean',
@@ -175,42 +251,16 @@ const swaggerDefinition = {
           },
         },
       },
-
-      LoginRequest: {
-        type: 'object',
-        required: ['email', 'senha'],
-        properties: {
-          email: {
-            type: 'string',
-            example: 'admin@teste.com',
-          },
-          senha: {
-            type: 'string',
-            example: '123456',
-          },
-        },
-      },
-
-      LoginResponse: {
-        type: 'object',
-        properties: {
-          usuario: {
-            $ref: '#/components/schemas/Usuario',
-          },
-          token: {
-            type: 'string',
-            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
-          },
-        },
-      },
     },
   },
+
   paths: {
     '/health': {
       get: {
         tags: ['Health'],
         summary: 'Verificar status da API',
-        description: 'Retorna uma mensagem simples informando que a API está em execução.',
+        description:
+          'Retorna uma mensagem simples informando que a API está em execução.',
         responses: {
           200: {
             description: 'API em execução',
@@ -225,6 +275,13 @@ const swaggerDefinition = {
           },
           500: {
             description: 'Erro interno',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/ErrorResponse',
+                },
+              },
+            },
           },
         },
       },
@@ -234,13 +291,18 @@ const swaggerDefinition = {
       post: {
         tags: ['Auth'],
         summary: 'Autenticar usuário',
-        description: 'Realiza login do usuário e retorna os dados do usuário autenticado junto com o token JWT.',
+        description:
+          'Realiza login usando e-mail ou CPF e senha. Retorna os dados básicos do usuário autenticado junto com o token JWT.',
         requestBody: {
           required: true,
           content: {
             'application/json': {
               schema: {
                 $ref: '#/components/schemas/LoginRequest',
+              },
+              example: {
+                login: 'admin@sistemaxfragil.com',
+                senha: 'Admin@123',
               },
             },
           },
@@ -253,17 +315,69 @@ const swaggerDefinition = {
                 schema: {
                   $ref: '#/components/schemas/LoginResponse',
                 },
+                example: {
+                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+                  usuario: {
+                    id_usuario: 1,
+                    nome: 'Administrador',
+                    email: 'admin@sistemaxfragil.com',
+                    tipo_usuario: 'ADMIN',
+                  },
+                },
               },
             },
           },
           400: {
-            description: 'Dados inválidos',
+            description: 'Login e senha são obrigatórios',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/ErrorResponse',
+                },
+                example: {
+                  message: 'Login e senha são obrigatórios.',
+                },
+              },
+            },
           },
           401: {
-            description: 'Não autenticado',
+            description: 'Credenciais inválidas',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/ErrorResponse',
+                },
+                example: {
+                  message: 'Credenciais inválidas.',
+                },
+              },
+            },
+          },
+          403: {
+            description: 'Usuário inativo',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/ErrorResponse',
+                },
+                example: {
+                  message: 'Usuário inativo.',
+                },
+              },
+            },
           },
           500: {
-            description: 'Erro interno',
+            description: 'Erro interno ao realizar login',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/ErrorResponse',
+                },
+                example: {
+                  message: 'Erro interno ao realizar login.',
+                },
+              },
+            },
           },
         },
       },
@@ -274,6 +388,11 @@ const swaggerDefinition = {
         tags: ['Pacientes'],
         summary: 'Listar pacientes',
         description: 'Retorna a lista de pacientes cadastrados no sistema.',
+        security: [
+          {
+            bearerAuth: [],
+          },
+        ],
         responses: {
           200: {
             description: 'Lista de pacientes retornada com sucesso',
@@ -301,6 +420,11 @@ const swaggerDefinition = {
         tags: ['Pacientes'],
         summary: 'Cadastrar paciente',
         description: 'Cria um novo paciente no sistema.',
+        security: [
+          {
+            bearerAuth: [],
+          },
+        ],
         requestBody: {
           required: true,
           content: {
@@ -340,6 +464,11 @@ const swaggerDefinition = {
         tags: ['Pacientes'],
         summary: 'Buscar paciente por ID',
         description: 'Retorna os dados de um paciente específico.',
+        security: [
+          {
+            bearerAuth: [],
+          },
+        ],
         parameters: [
           {
             name: 'id',
@@ -379,6 +508,11 @@ const swaggerDefinition = {
         tags: ['Pacientes'],
         summary: 'Atualizar paciente',
         description: 'Atualiza os dados de um paciente existente.',
+        security: [
+          {
+            bearerAuth: [],
+          },
+        ],
         parameters: [
           {
             name: 'id',
@@ -434,6 +568,11 @@ const swaggerDefinition = {
         summary: 'Criar avaliação clínica',
         description:
           'Registra uma avaliação clínica de um paciente, contendo as respostas dos sintomas e o score calculado.',
+        security: [
+          {
+            bearerAuth: [],
+          },
+        ],
         requestBody: {
           required: true,
           content: {
@@ -482,7 +621,13 @@ const swaggerDefinition = {
       get: {
         tags: ['Avaliações'],
         summary: 'Listar avaliações de um paciente',
-        description: 'Retorna o histórico de avaliações clínicas de um paciente específico.',
+        description:
+          'Retorna o histórico de avaliações clínicas de um paciente específico.',
+        security: [
+          {
+            bearerAuth: [],
+          },
+        ],
         parameters: [
           {
             name: 'idPaciente',
@@ -528,6 +673,11 @@ const swaggerDefinition = {
         summary: 'Gerar relatório geral',
         description:
           'Retorna dados consolidados das avaliações, permitindo futuramente filtros por período, paciente, usuário e resultado.',
+        security: [
+          {
+            bearerAuth: [],
+          },
+        ],
         parameters: [
           {
             name: 'dataInicio',

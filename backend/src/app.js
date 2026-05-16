@@ -4,6 +4,7 @@ const cors = require('cors');
 
 const healthRoute = require('./routes/health.routes')
 const swaggerRoute = require('./routes/swagger.routes')
+const authRoute = require('./routes/auth.routes')
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(express.urlencoded({extended: true}));// interpreta os dados de formular
 // rotas 
 app.use('/health', healthRoute);
 app.use('/swagger', swaggerRoute);
+app.use('/auth', authRoute);
 
 
 // middlewares para rotas nao encontradas & erros internos no server (404 e 500)
