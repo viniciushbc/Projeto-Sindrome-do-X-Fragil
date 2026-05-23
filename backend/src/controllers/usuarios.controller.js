@@ -44,7 +44,7 @@ async function listarUsuarios(req, res){
         return res.status(200).json(usuarios);
 
     } catch(error){
-        console.log('Erro ao listar usuários: ', error);
+        console.error('Erro ao listar usuários: ', error);
 
         return res.status(500).json({
             message: 'Erro interno ao listar usuários.'
@@ -75,7 +75,7 @@ async function buscarUsuarioPorId(req, res) {
 
 
     } catch (error){
-        console.log('Erro ao buscar usuário: ', error);
+        console.error('Erro ao buscar usuário: ', error);
 
         return res.status(500).json({
             message: 'Erro interno ao buscar usuário.'
@@ -129,7 +129,7 @@ async function criarUsuario(req,res){
         return res.status(201).json(usuarioCriado);
 
     } catch(error){
-        console.log("Erro ao criar usuário: ", error)
+        console.error("Erro ao criar usuário: ", error)
 
         return res.status(500).json({
             message: 'Erro interno ao criar usuário'
@@ -179,7 +179,7 @@ async function atualizarUsuario(req, res){
         return res.status(200).json(usuarioAtualizado)
 
     } catch(error){
-        console.log("Erro ao atualizar usuário: ", error)
+        console.error("Erro ao atualizar usuário: ", error)
 
         return res.status(500).json({
             message: 'Erro interno ao atualizar o usuário.'
@@ -202,7 +202,7 @@ async function atualizarStatusUsuario(req,res){
 
         if(typeof ativo !== 'boolean'){
             return res.status(400).json({
-                message: 'O campo ativo é inválido'
+                message: 'O campo ativo deve ser booleano.'
             })
         }
 
@@ -219,7 +219,7 @@ async function atualizarStatusUsuario(req,res){
         return res.status(200).json(usuarioAtualizado)
 
     } catch(error){
-        console.log("Erro ao atualizar status usuário: ", error)
+        console.error("Erro ao atualizar status usuário: ", error)
 
         return res.status(500).json({
             message: 'Erro interno ao atualizar status usuário'
