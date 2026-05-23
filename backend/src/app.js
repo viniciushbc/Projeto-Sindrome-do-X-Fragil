@@ -6,6 +6,7 @@ const healthRoute = require('./routes/health.routes')
 const swaggerRoute = require('./routes/swagger.routes')
 const authRoute = require('./routes/auth.routes')
 const usuariosRoute = require('./routes/usuarios.routes')
+const pacientesRoute = require('./routes/pacientes.routes')
 
 
 const app = express();
@@ -19,7 +20,8 @@ app.use(express.urlencoded({extended: true}));// interpreta os dados de formular
 app.use('/health', healthRoute);
 app.use('/swagger', swaggerRoute);
 app.use('/auth', authRoute);
-app.use('/usuarios', usuariosRoute)
+app.use('/usuarios', usuariosRoute);
+app.use('/pacientes', pacientesRoute);
 
 
 // middlewares para rotas nao encontradas & erros internos no server (404 e 500)
