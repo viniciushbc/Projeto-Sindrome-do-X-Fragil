@@ -1,7 +1,7 @@
 // CRUD de usuários
 
 const bcrypt = require('bcrypt')
-const db = require('../database/connection')
+const {pool: db} = require('../database/connection')
 
 const salt_rounds = 10
 
@@ -68,7 +68,7 @@ async function buscarUsuarioPorId(id){
 
 // GET /users/email
 async function buscarUsuarioPorEmail(email){
-  const [rows] = db.execute(
+  const [rows] = await db.execute(
   `
     SELECT
       id_usuario,
