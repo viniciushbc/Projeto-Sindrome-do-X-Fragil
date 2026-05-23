@@ -10,6 +10,32 @@ function idValido(id){
     return Number.isInteger(Number(id)) && Number(id) > 0;
 }
 
+function validarUsuario(body){
+    const erros = [];
+
+    if(!body.nome || body.nome.trim() === ''){
+        erros.push('Nome é obrigatório.')
+    }
+
+    if(!body.email || body.email.trim() === ''){
+        erros.push('E-mail é obrigatório.')
+    }
+
+    if(!body.senha || body.senha.trim() === ''){
+        erros.push('Senha é obrigatória.')
+    }
+
+    if(!body.tipo_usuario || body.tipo_usuario.trim() === ''){
+        erros.push('Tipo do usuário é obrigatório.')
+    }
+
+    if(body.tipo_usuario && !usuarioEhValido(body.tipo_usuario)){
+        erros.push('Tipo do usuário deve ser ADMIN ou PADRAO');
+    }
+
+    return erros
+}
+
 // GET /users
 async function listarUsuarios(req, res){
     try{
@@ -31,7 +57,7 @@ async function buscarUsuarioPorId(req, res) {
     try {
         const {id} = req.params;
 
-        if(!idValido){
+        if(!idValido(id)){
             return res.status(400).json({
                 message: 'ID do usuário inválido.'
             });
@@ -72,34 +98,11 @@ async function criarUsuario(req,res){
             cargo
         } = req.body;
 
-        if(!nome){
-            return res.status(400).json({
-                message: 'Nome é obrigatório.'
-            })
-        }
+        const erros = validarUsuario(req.body);
 
-        if(!email){
-            return res.status(400).json({
-                message: 'E-mail é obrigatório'
-            })
-        }
 
-        if(!senha){
-            return res.status(400).json({
-                message: 'Senha é obrigatória'
-            })
-        }
-
-        if(!tipo_usuario){
-            return res.status(400).json({
-                message: 'Tipo do Usuário é obrigatório'
-            })
-        }
-
-        if(!usuarioEhValido(tipo_usuario)){
-            return res.status(400).json({
-                message: 'Tipo do Usuário deve ser ADMIN ou PADRAO'
-            })
+        if(erros.length > 0){
+            return res.status(400).json({erros});
         }
 
         const cadastroJaExiste = await usuarioService.buscarUsuarioPorEmail(email)
@@ -154,10 +157,10 @@ async function atualizarUsuario(req, res){
             })
         }
 
-        if(tipo_usuario && !usuarioEhValido(tipo_usuario)){
-            return res.status(400).json({
-                message: 'Tipo do Usuário inválido'
-            })
+        const erros = validarUsuario(req.body);
+
+        if(erros.length > 0){
+            return res.status(400).json({erros})
         }
 
         if (email){
@@ -206,7 +209,7 @@ async function atualizarStatusUsuario(req,res){
         const usuario = await usuarioService.buscarUsuarioPorId(id);
 
         if(!usuario){
-            return res.status(400).json({
+            return res.status(404).json({
                 messahe: 'Usuário não encontrado.'
             })
         }
