@@ -4,59 +4,59 @@
   [modal]="true"
   [style]="{ width: '700px', padding: '5px', height: '800px' }"
   styleClass="meu-dialog"
-  >
-  
-  <div class="campo">
-    <label>Nome</label>
-    <input pInputText type="text" [(ngModel)]="nome">
-  </div>
+>
+  <form [formGroup]="formulario">
 
-  <div class="campo">
-    <label>CPF</label>
-    <input pInputText type="text" [(ngModel)]="cpf">
-  </div>
+    <div class="campo">
+      <label>Nome</label>
+      <input pInputText type="text" formControlName="nome">
+    </div>
 
-  <div class="campo">
-    <label>Data de nascimento</label>
-    <p-calendar [(ngModel)]="dataNascimento"></p-calendar>
-  </div>
+    <div class="campo">
+      <label>CPF</label>
+      <input pInputText type="text" formControlName="cpf">
+    </div>
 
-  <div class="campo">
-    <label>Sexo</label>
+    <div class="campo">
+      <label>Data de nascimento</label>
+      <p-calendar formControlName="dataNascimento"></p-calendar>
+    </div>
 
-    <p-dropdown
-      [options]="sexos"
-      [(ngModel)]="sexo"
-      optionLabel="nome"
-      placeholder="Selecione">
-    </p-dropdown>
-  </div>
+    <div class="campo">
+      <label>Sexo</label>
+      <p-dropdown
+        [options]="sexos"
+        formControlName="sexo"
+        optionLabel="nome"
+        placeholder="Selecione">
+      </p-dropdown>
+    </div>
 
-  <div class="campo">
-    <label>Telefone</label>
-    <input pInputText type="text" [(ngModel)]="telefone">
-  </div>
+    <div class="campo">
+      <label>Telefone</label>
+      <input pInputText type="text" formControlName="telefone">
+    </div>
 
-  <div class="campo">
-    <label>Nome do responsável</label>
-    <input pInputText type="text" [(ngModel)]="responsavel">
-  </div>
+    <div class="campo">
+      <label>Nome do responsável</label>
+      <input pInputText type="text" formControlName="responsavel">
+    </div>
 
-  <div class="campo">
-    <label>Observações</label>
+    <div class="campo">
+      <label>Observações</label>
+      <textarea
+        pInputTextarea
+        rows="4"
+        formControlName="observacoes">
+      </textarea>
+    </div>
 
-    <textarea
-      pInputTextarea
-      rows="4"
-      [(ngModel)]="observacoes">
-    </textarea>
-  </div>
+    <div class="botoes">
+      <p-button
+        label="Salvar"
+        (onClick)="salvar()">
+      </p-button>
+    </div>
 
-  <div class="botoes">
-    <p-button
-      label="Salvar"
-      (onClick)="salvar()">
-    </p-button>
-  </div>
-
+  </form>
 </p-dialog>
