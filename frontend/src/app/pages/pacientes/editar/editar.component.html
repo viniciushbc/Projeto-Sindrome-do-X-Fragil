@@ -1,0 +1,62 @@
+<p-dialog 
+  header="Cadastrar Paciente"
+  [(visible)]="visivel"
+  [modal]="true"
+  [style]="{ width: '700px', padding: '5px', height: '800px' }"
+  styleClass="meu-dialog"
+  >
+  
+  <div class="campo">
+    <label>Nome</label>
+    <input pInputText type="text" [(ngModel)]="nome">
+  </div>
+
+  <div class="campo">
+    <label>CPF</label>
+    <input pInputText type="text" [(ngModel)]="cpf">
+  </div>
+
+  <div class="campo">
+    <label>Data de nascimento</label>
+    <p-calendar [(ngModel)]="dataNascimento"></p-calendar>
+  </div>
+
+  <div class="campo">
+    <label>Sexo</label>
+
+    <p-dropdown
+      [options]="sexos"
+      [(ngModel)]="sexo"
+      optionLabel="nome"
+      placeholder="Selecione">
+    </p-dropdown>
+  </div>
+
+  <div class="campo">
+    <label>Telefone</label>
+    <input pInputText type="text" [(ngModel)]="telefone">
+  </div>
+
+  <div class="campo">
+    <label>Nome do responsável</label>
+    <input pInputText type="text" [(ngModel)]="responsavel">
+  </div>
+
+  <div class="campo">
+    <label>Observações</label>
+
+    <textarea
+      pInputTextarea
+      rows="4"
+      [(ngModel)]="observacoes">
+    </textarea>
+  </div>
+
+  <div class="botoes">
+    <p-button
+      label="Salvar"
+      (onClick)="salvar()">
+    </p-button>
+  </div>
+
+</p-dialog>

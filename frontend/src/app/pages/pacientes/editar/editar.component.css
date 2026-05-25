@@ -1,0 +1,56 @@
+.campo {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+  padding: 20px;
+}
+
+.campo label {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.campo input {
+  width: 100%;
+}
+
+.campo textarea {
+  width: 100%;
+}
+
+.campo .p-dropdown {
+  width: 100%;
+}
+
+.campo .p-calendar {
+  width: 100%;
+}
+
+.botoes {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 30px;
+  margin-right: 30px;
+
+}
+
+:host ::ng-deep .p-dialog-header {
+  padding: 25px;
+  background-color:  #b8d4e8;
+
+}
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: #1e3a5f;
+  padding: 30px;
+}
+
+input,
+textarea,
+.p-inputtext,
+.p-dropdown,
+.p-calendar {
+  border-radius: 5px !important;
+}

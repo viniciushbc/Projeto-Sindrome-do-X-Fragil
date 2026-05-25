@@ -7,6 +7,7 @@ import { MessageService } from 'primeng/api';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
+    //provideAnimationsAsync(),
     provideAnimations(),
     MessageService,
   ],

@@ -17,12 +17,14 @@ export const routes: Routes = [
       ),
   },
 
-  {
+ {
     path: 'pacientes',
-    loadComponent: () =>
-      import('./pages/pacientes/pacientes.component').then(
-        (m) => m.PacientesComponent
-      ),
+    children: [
+      {
+        path: 'editar',
+        loadComponent: () => import('./pages/pacientes/editar/editar.component').then((m) => m.EditarComponent),
+      }
+    ]
   },
 
   {
