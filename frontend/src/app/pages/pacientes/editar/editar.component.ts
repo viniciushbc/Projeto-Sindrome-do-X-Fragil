@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+/*mport { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
@@ -57,4 +57,4 @@ export class EditarComponent {
     // Para acessar os dados agora, usamos o .value do formulário
     console.log('Dados do formulário:', this.formulario.value);
   }
-}
+}*/

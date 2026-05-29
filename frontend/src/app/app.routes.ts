@@ -23,15 +23,29 @@ export const routes: Routes = [
       ),
   },
 
- {
-    path: 'pacientes',
-    children: [
-      {
-        path: 'editar',
-        loadComponent: () => import('./pages/pacientes/editar/editar.component').then((m) => m.EditarComponent),
-      }
-    ]
-  },
+
+{
+  path: 'pacientes',
+  children: [
+    /*{
+      path: 'editar',
+      loadComponent: () =>
+        import('./pages/pacientes/editar/editar.component')
+          .then((m) => m.EditarComponent),
+    },*/
+
+    {
+      path: 'lista',
+      loadComponent: () =>
+        import('./pages/pacientes/lista/lista.component')
+          .then((m) => m.PacientesComponent),
+    }
+  ]
+},
+
+
+
+
 
   {
     path: 'usuarios',
