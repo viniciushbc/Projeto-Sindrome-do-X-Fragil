@@ -5,6 +5,7 @@
   --azul-principal: #123f73;
   --azul-medio: #2f80b7;
   --ciano: #75d5e8;
+  --ciano-claro: #e8f8fb;
   --branco: #ffffff;
   --texto: #1f2937;
   --texto-suave: #64748b;
@@ -69,9 +70,10 @@
 }
 
 .butterfly-icon {
-  width: 32px;
-  height: 32px;
+  width: 38px;
+  height: 38px;
   fill: var(--branco);
+  color: var(--branco);
 }
 
 :host ::ng-deep .login-card {
@@ -137,7 +139,7 @@
   width: fit-content;
   padding: 0.45rem 0.75rem;
   border-radius: 999px;
-  background: #e8f8fb;
+  background: var(--ciano-claro);
   color: var(--azul-principal);
   border: 1px solid #bdebf3;
   font-size: 0.82rem;
@@ -155,11 +157,25 @@
 }
 
 :host ::ng-deep .p-password {
+  position: relative;
   width: 100%;
+  display: block;
 }
 
 :host ::ng-deep .p-password-input {
   width: 100%;
+  padding-right: 2.75rem;
+}
+
+:host ::ng-deep .p-password .p-icon-wrapper,
+:host ::ng-deep .p-password .p-password-toggle-mask {
+  position: absolute;
+  right: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-login {
@@ -292,13 +308,9 @@
   font-size: 1.15rem;
 }
 
-:host ::ng-deep .p-divider::before {
-  border-color: rgba(255, 255, 255, 0.22);
-}
-
 .references-area {
   margin-top: 1.25rem;
-  padding-top: 1rem;
+  padding-top: 0;
   border-top: none;
 }
 
@@ -358,6 +370,115 @@
   background: rgba(255, 255, 255, 0.16);
 }
 
+/* Toast da tela de login */
+
+:host ::ng-deep .login-toast {
+  width: min(420px, calc(100vw - 2rem));
+}
+
+:host ::ng-deep .login-toast .p-toast-message {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid transparent;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
+  backdrop-filter: blur(10px);
+}
+
+:host ::ng-deep .login-toast .p-toast-message-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 1rem 1.1rem;
+}
+
+:host ::ng-deep .login-toast .p-toast-message-error {
+  background: #fff7f7;
+  border-color: #fecaca;
+  border-left: 5px solid #dc2626;
+  color: #7f1d1d;
+}
+
+:host ::ng-deep .login-toast .p-toast-message-warn {
+  background: #fffbeb;
+  border-color: #fde68a;
+  border-left: 5px solid #f59e0b;
+  color: #78350f;
+}
+
+:host ::ng-deep .login-toast .p-toast-message-success {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  border-left: 5px solid #16a34a;
+  color: #14532d;
+}
+
+:host ::ng-deep .login-toast .p-toast-message-info {
+  background: #f0f9ff;
+  border-color: #bae6fd;
+  border-left: 5px solid var(--azul-medio);
+  color: var(--azul-escuro);
+}
+
+:host ::ng-deep .login-toast .p-toast-message-icon {
+  width: 2rem;
+  height: 2rem;
+  min-width: 2rem;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.1rem;
+  font-size: 1rem;
+}
+
+:host ::ng-deep .login-toast .p-toast-message-error .p-toast-message-icon {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+:host ::ng-deep .login-toast .p-toast-message-warn .p-toast-message-icon {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+:host ::ng-deep .login-toast .p-toast-message-success .p-toast-message-icon {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+:host ::ng-deep .login-toast .p-toast-message-info .p-toast-message-icon {
+  background: var(--ciano-claro);
+  color: var(--azul-principal);
+}
+
+:host ::ng-deep .login-toast .p-toast-summary {
+  display: block;
+  margin-bottom: 0.2rem;
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+:host ::ng-deep .login-toast .p-toast-detail {
+  margin: 0;
+  color: #475569;
+  font-size: 0.88rem;
+  line-height: 1.35;
+}
+
+:host ::ng-deep .login-toast .p-toast-icon-close {
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 999px;
+  color: #64748b;
+  transition: 0.2s ease;
+}
+
+:host ::ng-deep .login-toast .p-toast-icon-close:hover {
+  background: rgba(15, 23, 42, 0.08);
+  color: #0f172a;
+}
+
 @media (max-width: 1024px) {
   .login-page {
     grid-template-columns: 1fr;
@@ -371,7 +492,6 @@
   .login-right {
     min-height: auto;
   }
-  
 }
 
 @media (max-width: 640px) {
@@ -400,36 +520,17 @@
     grid-template-columns: 1fr;
   }
 
-
   .reference-list {
-  grid-template-columns: 1fr;
+    grid-template-columns: 1fr;
   }
 
   .references-header {
     align-items: flex-start;
     flex-direction: column;
     gap: 0.25rem;
-   }
-}
+  }
 
-:host ::ng-deep .p-password {
-  position: relative;
-  width: 100%;
-  display: block;
-}
-
-:host ::ng-deep .p-password-input {
-  width: 100%;
-  padding-right: 2.75rem;
-}
-
-:host ::ng-deep .p-password .p-icon-wrapper,
-:host ::ng-deep .p-password .p-password-toggle-mask {
-  position: absolute;
-  right: 0.9rem;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  :host ::ng-deep .login-toast {
+    width: calc(100vw - 1.5rem);
+  }
 }
