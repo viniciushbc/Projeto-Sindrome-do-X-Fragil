@@ -1,28 +1,218 @@
+<!-- frontend/src/app/pages/login/login.component.html -->
 
-<div class="linha-topo"></div>
+<p-toast></p-toast>
 
-<div class="login-container">
-  <h1>Login de Acesso</h1>
-  <h2>Acesse sua conta</h2>
-    
-  <div class="field">
-    <label for="cpfEmail">Digite seu CPF ou Email:</label>
-    <input id="cpfEmail" type="text" pInputText class="input-field">
-  </div>
+<main class="login-page">
+  <section class="login-left">
+    <div class="brand-area">
+      <div class="brand-icon">
+        <svg
+          class="butterfly-icon"
+          viewBox="0 0 64 64"
+          aria-hidden="true"
+        >
+          <!-- Asa superior esquerda -->
+          <path
+            d="M30 30C22 14 11 5 5 12C-1 20 8 33 27 33Z"
+          />
 
-  <div class="field">
-    <label for="senha">Digite sua senha:</label>
-    <input id="senha" type="password" pInputText class="input-field">
-  </div>
-  <div class="links">
-    <a routerLink="#">Esqueceu a senha?</a>
-  </div>
+          <!-- Asa superior direita -->
+          <path
+            d="M34 30C42 14 53 5 59 12C65 20 56 33 37 33Z"
+          />
 
-  <p-button label="Entrar" (onClick)="fazerLogin()"></p-button>
+          <!-- Asa inferior esquerda -->
+          <path
+            d="M28 35C15 37 7 48 13 56C20 65 31 51 31 38Z"
+          />
 
-  <p class="criar1" >Não tem conta? </p>
-  <div class="criar">
-    <a routerLink="#">Crie uma agora</a>
-  </div>
-  
-</div>
+          <!-- Asa inferior direita -->
+          <path
+            d="M36 35C49 37 57 48 51 56C44 65 33 51 33 38Z"
+          />
+
+          <!-- Corpo central -->
+          <path
+            d="M32 25C35 30 35 42 32 48C29 42 29 30 32 25Z"
+          />
+
+          <!-- Antenas -->
+          <path
+            d="M31 25C27 20 24 18 20 18"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="3"
+            stroke-linecap="round"
+          />
+          <path
+            d="M33 25C37 20 40 18 44 18"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="3"
+            stroke-linecap="round"
+          />
+        </svg>
+      </div>
+
+      <div>
+        <h1>Sistema de Triagem</h1>
+        <p>Síndrome do X Frágil</p>
+      </div>
+    </div>
+
+    <p-card styleClass="login-card">
+      <div class="login-header">
+        <span class="access-badge">
+          <i class="pi pi-lock"></i>
+          Acesso restrito
+        </span>
+
+        <h2>Login de Acesso</h2>
+        <p>Informe suas credenciais para acessar o menu principal.</p>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="entrar()" class="login-form">
+        <div class="form-field">
+          <label for="login">E-mail ou CPF</label>
+
+          <input
+            id="login"
+            type="text"
+            pInputText
+            formControlName="login"
+            placeholder="Digite seu e-mail ou CPF"
+            autocomplete="username"
+            class="input-full"
+          />
+
+          <p-message
+            *ngIf="campoInvalido('login')"
+            severity="error"
+            text="Informe o e-mail ou CPF."
+          ></p-message>
+        </div>
+
+        <div class="form-field">
+          <label for="senha">Senha</label>
+
+          <p-password
+            inputId="senha"
+            formControlName="senha"
+            placeholder="Digite sua senha"
+            [feedback]="false"
+            [toggleMask]="true"
+            autocomplete="current-password"
+            styleClass="input-full"
+            inputStyleClass="input-full"
+          ></p-password>
+
+          <p-message
+            *ngIf="campoInvalido('senha')"
+            severity="error"
+            text="Informe a senha."
+          ></p-message>
+        </div>
+
+        <button
+          pButton
+          type="submit"
+          label="Entrar"
+          icon="pi pi-sign-in"
+          class="btn-login"
+          [loading]="carregando"
+        ></button>
+
+        <button
+          pButton
+          type="button"
+          label="Esqueci minha senha"
+          class="p-button-link forgot-password"
+          (click)="esqueciSenha()"
+        ></button>
+      </form>
+    </p-card>
+  </section>
+
+  <section class="login-right">
+    <div class="info-content">
+      <div class="info-header">
+        <span class="info-kicker">Informação clínica</span>
+        <h2>Entenda a Síndrome do X Frágil</h2>
+        <p>
+          A triagem não substitui o diagnóstico médico. Ela ajuda profissionais
+          a identificar sinais que podem justificar encaminhamento para exame genético.
+        </p>
+      </div>
+
+      <div class="info-grid">
+        <article class="info-card destaque">
+          <div class="card-icon">
+            <i class="pi pi-info-circle"></i>
+          </div>
+
+          <h3>O que é?</h3>
+          <p>
+            É uma condição genética ligada ao gene FMR1. Ela pode afetar o
+            desenvolvimento, a aprendizagem, a comunicação e o comportamento.
+          </p>
+        </article>
+
+        <article class="info-card">
+          <div class="card-icon">
+            <i class="pi pi-search"></i>
+          </div>
+
+          <h3>Por que triar?</h3>
+          <p>
+            A identificação inicial organiza os sinais observados e ajuda a decidir
+            quando o paciente deve ser encaminhado para confirmação genética.
+          </p>
+        </article>
+
+        <article class="info-card">
+          <div class="card-icon">
+            <i class="pi pi-check-square"></i>
+          </div>
+
+          <h3>Sinais comuns</h3>
+          <p>
+            Podem aparecer dificuldades de aprendizagem, déficit de atenção,
+            atraso na fala, hiperatividade e algumas características físicas.
+          </p>
+        </article>
+
+        <article class="info-card">
+          <div class="card-icon">
+            <i class="pi pi-users"></i>
+          </div>
+
+          <h3>Acompanhamento</h3>
+          <p>
+            O cuidado pode envolver profissionais da saúde, educação, terapias
+            especializadas e orientação genética para a família.
+          </p>
+        </article>
+      </div>
+
+      <div class="references-area">
+        <div class="references-header">
+          <h3>Referências</h3>
+          <span>Materiais de apoio para consulta</span>
+        </div>
+
+        <div class="reference-list">
+          <a
+            *ngFor="let referencia of referencias"
+            class="reference-link"
+            [href]="referencia.url"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>{{ referencia.titulo }}</span>
+            <i class="pi pi-external-link"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
