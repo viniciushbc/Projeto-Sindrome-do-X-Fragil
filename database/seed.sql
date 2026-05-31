@@ -26,6 +26,26 @@ ON DUPLICATE KEY UPDATE
     tipo_usuario = novo.tipo_usuario,
     ativo = novo.ativo;
 
+--- 1.1 Usuário padrão inicial
+INSERT INTO usuarios (
+    nome,
+    email,
+    senha_hash,
+    tipo_usuario,
+    ativo
+) VALUES (
+    'Usuário Padrão Teste',
+    'usuario@sistemaxfragil.com',
+    '$2b$10$d0gOqDDfGbDbH2BmGud5CeVV2.MIoqTOE50EHG0xLLIhj9wjMiv0m',
+    'PADRAO',
+    TRUE
+) AS novo
+ON DUPLICATE KEY UPDATE
+    nome = novo.nome,
+    senha_hash = novo.senha_hash,
+    tipo_usuario = novo.tipo_usuario,
+    ativo = novo.ativo;
+
 -- 2. Sintomas
 INSERT INTO sintomas (
     nome,
