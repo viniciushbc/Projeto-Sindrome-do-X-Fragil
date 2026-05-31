@@ -35,9 +35,9 @@ export const routes: Routes = [
     },*/
 
     {
-      path: 'lista',
+      path: 'listar',
       loadComponent: () =>
-        import('./pages/pacientes/lista/lista.component')
+        import('./pages/pacientes/listar/listar.component')
           .then((m) => m.PacientesComponent),
     }
   ]
