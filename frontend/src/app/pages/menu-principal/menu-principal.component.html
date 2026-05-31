@@ -1,41 +1,172 @@
 <div class="menu-page">
-  <app-header
-    userName="Dr. João Silva"
-    userRole="Administrador"
-  ></app-header>
+  <app-header></app-header>
 
   <main class="menu-main">
-    <div class="menu-header-section">
-      <h1 class="menu-title">Menu Principal</h1>
-      <p class="menu-subtitle">Selecione <span class="highlight">uma opção</span> para acessar o módulo desejado</p>
-    </div>
 
-    <div class="menu-grid">
-      <div
-        *ngFor="let item of menuItems"
-        class="menu-card"
-        (click)="navigate(item.route)"
-        tabindex="0"
-        (keydown.enter)="navigate(item.route)"
-      >
-        <div class="menu-card__icon-wrapper" [style.background]="item.color">
-          <i [class]="'pi ' + item.icon"></i>
-        </div>
-        <div class="menu-card__content">
-          <h3 class="menu-card__title">{{ item.title }}</h3>
-          <p class="menu-card__desc">{{ item.description }}</p>
-        </div>
-      </div>
-    </div>
+    <!-- PAINEL DE CONTEXTO CLÍNICO -->
+    <section class="context-panel">
 
-    <div class="menu-welcome">
-      <div class="welcome-icon">
-        <i class="pi pi-lightbulb"></i>
+      <!-- Linha superior: tag + descrição -->
+      <div class="context-panel__top">
+        <div class="context-tag">
+          <span class="hero-dot"></span>
+          <span>Sistema de Triagem Clínica — Síndrome do X Frágil</span>
+        </div>
+        <p class="context-desc">
+          Ferramenta de apoio à decisão clínica para triagem da SXF. Preencha o checklist de sintomas,
+          calcule o score ponderado e obtenha recomendação de encaminhamento para teste genético confirmatório.
+          O sistema <strong>não substitui</strong> o diagnóstico médico — sua finalidade é padronizar a
+          triagem inicial e indicar a necessidade de exame molecular confirmatório (PCR / Southern Blot).
+        </p>
       </div>
-      <div>
-        <strong>Bem-vindo ao Sistema SIGMA</strong>
-        <p>Acesse qualquer módulo clicando nos cards acima. O sistema está organizado para facilitar sua navegação e aumentar sua produtividade no dia a dia.</p>
+
+      <!-- Linha inferior: estatísticas distribuídas -->
+      <div class="context-panel__stats">
+
+        <div class="context-stat">
+          <span class="context-stat__icon"><i class="pi pi-star"></i></span>
+          <span class="context-stat__value">0,56</span>
+          <span class="context-stat__label">Limiar masculino</span>
+        </div>
+
+        <div class="context-stat__divider"></div>
+
+        <div class="context-stat">
+          <span class="context-stat__icon"><i class="pi pi-star-fill"></i></span>
+          <span class="context-stat__value">0,55</span>
+          <span class="context-stat__label">Limiar feminino</span>
+        </div>
+
+        <div class="context-stat__divider"></div>
+
+        <div class="context-stat">
+          <span class="context-stat__icon"><i class="pi pi-verified"></i></span>
+          <span class="context-stat__value">12</span>
+          <span class="context-stat__label">Sintomas avaliados</span>
+        </div>
+
+        <div class="context-stat__divider"></div>
+
+        <div class="context-stat">
+          <span class="context-stat__icon"><i class="pi pi-chart-bar"></i></span>
+          <span class="context-stat__value">0,32</span>
+          <span class="context-stat__label">Maior peso (masc.)</span>
+        </div>
+
+        <div class="context-stat__divider"></div>
+
+        <div class="context-stat">
+          <span class="context-stat__icon"><i class="pi pi-chart-bar"></i></span>
+          <span class="context-stat__value">0,28</span>
+          <span class="context-stat__label">Maior peso (fem.)</span>
+        </div>
+
+        <div class="context-stat__divider"></div>
+
+        <div class="context-stat">
+          <span class="context-stat__icon"><i class="pi pi-users"></i></span>
+          <span class="context-stat__value">2</span>
+          <span class="context-stat__label">Perfis de acesso</span>
+        </div>
+
       </div>
-    </div>
+
+    </section>
+
+    <!-- EYEBROW -->
+    <section class="menu-hero">
+      <div class="hero-eyebrow">
+        <span class="hero-dot"></span>
+        <span>Funcionalidades</span>
+      </div>
+    </section>
+
+    <!-- MÓDULOS PRINCIPAIS -->
+    <section class="modules-section">
+      <div class="modules-grid">
+        <ng-container *ngFor="let item of mainMenuItems; let i = index">
+          <article
+            class="module-card"
+            [class.module-card--featured]="item.route === '/avaliacoes'"
+            [style.--card-color]="item.color"
+            [style.animation-delay]="(i * 80) + 'ms'"
+            tabindex="0"
+            role="button"
+            [attr.aria-label]="'Acessar módulo ' + item.title"
+            (click)="navigate(item.route)"
+            (keydown.enter)="navigate(item.route)"
+          >
+            <div class="module-card__inner">
+
+              <div class="module-card__head">
+                <span *ngIf="item.route === '/avaliacoes'" class="module-card__badge module-card__badge--new">
+                  <i class="pi pi-plus"></i> Nova Triagem
+                </span>
+              </div>
+
+              <div class="module-card__body">
+                <div class="module-card__icon">
+                  <i [class]="'pi ' + item.icon"></i>
+                </div>
+                <div class="module-card__text">
+                  <h3>{{ item.title }}</h3>
+                  <p>{{ item.description }}</p>
+                </div>
+              </div>
+
+              <div class="module-card__foot">
+                <span class="module-card__cta">Acessar módulo</span>
+                <span class="module-card__arrow">
+                  <i class="pi pi-arrow-right"></i>
+                </span>
+              </div>
+
+            </div>
+          </article>
+        </ng-container>
+
+        <!-- Cards administrativos inline no mesmo grid -->
+        <ng-container *ngFor="let item of adminMenuItems; let i = index">
+          <article
+            class="module-card module-card--admin"
+            [style.--card-color]="item.color"
+            [style.animation-delay]="((mainMenuItems.length + i) * 80) + 'ms'"
+            tabindex="0"
+            role="button"
+            [attr.aria-label]="'Acessar ' + item.title"
+            (click)="navigate(item.route)"
+            (keydown.enter)="navigate(item.route)"
+          >
+            <div class="module-card__inner">
+
+              <div class="module-card__head">
+                <span class="module-card__badge module-card__badge--admin">
+                  <i class="pi pi-shield"></i> Admin
+                </span>
+              </div>
+
+              <div class="module-card__body">
+                <div class="module-card__icon">
+                  <i [class]="'pi ' + item.icon"></i>
+                </div>
+                <div class="module-card__text">
+                  <h3>{{ item.title }}</h3>
+                  <p>{{ item.description }}</p>
+                </div>
+              </div>
+
+              <div class="module-card__foot">
+                <span class="module-card__cta">Acessar módulo</span>
+                <span class="module-card__arrow">
+                  <i class="pi pi-arrow-right"></i>
+                </span>
+              </div>
+
+            </div>
+          </article>
+        </ng-container>
+      </div>
+    </section>
+
   </main>
 </div>
