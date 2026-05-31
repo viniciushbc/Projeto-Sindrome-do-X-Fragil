@@ -1,7 +1,7 @@
 USE sindrome_x_fragil;
 
 -- =========================================================
--- Seed inicial do sistema
+-- Seed inicial do sistema - LOGIN DE TESTE
 -- Login temporário do admin para desenvolvimento: admin@sistemaxfragil.com
 -- Senha temporária do admin para desenvolvimento: Admin@123
 -- =========================================================
