@@ -5,7 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TagModule } from 'primeng/tag';
 import { AccordionModule } from 'primeng/accordion';
-import { HeaderComponent } from '../../layout/header.component';
+import { HeaderComponent } from '../../layout/header/header.component';
 
 interface Usuario {
   nome: string;

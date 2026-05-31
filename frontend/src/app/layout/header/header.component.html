@@ -1,0 +1,18 @@
+<header class="sigma-header">
+    <div class="sigma-header__brand">
+    <div class="sigma-header__logo">Σ</div>
+    <div class="sigma-header__title-group">
+        <span class="sigma-header__title">SIGMA</span>
+        <span class="sigma-header__subtitle">Sistema Integrado de Gestão Médica</span>
+    </div>
+    </div>
+    <div class="sigma-header__user" *ngIf="showUser">
+    <div class="sigma-header__user-info">
+        <span class="sigma-header__user-name">{{ userName }}</span>
+        <span class="sigma-header__user-role">{{ userRole }}</span>
+    </div>
+    <button class="sigma-header__logout" (click)="onLogout()" title="Sair">
+        <i class="pi pi-sign-out"></i>
+    </button>
+    </div>
+</header>
