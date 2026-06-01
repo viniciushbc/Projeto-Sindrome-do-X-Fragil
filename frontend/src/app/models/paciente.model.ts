@@ -8,5 +8,5 @@ export interface Paciente {
   telefone: string;
   responsavel: string;
   observacao?: string | null;
-  ativo: boolean;
+  ativo: number;
 }

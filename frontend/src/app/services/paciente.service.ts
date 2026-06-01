@@ -24,7 +24,7 @@ export class PacienteService {
 
     return this.http.get<Paciente[]>(this.apiUrl, { headers }).pipe(
       map((pacientes) => {
-        return pacientes.filter((paciente) => paciente.ativo === true);
+        return pacientes.filter((paciente) => paciente.ativo === 1);
       })
     );
   }
