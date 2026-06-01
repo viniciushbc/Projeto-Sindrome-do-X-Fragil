@@ -5,19 +5,18 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 
 import { LoginRequest, LoginResponse } from '../models/login.model';
-
+import { environment } from '../../environments/environment.development';
 @Injectable({
     providedIn: 'root'
 })
 
 export class AuthService {
-    private readonly apiUrl = 'http://localhost:3000/auth/login';
 
     constructor(private http: HttpClient){}
 
     // funcao de fazer login
     login(dados: LoginRequest): Observable<LoginResponse> {
-        return this.http.post<LoginResponse>(`${this.apiUrl}`, dados).pipe(
+        return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, dados).pipe(
             tap((response) => {
                 if(response?.token) {
                     localStorage.setItem('token', response.token);
