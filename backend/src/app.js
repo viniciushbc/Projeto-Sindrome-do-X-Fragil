@@ -7,6 +7,7 @@ const swaggerRoute = require('./routes/swagger.routes')
 const authRoute = require('./routes/auth.routes')
 const usuariosRoute = require('./routes/usuarios.routes')
 const pacientesRoute = require('./routes/pacientes.routes')
+const sintomasRoute = require('./routes/sintomas.routes')
 
 
 const app = express();
@@ -22,6 +23,7 @@ app.use('/swagger', swaggerRoute);
 app.use('/auth', authRoute);
 app.use('/usuarios', usuariosRoute);
 app.use('/pacientes', pacientesRoute);
+app.use('/sintomas', sintomasRoute)
 
 
 // middlewares para rotas nao encontradas & erros internos no server (404 e 500)
