@@ -48,8 +48,9 @@ export class PacientesComponent implements OnInit{
     this.loading = true;
 
     this.pacienteService.listarPacientes().subscribe({
-      next: (dados) => {
 
+      next: (dados) => {
+        console.log('Dados recebidos:', dados);
         this.pacientes = dados;
         this.pacientesFiltrados = dados;
 
@@ -84,3 +85,5 @@ export class PacientesComponent implements OnInit{
     console.log('Detalhes', paciente);
   }
 }
+
+
