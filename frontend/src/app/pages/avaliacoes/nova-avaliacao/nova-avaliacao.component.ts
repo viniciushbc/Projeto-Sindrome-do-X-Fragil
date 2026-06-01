@@ -37,6 +37,7 @@ export class NovaAvaliacaoComponent implements OnInit {
   erroCarregamento = false;
 
   relacoesRespondente = [
+    {label: 'Paciente', value: 'PACIENTE'},
     { label: 'Mãe', value: 'MAE' },
     { label: 'Pai', value: 'PAI' },
     { label: 'Responsável legal', value: 'RESPONSAVEL_LEGAL' },
