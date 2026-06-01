@@ -63,6 +63,14 @@ export const routes: Routes = [
       ),
   },
 
+    {
+    path: 'avaliacoes/nova',
+    loadComponent: () =>
+      import('./pages/avaliacoes/nova-avaliacao/nova-avaliacao.component').then(
+        (m) => m.NovaAvaliacaoComponent
+      ),
+  },
+
   {
     path: 'relatorios',
     loadComponent: () =>
