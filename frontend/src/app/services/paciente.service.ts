@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
+import { environment } from '../../environments/environment.development';
+import { AuthService } from './auth.service';
 
 import { Paciente } from '../models/paciente.model';
 
@@ -9,11 +11,21 @@ import { Paciente } from '../models/paciente.model';
 })
 export class PacienteService {
 
-  private apiUrl = 'http://localhost:3000/pacientes';
+  private readonly apiUrl = `${environment.apiUrl}/pacientes`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   listarPacientes(): Observable<Paciente[]> {
-    return this.http.get<Paciente[]>(this.apiUrl);
+    const token = this.authService.getToken();
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get<Paciente[]>(this.apiUrl, { headers }).pipe(
+      map((pacientes) => {
+        return pacientes.filter((paciente) => paciente.ativo === true);
+      })
+    );
   }
 }

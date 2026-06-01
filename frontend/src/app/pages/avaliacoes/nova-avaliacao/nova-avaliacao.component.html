@@ -1,0 +1,145 @@
+<p-toast></p-toast>
+
+<div class="nova-avaliacao-page">
+  <section class="page-header">
+    <div>
+      <h1>Nova avaliação clínica</h1>
+      <p>Selecione um paciente cadastrado e informe os dados do respondente para iniciar a triagem.</p>
+    </div>
+  </section>
+
+  <p-card styleClass="avaliacao-card">
+    <form [formGroup]="form" class="avaliacao-form">
+      <div class="form-section">
+        <h2>Paciente</h2>
+
+        <div *ngIf="!carregandoPacientes && pacientes.length === 0" class="empty-message">
+          Nenhum paciente cadastrado. Cadastre um paciente antes de iniciar uma avaliação.
+        </div>
+
+        <div class="field">
+          <label for="paciente">Paciente <span>*</span></label>
+
+          <p-dropdown
+            inputId="paciente"
+            formControlName="paciente"
+            [options]="pacientes"
+            optionLabel="nome"
+            placeholder="Selecione o paciente"
+            [filter]="true"
+            filterBy="nome"
+            [showClear]="true"
+            [loading]="carregandoPacientes"
+            [disabled]="pacientes.length === 0"
+            (onChange)="aoSelecionarPaciente($event.value)"
+          ></p-dropdown>
+
+          <small *ngIf="campoInvalido('paciente')" class="error-text">
+            Selecione um paciente.
+          </small>
+        </div>
+      </div>
+
+      <div *ngIf="pacienteSelecionado" class="paciente-resumo">
+        <h3>Dados do paciente selecionado</h3>
+
+        <div class="resumo-grid">
+          <div>
+            <span>Nome</span>
+            <strong>{{ pacienteSelecionado.nome }}</strong>
+          </div>
+
+          <div>
+            <span>Sexo</span>
+            <strong>{{ formatarSexo(pacienteSelecionado.sexo) }}</strong>
+          </div>
+
+          <div>
+            <span>Idade/Nascimento</span>
+            <strong>{{ obterIdadeOuNascimento(pacienteSelecionado) }}</strong>
+          </div>
+
+          <div>
+            <span>Responsável</span>
+            <strong>{{ pacienteSelecionado.responsavel || 'Não informado' }}</strong>
+          </div>
+
+          <div>
+            <span>Telefone</span>
+            <strong>{{ pacienteSelecionado.telefone || 'Não informado' }}</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2>Respondente</h2>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="nomeRespondente">Nome do respondente <span>*</span></label>
+            <input
+              id="nomeRespondente"
+              type="text"
+              pInputText
+              formControlName="nomeRespondente"
+              placeholder="Digite o nome do respondente"
+            />
+
+            <small *ngIf="campoInvalido('nomeRespondente')" class="error-text">
+              Informe o nome do respondente.
+            </small>
+          </div>
+
+          <div class="field">
+            <label for="relacaoRespondente">Relação com o paciente <span>*</span></label>
+
+            <p-dropdown
+              inputId="relacaoRespondente"
+              formControlName="relacaoRespondente"
+              [options]="relacoesRespondente"
+              placeholder="Selecione a relação"
+            ></p-dropdown>
+
+            <small *ngIf="campoInvalido('relacaoRespondente')" class="error-text">
+              Informe a relação com o paciente.
+            </small>
+          </div>
+
+          <div class="field">
+            <label for="documentoRespondente">Documento do respondente</label>
+            <input
+              id="documentoRespondente"
+              type="text"
+              pInputText
+              formControlName="documentoRespondente"
+              placeholder="CPF, RG ou outro documento"
+            />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="observacoesIniciais">Observações iniciais</label>
+            <textarea
+            id="observacoesIniciais"
+            class="textarea-field"
+            formControlName="observacoesIniciais"
+            rows="4"
+            placeholder="Digite observações relevantes antes do checklist"
+            ></textarea>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button
+          pButton
+          type="button"
+          label="Continuar para checklist"
+          icon="pi pi-arrow-right"
+          iconPos="right"
+          class="continue-button"
+          (click)="continuarParaChecklist()"
+        ></button>
+      </div>
+    </form>
+  </p-card>
+</div>

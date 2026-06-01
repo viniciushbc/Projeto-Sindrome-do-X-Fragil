@@ -7,5 +7,6 @@ export interface Paciente {
   idade:number;
   telefone: string;
   responsavel: string;
+  observacao?: string | null;
   ativo: boolean;
 }
