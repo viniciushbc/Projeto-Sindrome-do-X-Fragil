@@ -11,7 +11,9 @@ import { Paciente } from '../models/paciente.model';
 })
 export class PacienteService {
 
+
   private readonly apiUrl = `${environment.apiUrl}/pacientes`;
+
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
