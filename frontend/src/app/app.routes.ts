@@ -58,8 +58,8 @@ export const routes: Routes = [
   {
     path: 'avaliacoes',
     loadComponent: () =>
-      import('./pages/avaliacoes/avaliacoes.component').then(
-        (m) => m.AvaliacoesComponent
+      import('./pages/avaliacoes/listar-avaliacoes/listar-avaliacoes.component').then(
+        (m) => m.ListarAvaliacoesComponent
       ),
   },
 
