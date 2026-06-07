@@ -81,16 +81,29 @@ export class EditarComponent implements OnInit {
     });
   }
 
-  salvar(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
+salvar(): void {
+  if (this.form.invalid) {
+    this.form.markAllAsTouched();
+    return;
+  }
 
-    this.loading = true;
-    const dados = this.form.value;
+  this.loading = true;
+  const dados = this.form.value;
 
-    const requisicao = this.isEdicao
+
+    // converte a data para string YYYY-MM-DD
+  if (dados.dataNascimento) {
+    const d = new Date(dados.dataNascimento);
+    const ano = d.getFullYear();
+    const mes = String(d.getMonth() + 1).padStart(2, '0');
+    const dia = String(d.getDate()).padStart(2, '0');
+    dados.dataNascimento = `${ano}-${mes}-${dia}`;
+  }
+
+  console.log('Dados enviados:', dados);  // <-- adicione essa linha
+
+  const requisicao = this.isEdicao
+    
       ? this.pacienteService.editarPaciente(this.pacienteId!, dados)
       : this.pacienteService.cadastrarPaciente(dados);
 

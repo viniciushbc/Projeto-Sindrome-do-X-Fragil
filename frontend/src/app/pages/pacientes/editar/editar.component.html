@@ -67,12 +67,14 @@
         <!-- Sexo -->
         <div class="campo">
           <label>Sexo *</label>
-          <p-dropdown
-            formControlName="sexo"
-            [options]="sexoOpcoes"
-            placeholder="Selecione"
-            styleClass="w-full"
-          />
+    <p-dropdown
+      formControlName="sexo"
+      [options]="sexoOpcoes"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Selecione"
+      styleClass="w-full"
+    />
           <small *ngIf="campoInvalido('sexo')" class="erro">Sexo é obrigatório.</small>
         </div>
 

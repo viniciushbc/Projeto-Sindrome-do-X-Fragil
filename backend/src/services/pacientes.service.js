@@ -58,7 +58,7 @@ async function criarPaciente(dados){
         observacoes,
         ativo
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         `,
         [
         nome,
