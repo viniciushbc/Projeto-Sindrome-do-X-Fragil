@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 
+
 export const routes: Routes = [
   
    { 
@@ -76,6 +77,14 @@ export const routes: Routes = [
       ),
   },
 
+{
+  path: 'avaliacoes/checklist',
+  loadComponent: () =>
+    import('./pages/avaliacoes/checklist/checklist.component').then(
+      (m) => m.ChecklistComponent
+    ),
+},
+  
   {
     path: 'relatorios',
     loadComponent: () =>

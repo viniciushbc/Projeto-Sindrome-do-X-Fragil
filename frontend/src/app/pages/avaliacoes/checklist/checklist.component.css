@@ -1,0 +1,208 @@
+.checklist-page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.page-header h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--surface-900);
+  margin: 0 0 0.25rem 0;
+}
+
+.page-header p {
+  font-size: 0.9375rem;
+  color: var(--surface-500);
+  margin: 0;
+}
+
+.paciente-resumo {
+  background: var(--surface-50);
+  border: 1px solid var(--surface-200);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+}
+
+.resumo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.75rem 1.5rem;
+}
+
+.resumo-grid div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.resumo-grid span {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--surface-400);
+  font-weight: 500;
+}
+
+.resumo-grid strong {
+  font-size: 0.9375rem;
+  color: var(--surface-800);
+  font-weight: 600;
+}
+
+::ng-deep .checklist-card .p-card-body {
+  padding: 1.5rem;
+}
+
+.checklist-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.checklist-header h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--surface-900);
+  margin: 0 0 0.2rem 0;
+}
+
+.checklist-header p {
+  font-size: 0.875rem;
+  color: var(--surface-500);
+  margin: 0;
+}
+
+.contador {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.contador-valor {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-600);
+  line-height: 1;
+}
+
+.contador-label {
+  font-size: 0.75rem;
+  color: var(--surface-400);
+}
+
+.sintomas-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.sintoma-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+  padding: 0.875rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  transition: background 0.15s, border-color 0.15s;
+  cursor: pointer;
+}
+
+.sintoma-item:hover:not(.sintoma-item--nao-aplicavel) {
+  background: var(--surface-50);
+  border-color: var(--surface-200);
+}
+
+.sintoma-item--presente {
+  background: var(--green-50);
+  border-color: var(--green-200);
+}
+
+.sintoma-item--nao-aplicavel {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sintoma-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  cursor: pointer;
+  flex: 1;
+}
+
+.sintoma-nome {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--surface-800);
+}
+
+.sintoma-descricao {
+  font-size: 0.8125rem;
+  color: var(--surface-500);
+}
+
+.sintoma-nao-aplicavel {
+  font-size: 0.8125rem;
+  color: var(--orange-600);
+  font-style: italic;
+}
+
+.empty-message {
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--surface-500);
+  font-size: 0.9rem;
+}
+
+.error-text {
+  color: var(--red-600);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding-top: 0.5rem;
+}
+
+.continue-button {
+  background: var(--primary-600) !important;
+  border-color: var(--primary-600) !important;
+}
+
+.continue-button:hover {
+  background: var(--primary-700) !important;
+  border-color: var(--primary-700) !important;
+}
+
+@media (max-width: 640px) {
+  .checklist-page {
+    padding: 1rem;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+
+  .checklist-header {
+    flex-direction: column;
+  }
+
+  .contador {
+    align-items: flex-start;
+  }
+}

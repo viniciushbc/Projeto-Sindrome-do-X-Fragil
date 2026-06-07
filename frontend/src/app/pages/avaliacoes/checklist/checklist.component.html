@@ -1,0 +1,111 @@
+<p-toast></p-toast>
+
+<div class="checklist-page">
+  <section class="page-header">
+    <div>
+      <h1>Checklist clínico</h1>
+      <p>Marque os sintomas observados no paciente durante a avaliação.</p>
+    </div>
+  </section>
+
+  <div *ngIf="avaliacaoInicial" class="paciente-resumo">
+    <div class="resumo-grid">
+      <div>
+        <span>Paciente</span>
+        <strong>{{ avaliacaoInicial.paciente.nome }}</strong>
+      </div>
+      <div>
+        <span>Respondente</span>
+        <strong>{{ avaliacaoInicial.nome_respondente }}</strong>
+      </div>
+      <div>
+        <span>Relação</span>
+        <strong>{{ avaliacaoInicial.relacao_respondente }}</strong>
+      </div>
+    </div>
+  </div>
+
+  <p-card styleClass="checklist-card">
+
+    <div class="checklist-header">
+      <div>
+        <h2>Sintomas</h2>
+        <p>Marque cada sintoma como presente ou ausente.</p>
+      </div>
+      <div class="contador" *ngIf="!carregandoSintomas">
+        <span class="contador-valor">{{ contagemPresentes() }}</span>
+        <span class="contador-label">de {{ totalAplicaveis() }} marcados</span>
+      </div>
+    </div>
+
+    <p-divider></p-divider>
+
+    <div *ngIf="carregandoSintomas" class="empty-message">
+      Carregando sintomas...
+    </div>
+
+    <div *ngIf="erroCarregamento" class="empty-message error-text">
+      Não foi possível carregar os sintomas. Tente novamente.
+    </div>
+
+    <div *ngIf="!carregandoSintomas && !erroCarregamento" class="sintomas-lista">
+      <div
+        *ngFor="let item of sintomas; trackBy: trackBySintoma"
+        class="sintoma-item"
+        [class.sintoma-item--presente]="item.presente && !isNaoAplicavel(item.sintoma)"
+        [class.sintoma-item--nao-aplicavel]="isNaoAplicavel(item.sintoma)"
+      >
+        <p-checkbox
+          [binary]="true"
+          [(ngModel)]="item.presente"
+          [disabled]="isNaoAplicavel(item.sintoma)"
+          [inputId]="'sintoma-' + item.sintoma.id_sintoma"
+        ></p-checkbox>
+
+        <label [for]="'sintoma-' + item.sintoma.id_sintoma" class="sintoma-label">
+          <span class="sintoma-nome">{{ item.sintoma.nome }}</span>
+          <span *ngIf="item.sintoma.descricao" class="sintoma-descricao">
+            {{ item.sintoma.descricao }}
+          </span>
+          <span *ngIf="isNaoAplicavel(item.sintoma)" class="sintoma-nao-aplicavel">
+            Não aplicável para pacientes do sexo feminino.
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <p-divider *ngIf="!carregandoSintomas && !erroCarregamento"></p-divider>
+
+    <div class="actions" *ngIf="!carregandoSintomas && !erroCarregamento">
+      <button
+        pButton
+        type="button"
+        label="Voltar"
+        icon="pi pi-arrow-left"
+        class="p-button-secondary p-button-outlined"
+        (click)="voltar()"
+      ></button>
+
+      <button
+        pButton
+        type="button"
+        label="Limpar seleções"
+        icon="pi pi-refresh"
+        class="p-button-secondary p-button-outlined"
+        (click)="limparSelecoes()"
+      ></button>
+
+      <button
+        pButton
+        type="button"
+        label="Enviar avaliação"
+        icon="pi pi-check"
+        iconPos="right"
+        class="continue-button"
+        [loading]="enviando"
+        (click)="enviarAvaliacao()"
+      ></button>
+    </div>
+
+  </p-card>
+</div>

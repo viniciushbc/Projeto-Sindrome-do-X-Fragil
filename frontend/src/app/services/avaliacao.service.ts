@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
-import { NovaAvaliacaoInicial } from "../models/avaliacao.model";
+import { BehaviorSubject, Observable } from "rxjs";  
+import { HttpClient } from "@angular/common/http";  
+import { NovaAvaliacaoInicial, PayloadAvaliacao } from "../models/avaliacao.model"; 
 
 @Injectable({
     providedIn: 'root'
@@ -13,6 +14,7 @@ export class AvaliacaoService {
 
     avaliacaoInicial$ = this.avaliacaoInicialSubject.asObservable();
 
+     constructor(private http: HttpClient) {} 
 
     definirAvaliacaoInicial(dados: NovaAvaliacaoInicial): void {
         this.avaliacaoInicialSubject.next(dados);
@@ -27,6 +29,10 @@ export class AvaliacaoService {
         this.avaliacaoInicialSubject.next(null);
         sessionStorage.removeItem(this.storageKey);
     }
+      enviarAvaliacao(payload: PayloadAvaliacao): Observable<any> {
+        return this.http.post(`http://localhost:3000/avaliacoes`, payload);
+    }
+  
 
     private carregarDoStorage(): NovaAvaliacaoInicial | null {
         const dados = sessionStorage.getItem(this.storageKey);
@@ -44,3 +50,4 @@ export class AvaliacaoService {
     }
 
 }
+
