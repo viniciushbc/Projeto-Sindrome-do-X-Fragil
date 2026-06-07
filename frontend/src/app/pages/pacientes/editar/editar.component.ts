@@ -1,60 +1,125 @@
-/*mport { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
-// 1. IMPORTAÇÕES DO ANGULAR FORMS (Trocado FormsModule por ReactiveFormsModule)
-import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
-
-// IMPORTAÇÕES DO PRIMENG
-import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api'; 
+import { MessageService } from 'primeng/api';
+
+import { PacienteService } from '../../../services/paciente.service';
 
 @Component({
   selector: 'app-editar',
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
-    ReactiveFormsModule, // Mudança aqui
-    CalendarModule,
-    DialogModule,
+    ReactiveFormsModule,
     InputTextModule,
     DropdownModule,
+    CalendarModule,
     InputTextareaModule,
     ButtonModule,
-    ToastModule
+    ToastModule,
   ],
-  providers: [MessageService], 
+  providers: [MessageService],
   templateUrl: './editar.component.html',
-  styleUrl: './editar.component.css'
+  styleUrls: ['./editar.component.css']
 })
-export class EditarComponent {
-  visivel: boolean = true;
+export class EditarComponent implements OnInit {
 
-  // Criação do grupo do formulário com os mesmos nomes anteriores
-  formulario = new FormGroup({
-    nome: new FormControl(''),
-    cpf: new FormControl(''),
-    dataNascimento: new FormControl<Date | null>(null),
-    sexo: new FormControl(null),
-    telefone: new FormControl(''),
-    responsavel: new FormControl(''),
-    observacoes: new FormControl('')
-  });
+  form!: FormGroup;
+  pacienteId: number | null = null;
+  isEdicao = false;
+  loading = false;
 
-  sexos = [
-    { nome: 'Masculino' },
-    { nome: 'Feminino' }
+  sexoOpcoes = [
+    { label: 'Masculino', value: 'M' },
+    { label: 'Feminino',  value: 'F' },
   ];
 
-  salvar() {
-    // Para acessar os dados agora, usamos o .value do formulário
-    console.log('Dados do formulário:', this.formulario.value);
+  constructor(
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router,
+    private pacienteService: PacienteService,
+    private messageService: MessageService,
+  ) {}
+
+  ngOnInit(): void {
+    this.initForm();
+
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.pacienteId = +id;
+      this.isEdicao = true;
+      this.carregarPaciente(this.pacienteId);
+    }
   }
-}*/
+
+  initForm(): void {
+    this.form = this.fb.group({
+      nome:         ['', Validators.required],
+      cpf:          ['', Validators.required],
+      dataNascimento: [null],
+      idade:        [null],
+      sexo:         [''],
+      telefone:     ['', Validators.required],
+      responsavel:  [''],
+      observacao:  [''],
+    });
+  }
+
+  carregarPaciente(id: number): void {
+    this.pacienteService.buscarPaciente(id).subscribe({
+      next: (paciente) => this.form.patchValue(paciente),
+      error: () => this.mostrarErro('Erro ao carregar paciente.')
+    });
+  }
+
+  salvar(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    this.loading = true;
+    const dados = this.form.value;
+
+    const requisicao = this.isEdicao
+      ? this.pacienteService.editarPaciente(this.pacienteId!, dados)
+      : this.pacienteService.cadastrarPaciente(dados);
+
+    requisicao.subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Sucesso',
+          detail: this.isEdicao ? 'Paciente atualizado!' : 'Paciente cadastrado!'
+        });
+        setTimeout(() => this.router.navigate(['/pacientes/listar']), 1500);
+      },
+      error: () => {
+        this.mostrarErro('Erro ao salvar paciente.');
+        this.loading = false;
+      }
+    });
+  }
+
+  cancelar(): void {
+    this.router.navigate(['/pacientes/listar']);
+  }
+
+  mostrarErro(msg: string): void {
+    this.messageService.add({ severity: 'error', summary: 'Erro', detail: msg });
+  }
+
+  campoInvalido(campo: string): boolean {
+    const c = this.form.get(campo);
+    return !!(c?.invalid && c?.touched);
+  }
+}

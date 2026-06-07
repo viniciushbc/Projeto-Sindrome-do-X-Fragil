@@ -1,62 +1,110 @@
-<!--<p-dialog 
-  header="Cadastrar Paciente"
-  [(visible)]="visivel"
-  [modal]="true"
-  [style]="{ width: '700px', padding: '5px', height: '800px' }"
-  styleClass="meu-dialog"
->
-  <form [formGroup]="formulario">
+<p-toast />
 
-    <div class="campo">
-      <label>Nome</label>
-      <input pInputText type="text" formControlName="nome">
+<div class="pagina">
+
+  <div class="topo">
+    <div class="topo-logo">
+      <div class="logo-icon">Σ</div>
+      <div>
+        <span class="logo-title">SIGMA</span>
+        <span class="logo-sub">{{ isEdicao ? 'Editar Paciente' : 'Novo Paciente' }}</span>
+      </div>
+    </div>
+    <div class="slogan">
+      <h1>Sistema de Triagem</h1>
+      <p>Síndrome do X Frágil</p>
+    </div>
+  </div>
+
+  <div class="form-container">
+
+    <div class="form-header">
+      <h2>{{ isEdicao ? 'Editar Paciente' : 'Cadastrar Paciente' }}</h2>
+      <p>Campos marcados com * são obrigatórios.</p>
     </div>
 
+    <form [formGroup]="form">
+
+      <!-- Nome -->
+      <div class="campo">
+        <label>Nome *</label>
+        <input pInputText formControlName="nome" placeholder="Nome completo" class="w-full" />
+        <small *ngIf="campoInvalido('nome')" class="erro">Nome é obrigatório.</small>
+      </div>
+
+      <div class="linha-dupla">
+
+        <!-- CPF -->
     <div class="campo">
-      <label>CPF</label>
-      <input pInputText type="text" formControlName="cpf" placeholder="000.000.000-00">
+      <label>CPF *</label>
+      <input pInputText formControlName="cpf" placeholder="000.000.000-00" class="w-full" />
+      <small *ngIf="campoInvalido('cpf')" class="erro">CPF é obrigatório.</small>
     </div>
 
-    <div class="campo">
-      <label>Data de nascimento</label>
-      <p-calendar formControlName="dataNascimento"></p-calendar>
-    </div>
 
     <div class="campo">
-      <label>Sexo</label>
-      <p-dropdown
-        [options]="sexos"
-        formControlName="sexo"
-        optionLabel="nome"
-        placeholder="Selecione">
-      </p-dropdown>
+      <label>Telefone *</label>
+      <input pInputText formControlName="telefone" placeholder="(00) 00000-0000" class="w-full" />
+      <small *ngIf="campoInvalido('telefone')" class="erro">Telefone é obrigatório.</small>
     </div>
 
-    <div class="campo">
-      <label>Telefone</label>
-      <input pInputText type="text" formControlName="telefone" placeholder="99 9999-9999">
-    </div>
+      </div>
 
-    <div class="campo">
-      <label>Nome do responsável</label>
-      <input pInputText type="text" formControlName="responsavel">
-    </div>
+      <div class="linha-dupla">
 
+        <!-- Data de Nascimento -->
+        <div class="campo">
+          <label>Data de Nascimento</label>
+          <p-calendar
+            formControlName="dataNascimento"
+            dateFormat="dd/mm/yy"
+            [showIcon]="true"
+            placeholder="dd/mm/aaaa"
+            styleClass="w-full"
+          />
+        </div>
+
+        <!-- Sexo -->
+        <div class="campo">
+          <label>Sexo *</label>
+          <p-dropdown
+            formControlName="sexo"
+            [options]="sexoOpcoes"
+            placeholder="Selecione"
+            styleClass="w-full"
+          />
+          <small *ngIf="campoInvalido('sexo')" class="erro">Sexo é obrigatório.</small>
+        </div>
+
+      </div>
+
+      <!-- Responsável -->
+      <div class="campo">
+        <label>Nome do Responsável</label>
+        <input pInputText formControlName="responsavel" placeholder="Nome do responsável" class="w-full" />
+      </div>
+
+
+    <!-- Observações -->
     <div class="campo">
       <label>Observações</label>
       <textarea
         pInputTextarea
+        formControlName="observacao"
+        placeholder="Observações adicionais..."
         rows="4"
-        formControlName="observacoes">
+        class="w-full">
       </textarea>
     </div>
 
-    <div class="botoes">
-      <p-button
-        label="Salvar"
-        (onClick)="salvar()">
-      </p-button>
-    </div>
+      <!-- Ações -->
+<div class="acoes">
+  <button pButton type="button" label="Cancelar" severity="secondary" (click)="cancelar()"></button>
+  <button pButton type="button" label="Salvar" [loading]="loading" (click)="salvar()"></button>
+</div>
 
-  </form>
-</p-dialog> -->
+    </form>
+
+  </div>
+
+</div>

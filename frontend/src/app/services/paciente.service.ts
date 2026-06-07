@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 import { AuthService } from './auth.service';
-
 import { Paciente } from '../models/paciente.model';
 
 @Injectable({
@@ -11,23 +10,31 @@ import { Paciente } from '../models/paciente.model';
 })
 export class PacienteService {
 
-
   private readonly apiUrl = `${environment.apiUrl}/pacientes`;
-
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  listarPacientes(): Observable<Paciente[]> {
-    const token = this.authService.getToken();
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
+  private getHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      Authorization: `Bearer ${this.authService.getToken()}`
     });
+  }
 
-    return this.http.get<Paciente[]>(this.apiUrl, { headers }).pipe(
-      map((pacientes) => {
-        return pacientes.filter((paciente) => paciente.ativo === 1);
-      })
+  listarPacientes(): Observable<Paciente[]> {
+    return this.http.get<Paciente[]>(this.apiUrl, { headers: this.getHeaders() }).pipe(
+      map((pacientes) => pacientes.filter((p) => p.ativo === 1))
     );
+  }
+
+  buscarPaciente(id: number): Observable<Paciente> {
+    return this.http.get<Paciente>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
+  }
+
+  cadastrarPaciente(dados: Partial<Paciente>): Observable<Paciente> {
+    return this.http.post<Paciente>(this.apiUrl, dados, { headers: this.getHeaders() });
+  }
+
+  editarPaciente(id: number, dados: Partial<Paciente>): Observable<Paciente> {
+    return this.http.put<Paciente>(`${this.apiUrl}/${id}`, dados, { headers: this.getHeaders() });
   }
 }

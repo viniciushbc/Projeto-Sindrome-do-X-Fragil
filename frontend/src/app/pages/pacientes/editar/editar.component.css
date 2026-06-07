@@ -1,57 +1,186 @@
-/*.campo {
+.pagina {
+  min-height: 100vh;
+  background: #f0f4f8;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* ── Topo ── */
+.topo {
+  background: #1e3a5f;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.topo-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logo-icon {
+  width: 38px;
+  height: 38px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.logo-title {
+  display: block;
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+.logo-sub {
+  display: block;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.slogan {
+  text-align: right;
+}
+
+.slogan h1 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: white;
+}
+
+.slogan p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.6);
+}
+
+/* ── Card do formulário ── */
+.form-container {
+  max-width: 720px;
+  margin: 2rem auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(30, 58, 95, 0.08);
+  padding: 2rem;
+}
+
+.form-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2eaf3;
+}
+
+.form-header h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1e3a5f;
+}
+
+.form-header p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+/* ── Campos ── */
+.campo {
   display: flex;
   flex-direction: column;
-  margin-bottom: 15px;
-  padding: 20px;
+  gap: 0.4rem;
+  margin-bottom: 1.2rem;
 }
 
 .campo label {
+  font-size: 0.85rem;
   font-weight: 600;
-  margin-bottom: 5px;
+  color: #1e3a5f;
 }
 
-.campo input {
-  width: 100%;
-  padding-left: 10px;
-}
-
+.campo input,
 .campo textarea {
+  border-radius: 8px !important;
+  border: 1.5px solid #cbd5e1 !important;
+  padding: 0.6rem 0.9rem !important;
+  font-size: 14px;
   width: 100%;
+  background: #fff !important;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
 }
 
-.campo .p-dropdown {
-  width: 100%;
+.campo input:focus,
+.campo textarea:focus {
+  border-color: #2d6a9f !important;
+  box-shadow: 0 0 0 3px rgba(45,106,159,0.12) !important;
+  outline: none;
 }
 
-.campo .p-calendar {
-  width: 100%;
+/* ── Linha dupla ── */
+.linha-dupla {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
 
-.botoes {
-  margin-top: 10px;
+/* ── Dropdown e Calendar ── */
+::ng-deep .campo .p-dropdown,
+::ng-deep .campo .p-calendar {
+  width: 100% !important;
+  border-radius: 8px !important;
+  border: 1.5px solid #cbd5e1 !important;
+}
+
+::ng-deep .campo .p-dropdown:hover,
+::ng-deep .campo .p-calendar:hover {
+  border-color: #2d6a9f !important;
+}
+
+::ng-deep .campo .p-dropdown.p-focus,
+::ng-deep .campo .p-calendar.p-focus {
+  border-color: #2d6a9f !important;
+  box-shadow: 0 0 0 3px rgba(45,106,159,0.12) !important;
+}
+
+/* ── Erro ── */
+.erro {
+  color: #e53e3e;
+  font-size: 0.78rem;
+}
+
+/* ── Botões ── */
+.acoes {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 30px;
-  margin-right: 30px;
-
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2eaf3;
 }
 
-:host ::ng-deep .p-dialog-header {
-  padding: 25px;
-  background-color:  #b8d4e8;
-
-}
-:host {
-  display: block;
-  min-height: 100vh;
-  background-color: #1e3a5f;
-  padding: 30px;
+::ng-deep .acoes .p-button {
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  padding: 0.6rem 1.4rem !important;
 }
 
-input,
-textarea,
-.p-inputtext,
-.p-dropdown,
-.p-calendar {
-  border-radius: 5px !important;
-}*/
+::ng-deep .acoes .p-button-secondary {
+  background: transparent !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #64748b !important;
+}
+
+::ng-deep .acoes .p-button-secondary:hover {
+  background: #f1f5f9 !important;
+}
