@@ -11,17 +11,24 @@ import { ToastModule } from 'primeng/toast';
 import { PacienteService } from '../../../services/paciente.service';
 import { Paciente } from '../../../models/paciente.model';
 
+
+import { InputIconModule } from 'primeng/inputicon';
+
+
 @Component({
   selector: 'app-pacientes',
   standalone: true,
   imports: [
     CommonModule,
+
     FormsModule,
     TableModule,
     ButtonModule,
     InputTextModule,
     TagModule,
-    ToastModule
+    ToastModule,
+  
+    InputIconModule
   ],
 
 templateUrl: './listar.component.html',

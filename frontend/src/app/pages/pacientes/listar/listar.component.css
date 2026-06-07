@@ -1,80 +1,145 @@
-.pagina{
-    background-color:#6ab0e0;
-
+.pagina {
+  min-height: 100vh;
+  background: #f0f4f8;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-
-h2{
- text-align: center;
- color: #d0e6f5;
- padding-bottom: 100px;
- margin-left: 100px;
-
-
+/* ── Topo ── */
+.topo {
+  background: #1e3a5f;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.topo{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color:white;
-    width: 100%;
-    margin-bottom: 2px;
+.topo-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
-input::placeholder {
-    color: gray;
-    font-size: 15px;
-    padding: 8px;
-    
+.logo-icon {
+  width: 38px;
+  height: 38px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+  flex-shrink: 0;
 }
 
-.busca{ 
-    margin-bottom: 20px;
-    padding: 15px;
-    display: flex;
-    
-     
-     
+.logo-title {
+  display: block;
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+  white-space: nowrap;
 }
 
-.btn-novo{
-    margin-top: 10px;
-    margin-left: 200px;
-    
-    box-shadow:
-        0 0 15px rgba(0, 51, 153, 0.4),
-        0 0 30px rgba(0, 51, 153, 0.3),
-        0 0 50px rgba(0, 51, 153, 0.2);
-    
-    
-    
-}
-.botaoBusca{
- margin-top: 10px;
- width: 450px;
- height: 50px;
- padding-left: 20px;
-
+.logo-sub {
+  display: block;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.8rem;
+  white-space: nowrap;
 }
 
-
-:host ::ng-deep .p-datatable th{
-    text-align: center;
-    font-size: 16px;
-     color: #777575 !important;
+.slogan {
+  text-align: right;
 }
 
-:host ::ng-deep .p-datatable th,
-:host ::ng-deep .p-datatable td {
-    border-right: 1px solid #ddd;
+.slogan h1 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: white;
 }
 
-.slogan{
-    color:#062031;
-    
-     text-shadow:
-        0 0 5px rgba(47, 114, 248, 0.856),
-        0 0 10px rgba(103, 144, 224, 0.882);
-        padding-right: 20px;
+.slogan p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.6);
+}
+
+/* ── Busca ── */
+.busca-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.2rem 2rem;
+  background: #e2eaf3;
+  border-bottom: 1px solid #c8d8ea;
+}
+
+.busca {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.input-busca {
+  border-radius: 10px !important;
+  border: 1.5px solid #cbd5e1 !important;
+  padding: 0.6rem 1rem !important;
+  font-size: 14px;
+  width: 280px;
+  background: #fff !important;
+}
+
+.input-busca:focus {
+  border-color: #2d6a9f !important;
+  box-shadow: 0 0 0 3px rgba(45, 106, 159, 0.15) !important;
+}
+
+::ng-deep .btn-lupa {
+  background: #1e3a5f !important;
+  border: none !important;
+  border-radius: 10px !important;
+}
+
+.btn-novo {
+  margin-left: auto;
+  background: #1e3a5f !important;
+  border: none !important;
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  padding: 0.6rem 1.2rem !important;
+}
+
+/* ── Tabela ── */
+.tabela-container {
+  padding: 1.5rem 2rem;
+}
+
+::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  background: #1e3a5f !important;
+  color: #fff !important;
+  font-weight: 600;
+  border: none !important;
+  padding: 0.9rem 1rem;
+}
+
+::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e2eaf3;
+}
+
+::ng-deep .p-datatable .p-datatable-tbody > tr:hover {
+  background: #eef4fb !important;
+}
+
+::ng-deep .p-datatable-wrapper {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(30, 58, 95, 0.08);
+}
+
+.vazio {
+  text-align: center;
+  padding: 2rem !important;
+  color: #94a3b8;
 }
