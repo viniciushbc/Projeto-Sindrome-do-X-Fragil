@@ -74,12 +74,23 @@ export class EditarComponent implements OnInit {
     });
   }
 
-  carregarPaciente(id: number): void {
-    this.pacienteService.buscarPaciente(id).subscribe({
-      next: (paciente) => this.form.patchValue(paciente),
-      error: () => this.mostrarErro('Erro ao carregar paciente.')
-    });
-  }
+carregarPaciente(id: number): void {
+  this.pacienteService.buscarPaciente(id).subscribe({
+    next: (paciente) => {
+      this.form.patchValue({
+        nome:          paciente.nome,
+        cpf:           paciente.cpf,
+        dataNascimento: paciente.dataNascimento ? new Date(paciente.dataNascimento) : null,
+        idade:         paciente.idade,
+        sexo:          paciente.sexo,
+        telefone:      paciente.telefone,
+        responsavel:   paciente.responsavel,
+        observacao:    paciente.observacao,
+      });
+    },
+    error: () => this.mostrarErro('Erro ao carregar paciente.')
+  });
+}
 
 salvar(): void {
   if (this.form.invalid) {
@@ -88,40 +99,42 @@ salvar(): void {
   }
 
   this.loading = true;
-  const dados = this.form.value;
+  const formValue = this.form.value;
 
-
-    // converte a data para string YYYY-MM-DD
-  if (dados.dataNascimento) {
-    const d = new Date(dados.dataNascimento);
-    const ano = d.getFullYear();
-    const mes = String(d.getMonth() + 1).padStart(2, '0');
-    const dia = String(d.getDate()).padStart(2, '0');
-    dados.dataNascimento = `${ano}-${mes}-${dia}`;
-  }
-
-  console.log('Dados enviados:', dados);  // <-- adicione essa linha
+  const dados = {
+    nome:            formValue.nome,
+    cpf:             formValue.cpf,
+    data_nascimento: formValue.dataNascimento ? (() => {
+      const d = new Date(formValue.dataNascimento);
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    })() : null,
+    idade:           formValue.idade,
+    sexo:            formValue.sexo,
+    telefone:        formValue.telefone,
+    responsavel:     formValue.responsavel,
+    observacoes:     formValue.observacao,
+  };
 
   const requisicao = this.isEdicao
-    
-      ? this.pacienteService.editarPaciente(this.pacienteId!, dados)
-      : this.pacienteService.cadastrarPaciente(dados);
+    ? this.pacienteService.editarPaciente(this.pacienteId!, dados)
+    : this.pacienteService.cadastrarPaciente(dados);
 
-    requisicao.subscribe({
-      next: () => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Sucesso',
-          detail: this.isEdicao ? 'Paciente atualizado!' : 'Paciente cadastrado!'
-        });
-        setTimeout(() => this.router.navigate(['/pacientes/listar']), 1500);
-      },
-      error: () => {
-        this.mostrarErro('Erro ao salvar paciente.');
-        this.loading = false;
-      }
-    });
-  }
+  requisicao.subscribe({
+    next: () => {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Sucesso',
+        detail: this.isEdicao ? 'Paciente atualizado!' : 'Paciente cadastrado!'
+      });
+      setTimeout(() => this.router.navigate(['/pacientes/listar']), 1500);
+    },
+    error: () => {
+      this.mostrarErro('Erro ao salvar paciente.');
+      this.loading = false;
+    }
+  });
+}
+
 
   cancelar(): void {
     this.router.navigate(['/pacientes/listar']);
