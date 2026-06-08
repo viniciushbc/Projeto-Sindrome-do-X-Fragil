@@ -93,6 +93,14 @@ export const routes: Routes = [
       ),
   },
 
+  {
+    path: 'calendario',
+    loadComponent: () =>
+      import('./pages/calendario/calendario.component').then(
+        (m) => m.CalendarioComponent
+      ),
+  },
+
   { path: '**', redirectTo: '/login' },
 
 ];

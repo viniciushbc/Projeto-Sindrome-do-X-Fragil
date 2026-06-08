@@ -1,37 +1,204 @@
-.placeholder-page {
-  min-height: calc(100vh - 80px);
-  padding: 2rem;
+.relatorios-page {
+  min-height: 100vh;
+  padding: 36px 40px;
+  background:
+    radial-gradient(circle at top left, rgba(31, 59, 115, 0.08), transparent 34%),
+    linear-gradient(180deg, #f8fafc 0%, var(--sigma-bg, #f6f8fb) 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.page-header h1 {
+  margin: 0 0 6px 0;
+  color: var(--sigma-primary, #1f3b73);
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.page-header p {
+  margin: 0;
+  color: var(--sigma-text-muted, #6b7280);
+  font-size: 15px;
+}
+
+:host ::ng-deep .filtros-card,
+:host ::ng-deep .tabela-card {
+  border-radius: 22px !important;
+  border: 1px solid rgba(148, 163, 184, 0.2) !important;
+  background: rgba(255, 255, 255, 0.97) !important;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06) !important;
+}
+
+:host ::ng-deep .filtros-card .p-card-body,
+:host ::ng-deep .tabela-card .p-card-body {
+  padding: 24px !important;
+}
+
+:host ::ng-deep .filtros-card .p-card-content,
+:host ::ng-deep .tabela-card .p-card-content {
+  padding: 0 !important;
+}
+
+.filtros-header h2,
+.tabela-header h2 {
+  margin: 0 0 16px 0;
+  font-size: 17px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+}
+
+.filtros-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #64748b;
+}
+
+:host ::ng-deep .field .p-dropdown,
+:host ::ng-deep .field .p-calendar {
+  width: 100%;
+  border-radius: 12px !important;
+  border-color: #dbe3ef !important;
+  min-height: 42px;
+}
+
+:host ::ng-deep .field .p-inputtext {
+  border-radius: 12px !important;
+}
+
+.filtros-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+:host ::ng-deep .buscar-button {
+  min-height: 42px !important;
+  padding: 0 20px !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  background: var(--sigma-primary, #1f3b73) !important;
+  border: none !important;
+  box-shadow: 0 8px 20px rgba(31, 59, 115, 0.2) !important;
+}
+
+.tabela-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0;
+}
+
+.tabela-count {
+  font-size: 13px;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+:host ::ng-deep .divider-slim.p-divider {
+  margin: 14px 0 !important;
+}
+
+.loading-state {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 1rem;
+  padding: 3rem;
+  color: #64748b;
+  font-size: 14px;
 }
 
-.placeholder-content {
-  max-width: 600px;
+:host ::ng-deep .spinner-sm {
+  width: 32px !important;
+  height: 32px !important;
+}
+
+.empty-msg {
+  padding: 2.5rem;
   text-align: center;
+  color: #94a3b8;
+  font-size: 14px;
 }
 
-.page-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  color: #2563eb;
+:host ::ng-deep .sigma-table .p-datatable-thead > tr > th {
+  background: #f8fafc !important;
+  color: #475569 !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  padding: 12px 14px !important;
 }
 
-h1 {
-  margin: 0 0 1rem;
-  font-size: 2rem;
+:host ::ng-deep .sigma-table .p-datatable-tbody > tr > td {
+  font-size: 13px !important;
+  color: #334155 !important;
+  padding: 12px 14px !important;
+  border-bottom: 1px solid #f1f5f9 !important;
 }
 
-p {
-  margin-bottom: 1.5rem;
-  color: #555;
+:host ::ng-deep .sigma-table .p-datatable-tbody > tr:hover > td {
+  background: #f8fafc !important;
 }
 
-.notice {
-  margin-bottom: 1.5rem;
-  padding: 1rem;
-  border-radius: 8px;
-  background-color: #f3f4f6;
-  color: #374151;
-  font-weight: 500;
+
+.score-pill {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  background: rgba(31, 59, 115, 0.08);
+  color: var(--sigma-primary, #1f3b73);
+}
+
+.score-pill--alto {
+  background: rgba(220, 38, 38, 0.08);
+  color: #dc2626;
+}
+
+@media (max-width: 900px) {
+  .relatorios-page {
+    padding: 22px 16px;
+  }
+
+  .page-header h1 {
+    font-size: 24px;
+  }
+
+  .filtros-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 580px) {
+  .filtros-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filtros-actions {
+    flex-direction: column;
+  }
 }

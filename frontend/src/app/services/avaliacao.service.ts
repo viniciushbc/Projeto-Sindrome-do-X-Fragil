@@ -41,6 +41,15 @@ export class AvaliacaoService {
         sessionStorage.removeItem(this.storageKey);
     }
 
+    buscarRelatorios(filtros: any = {}): Observable<any[]> {
+        const params = new URLSearchParams();
+        Object.entries(filtros).forEach(([k, v]) => { if (v) params.set(k, String(v)); });
+        const query = params.toString() ? '?' + params.toString() : '';
+        return this.http.get<any[]>(`${this.apiUrl}/relatorios${query}`, {
+            headers: this.getHeaders()
+        });
+    }
+
     listarAvaliacoes(): Observable<any[]> {
         return this.http.get<any[]>(`${this.apiUrl}/avaliacoes`, {
             headers: this.getHeaders()

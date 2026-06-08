@@ -31,13 +31,12 @@ export class MenuPrincipalComponent implements OnInit {
   ) {}
 
   menuItems: MenuItem[] = [
-    { icon: 'pi-users', title: 'Pacientes', description: 'Gerenciar informações de pacientes', route: '/pacientes/listar', color: '#3d7ab5' },
-    { icon: 'pi-plus', title: 'Avaliações', description: 'Registrar e consultar avaliações', route: '/avaliacoes', color: '#5a8fc4'},
-    { icon: 'pi-file', title: 'Relatórios', description: 'Visualizar e gerar relatórios', route: '/relatorios', color: '#4a90c4' },
-    { icon: 'pi-user-edit', title: 'Usuários', description: 'Administrar usuários do sistema', route: '/usuarios', color: '#2a5f8f', adminOnly: true }
-    
-    
-  ];
+  { icon: 'pi-users', title: 'Pacientes', description: 'Gerenciar informações de pacientes', route: '/pacientes/listar', color: '#3d7ab5' },
+  { icon: 'pi-plus', title: 'Avaliações', description: 'Registrar e consultar avaliações', route: '/avaliacoes', color: '#5a8fc4'},
+  { icon: 'pi-calendar', title: 'Calendário', description: 'Agendar e visualizar consultas', route: '/calendario', color: '#4a90c4' },
+  { icon: 'pi-file', title: 'Relatórios', description: 'Visualizar e gerar relatórios', route: '/relatorios', color: '#4a90c4' },
+  { icon: 'pi-user-edit', title: 'Usuários', description: 'Administrar usuários do sistema', route: '/usuarios', color: '#2a5f8f', adminOnly: true }
+];
 
   mainMenuItems: MenuItem[] =[];
   adminMenuItems: MenuItem[] =[];

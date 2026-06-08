@@ -42,3 +42,23 @@ export interface AvaliacaoResumo {
   paciente_nome: string;
   paciente_sexo: string;
 }
+export interface RelatorioItem {
+  id_avaliacao: number;
+  data_avaliacao: string;
+  score: number;
+  limiar_utilizado: number;
+  resultado: 'ENCAMINHAR' | 'NAO_ENCAMINHAR';
+  respondente_nome: string;
+  respondente_parentesco: string;
+  paciente_nome: string;
+  paciente_sexo: string;
+  profissional_nome: string;
+}
+
+export interface FiltrosRelatorio {
+  dataInicio?: string;
+  dataFim?: string;
+  idPaciente?: number;
+  idUsuario?: number;
+  resultado?: string;
+}

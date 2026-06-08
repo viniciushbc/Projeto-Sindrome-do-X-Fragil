@@ -1,0 +1,363 @@
+.calendario-page {
+  min-height: 100vh;
+  padding: 36px 40px;
+  background:
+    radial-gradient(circle at top left, rgba(31, 59, 115, 0.08), transparent 34%),
+    linear-gradient(180deg, #f8fafc 0%, var(--sigma-bg, #f6f8fb) 100%);
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.page-header h1 {
+  margin: 0 0 6px 0;
+  color: var(--sigma-primary, #1f3b73);
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.page-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 15px;
+}
+
+:host ::ng-deep .cal-card {
+  border-radius: 22px !important;
+  border: 1px solid rgba(148, 163, 184, 0.2) !important;
+  background: rgba(255, 255, 255, 0.97) !important;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06) !important;
+}
+
+:host ::ng-deep .cal-card .p-card-body { padding: 24px !important; }
+:host ::ng-deep .cal-card .p-card-content { padding: 0 !important; }
+
+.cal-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.cal-titulo {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.03em;
+}
+
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 3rem;
+  color: #64748b;
+}
+
+:host ::ng-deep .spinner-sm { width: 32px !important; height: 32px !important; }
+
+.cal-grid { width: 100%; }
+
+.cal-semana-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 4px;
+}
+
+.cal-dia-nome {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+  padding: 8px 0;
+}
+
+.cal-semana {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border-top: 1px solid #f1f5f9;
+}
+
+.cal-dia {
+  position: relative;
+  min-height: 110px;
+  padding: 8px;
+  border-right: 1px solid #f1f5f9;
+  cursor: pointer;
+  transition: background 0.15s;
+  overflow: hidden;
+}
+
+.cal-dia:last-child { border-right: none; }
+
+.cal-dia:hover { background: #f8fafc; }
+
+.cal-dia:hover .cal-add-btn { opacity: 1; }
+
+.cal-dia--outro-mes {
+  background: #fafafa;
+  cursor: default;
+}
+
+.cal-dia--outro-mes .cal-dia-num { color: #cbd5e1; }
+
+.cal-dia--hoje .cal-dia-num {
+  background: var(--sigma-primary, #1f3b73);
+  color: #fff;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cal-dia-num {
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 4px;
+  display: inline-block;
+  line-height: 1;
+}
+
+.cal-eventos {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cal-evento {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(31, 59, 115, 0.1);
+  cursor: pointer;
+  transition: background 0.15s;
+  overflow: hidden;
+}
+
+.cal-evento:hover { background: rgba(31, 59, 115, 0.18); }
+
+.cal-evento--realizado {
+  background: rgba(16, 185, 129, 0.12);
+}
+
+.cal-evento--realizado:hover { background: rgba(16, 185, 129, 0.2); }
+
+.cal-evento--cancelado {
+  background: rgba(220, 38, 38, 0.08);
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.cal-evento-hora {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--sigma-primary, #1f3b73);
+  flex-shrink: 0;
+}
+
+.cal-evento--realizado .cal-evento-hora { color: #065f46; }
+
+.cal-evento-nome {
+  font-size: 11px;
+  font-weight: 600;
+  color: #334155;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cal-evento-mais {
+  font-size: 10px;
+  color: #94a3b8;
+  font-weight: 600;
+  padding: 0 4px;
+}
+
+.cal-add-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  background: var(--sigma-primary, #1f3b73);
+  color: #fff;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+  padding: 0;
+}
+
+.cal-legenda {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.legenda-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.legenda-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.legenda-dot--agendado { background: rgba(31, 59, 115, 0.5); }
+.legenda-dot--realizado { background: #10b981; }
+.legenda-dot--cancelado { background: #dc2626; }
+
+:host ::ng-deep .modal-agendamento .p-dialog-header {
+  padding: 18px 22px 14px !important;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+:host ::ng-deep .modal-agendamento .p-dialog-content {
+  padding: 0 !important;
+}
+
+:host ::ng-deep .modal-agendamento .p-dialog-footer {
+  padding: 14px 22px !important;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+:host ::ng-deep .modal-agendamento {
+  border-radius: 20px !important;
+  overflow: hidden;
+}
+
+.modal-header-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.modal-header-content i { color: var(--sigma-primary, #1f3b73); font-size: 18px; }
+
+.modal-data {
+  font-size: 13px;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-left: 4px;
+}
+
+.modal-body {
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #64748b;
+}
+
+.obrigatorio { color: #dc2626; }
+
+:host ::ng-deep .field .p-dropdown,
+:host ::ng-deep .field .p-calendar {
+  width: 100%;
+  border-radius: 12px !important;
+  min-height: 42px;
+}
+
+.textarea-field {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #dbe3ef;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+}
+
+.textarea-field:focus {
+  border-color: var(--sigma-primary, #1f3b73);
+  box-shadow: 0 0 0 3px rgba(31, 59, 115, 0.1);
+}
+
+:host ::ng-deep .salvar-button {
+  background: var(--sigma-primary, #1f3b73) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+}
+
+.detalhe-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f8fafc;
+}
+
+.detalhe-row:last-child { border-bottom: none; }
+
+.detalhe-row > i { color: #94a3b8; font-size: 15px; margin-top: 2px; flex-shrink: 0; }
+
+.detalhe-row > div { display: flex; flex-direction: column; gap: 2px; }
+
+.detalhe-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+}
+
+.detalhe-row strong { font-size: 14px; color: #0f172a; font-weight: 700; }
+
+@media (max-width: 900px) {
+  .calendario-page { padding: 22px 14px; }
+  .page-header h1 { font-size: 24px; }
+  .cal-dia { min-height: 80px; padding: 6px; }
+}
+
+@media (max-width: 600px) {
+  .cal-dia { min-height: 60px; padding: 4px; }
+  .cal-evento-nome { display: none; }
+  .cal-dia-nome { font-size: 9px; }
+}

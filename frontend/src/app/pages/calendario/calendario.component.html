@@ -1,0 +1,208 @@
+<p-toast></p-toast>
+
+<div class="calendario-page">
+
+  <section class="page-header">
+    <div>
+      <h1>Calendário</h1>
+      <p>Visualize avaliações realizadas e agende novas consultas.</p>
+    </div>
+  </section>
+
+  <p-card styleClass="cal-card">
+
+    <div class="cal-nav">
+      <button pButton type="button" icon="pi pi-chevron-left" class="p-button-text p-button-rounded" (click)="mesAnterior()"></button>
+      <h2 class="cal-titulo">{{ tituloMes }}</h2>
+      <button pButton type="button" icon="pi pi-chevron-right" class="p-button-text p-button-rounded" (click)="proximoMes()"></button>
+    </div>
+
+    <div *ngIf="carregando" class="loading-state">
+      <p-progressSpinner strokeWidth="4" styleClass="spinner-sm"></p-progressSpinner>
+      <span>Carregando...</span>
+    </div>
+
+    <div *ngIf="!carregando" class="cal-grid">
+
+      <div class="cal-semana-header">
+        <div *ngFor="let dia of nomesDias" class="cal-dia-nome">{{ dia }}</div>
+      </div>
+
+      <div *ngFor="let semana of diasCalendario" class="cal-semana">
+        <div
+          *ngFor="let dia of semana"
+          class="cal-dia"
+          [class.cal-dia--outro-mes]="!dia.mesAtual"
+          [class.cal-dia--hoje]="dia.diaAtual"
+          [class.cal-dia--tem-evento]="dia.agendamentos.length > 0"
+          (click)="abrirModal(dia)"
+        >
+          <span class="cal-dia-num">{{ dia.data.getDate() }}</span>
+
+          <div class="cal-eventos">
+            <div
+              *ngFor="let ag of dia.agendamentos.slice(0, 3)"
+              class="cal-evento"
+              [class.cal-evento--realizado]="ag.status === 'REALIZADO'"
+              [class.cal-evento--cancelado]="ag.status === 'CANCELADO'"
+              (click)="verDetalhes(ag, $event)"
+            >
+              <span class="cal-evento-hora">{{ formatarHorario(ag.horario) }}</span>
+              <span class="cal-evento-nome">{{ ag.paciente_nome }}</span>
+            </div>
+            <div *ngIf="dia.agendamentos.length > 3" class="cal-evento-mais">
+              +{{ dia.agendamentos.length - 3 }} mais
+            </div>
+          </div>
+
+          <button class="cal-add-btn" title="Agendar neste dia">
+            <i class="pi pi-plus"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="cal-legenda">
+      <div class="legenda-item"><span class="legenda-dot legenda-dot--agendado"></span> Agendado</div>
+      <div class="legenda-item"><span class="legenda-dot legenda-dot--realizado"></span> Realizado</div>
+      <div class="legenda-item"><span class="legenda-dot legenda-dot--cancelado"></span> Cancelado</div>
+    </div>
+
+  </p-card>
+
+</div>
+
+<p-dialog
+  [(visible)]="modalAberto"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  styleClass="modal-agendamento"
+  [style]="{ width: '480px' }"
+  (onHide)="fecharModal()"
+>
+  <ng-template pTemplate="header">
+    <div class="modal-header-content">
+      <i class="pi pi-calendar-plus"></i>
+      <span>Novo agendamento</span>
+      <span class="modal-data" *ngIf="dataSelecionada">
+        {{ dataSelecionada.toLocaleDateString('pt-BR') }}
+      </span>
+    </div>
+  </ng-template>
+
+  <div class="modal-body">
+    <div class="field">
+      <label>Paciente <span class="obrigatorio">*</span></label>
+      <p-dropdown
+        [(ngModel)]="novoAgendamento.id_paciente"
+        [options]="pacientes"
+        optionLabel="nome"
+        optionValue="id_paciente"
+        placeholder="Selecione o paciente"
+        [filter]="true"
+        filterBy="nome"
+        [showClear]="true"
+      ></p-dropdown>
+    </div>
+
+    <div class="field">
+      <label>Horário <span class="obrigatorio">*</span></label>
+      <p-calendar
+        [(ngModel)]="novoAgendamento.horario"
+        [timeOnly]="true"
+        hourFormat="24"
+        placeholder="HH:MM"
+        [showIcon]="true"
+        icon="pi pi-clock"
+      ></p-calendar>
+    </div>
+
+    <div class="field">
+      <label>Observação</label>
+      <textarea
+        pInputTextarea
+        [(ngModel)]="novoAgendamento.observacao"
+        rows="3"
+        placeholder="Observações sobre o agendamento..."
+        class="textarea-field"
+      ></textarea>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button pButton type="button" label="Cancelar" icon="pi pi-times" class="p-button-outlined p-button-secondary" (click)="fecharModal()"></button>
+    <button pButton type="button" label="Salvar" icon="pi pi-check" iconPos="right" class="salvar-button" [loading]="salvando" (click)="salvarAgendamento()"></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="modalDetalhes"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  styleClass="modal-agendamento"
+  [style]="{ width: '420px' }"
+>
+  <ng-template pTemplate="header">
+    <div class="modal-header-content">
+      <i class="pi pi-calendar"></i>
+      <span>Detalhes do agendamento</span>
+    </div>
+  </ng-template>
+
+  <div class="modal-body" *ngIf="agendamentoDetalhes">
+    <div class="detalhe-row">
+      <i class="pi pi-user"></i>
+      <div>
+        <span class="detalhe-label">Paciente</span>
+        <strong>{{ agendamentoDetalhes.paciente_nome }}</strong>
+      </div>
+    </div>
+    <div class="detalhe-row">
+      <i class="pi pi-id-card"></i>
+      <div>
+        <span class="detalhe-label">Profissional</span>
+        <strong>{{ agendamentoDetalhes.profissional_nome }}</strong>
+      </div>
+    </div>
+    <div class="detalhe-row">
+      <i class="pi pi-clock"></i>
+      <div>
+        <span class="detalhe-label">Horário</span>
+        <strong>{{ formatarHorario(agendamentoDetalhes.horario) }}</strong>
+      </div>
+    </div>
+    <div class="detalhe-row" *ngIf="agendamentoDetalhes.observacao">
+      <i class="pi pi-comment"></i>
+      <div>
+        <span class="detalhe-label">Observação</span>
+        <strong>{{ agendamentoDetalhes.observacao }}</strong>
+      </div>
+    </div>
+    <div class="detalhe-row">
+      <i class="pi pi-tag"></i>
+      <div>
+        <span class="detalhe-label">Status</span>
+        <p-tag
+          [value]="getLabelStatus(agendamentoDetalhes.status)"
+          [severity]="getSeveridadeStatus(agendamentoDetalhes.status)"
+          [rounded]="true"
+        ></p-tag>
+      </div>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      label="Excluir"
+      icon="pi pi-trash"
+      class="p-button-outlined p-button-danger"
+      (click)="excluirAgendamento(agendamentoDetalhes!.id_agendamento)"
+    ></button>
+    <button pButton type="button" label="Fechar" class="p-button-outlined p-button-secondary" (click)="modalDetalhes = false"></button>
+  </ng-template>
+</p-dialog>

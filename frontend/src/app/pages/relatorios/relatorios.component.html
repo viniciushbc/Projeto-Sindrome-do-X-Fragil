@@ -1,23 +1,179 @@
-<section class="placeholder-page">
-  <p-card>
-    <div class="placeholder-content">
-      <i class="pi pi-chart-bar page-icon"></i>
+<p-toast></p-toast>
 
+<div class="relatorios-page">
+
+  <section class="page-header">
+    <div>
       <h1>Relatórios</h1>
+      <p>Consulte e filtre as avaliações clínicas realizadas no sistema.</p>
+    </div>
+  </section>
 
-      <p>
-        Área destinada à visualização de relatórios e indicadores das avaliações realizadas no sistema.
-      </p>
+  <p-card styleClass="filtros-card">
+    <div class="filtros-header">
+      <h2>Filtros</h2>
+    </div>
 
-      <div class="notice">
-        Funcionalidade será implementada nas próximas sprints.
+    <div class="filtros-grid">
+
+      <div class="field">
+        <label>Data inicial</label>
+        <p-calendar
+          [(ngModel)]="dataInicio"
+          dateFormat="dd/mm/yy"
+          [showIcon]="true"
+          placeholder="dd/mm/aaaa"
+          [readonlyInput]="true"
+        ></p-calendar>
       </div>
 
-      <p-button
-        label="Voltar ao menu"
-        icon="pi pi-arrow-left"
-        routerLink="/menu"
-      ></p-button>
+      <div class="field">
+        <label>Data final</label>
+        <p-calendar
+          [(ngModel)]="dataFim"
+          dateFormat="dd/mm/yy"
+          [showIcon]="true"
+          placeholder="dd/mm/aaaa"
+          [readonlyInput]="true"
+        ></p-calendar>
+      </div>
+
+      <div class="field">
+        <label>Paciente</label>
+        <p-dropdown
+          [(ngModel)]="pacienteSelecionado"
+          [options]="pacientes"
+          optionLabel="nome"
+          optionValue="id_paciente"
+          placeholder="Todos os pacientes"
+          [showClear]="true"
+          [filter]="true"
+          filterBy="nome"
+        ></p-dropdown>
+      </div>
+
+      <div class="field" *ngIf="isAdmin">
+        <label>Profissional</label>
+        <p-dropdown
+          [(ngModel)]="usuarioSelecionado"
+          [options]="usuarios"
+          optionLabel="nome"
+          optionValue="id_usuario"
+          placeholder="Todos os profissionais"
+          [showClear]="true"
+        ></p-dropdown>
+      </div>
+
+      <div class="field">
+        <label>Resultado</label>
+        <p-dropdown
+          [(ngModel)]="resultadoSelecionado"
+          [options]="opcoesResultado"
+          optionLabel="label"
+          optionValue="value"
+        ></p-dropdown>
+      </div>
+
+    </div>
+
+    <div class="filtros-actions">
+      <button
+        pButton
+        type="button"
+        label="Limpar"
+        icon="pi pi-times"
+        class="p-button-outlined p-button-secondary"
+        (click)="limparFiltros()"
+      ></button>
+      <button
+        pButton
+        type="button"
+        label="Buscar"
+        icon="pi pi-search"
+        iconPos="right"
+        class="buscar-button"
+        [loading]="carregando"
+        (click)="buscar()"
+      ></button>
     </div>
   </p-card>
-</section>
+
+  <div *ngIf="carregando" class="loading-state">
+    <p-progressSpinner strokeWidth="4" styleClass="spinner-sm"></p-progressSpinner>
+    <span>Buscando registros...</span>
+  </div>
+
+  <p-card *ngIf="!carregando" styleClass="tabela-card">
+
+    <div class="tabela-header">
+      <h2>Resultados</h2>
+      <span class="tabela-count">{{ registros.length }} registro(s)</span>
+    </div>
+
+    <p-divider styleClass="divider-slim"></p-divider>
+
+    <div *ngIf="erro" class="empty-msg">
+      Não foi possível carregar os relatórios.
+    </div>
+
+    <div *ngIf="!erro && registros.length === 0" class="empty-msg">
+      Nenhum registro encontrado para os filtros selecionados.
+    </div>
+
+    <p-table
+      *ngIf="!erro && registros.length > 0"
+      [value]="registros"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 25, 50]"
+      styleClass="p-datatable-sm sigma-table"
+      [tableStyle]="{'min-width': '900px'}"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Data</th>
+          <th>Paciente</th>
+          <th>Sexo</th>
+          <th>Profissional</th>
+          <th style="text-align:center">Score</th>
+          <th style="text-align:center">Limiar</th>
+          <th style="text-align:center">Resultado</th>
+          <th style="text-align:center">Ações</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td>{{ formatarData(row.data_avaliacao) }}</td>
+          <td>{{ row.paciente_nome }}</td>
+          <td>{{ formatarSexo(row.paciente_sexo) }}</td>
+          <td>{{ row.profissional_nome }}</td>
+          <td style="text-align:center">
+            <span class="score-pill" [class.score-pill--alto]="row.resultado === 'ENCAMINHAR'">
+              {{ scorePercent(row.score) }}%
+            </span>
+          </td>
+          <td style="text-align:center">{{ scorePercent(row.limiar_utilizado) }}%</td>
+          <td style="text-align:center">
+            <p-tag
+              [value]="getResultadoLabel(row.resultado)"
+              [severity]="getSeverity(row.resultado)"
+              [rounded]="true"
+            ></p-tag>
+          </td>
+          <td style="text-align:center">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-eye"
+              class="p-button-text p-button-sm"
+              pTooltip="Ver detalhes"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+
+    </p-table>
+  </p-card>
+
+</div>

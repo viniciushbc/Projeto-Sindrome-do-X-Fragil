@@ -9,6 +9,8 @@ const usuariosRoute = require('./routes/usuarios.routes')
 const pacientesRoute = require('./routes/pacientes.routes')
 const sintomasRoute = require('./routes/sintomas.routes')
 const avaliacoesRoute = require('./routes/avaliacoes.routes')
+const relatoriosRoute = require('./routes/relatorio.routes')
+const agendamentosRoute = require('./routes/agendamentos.routes')
 
 
 const app = express();
@@ -26,6 +28,8 @@ app.use('/usuarios', usuariosRoute);
 app.use('/pacientes', pacientesRoute);
 app.use('/sintomas', sintomasRoute)
 app.use('/avaliacoes', avaliacoesRoute);
+app.use('/relatorios', relatoriosRoute);
+app.use('/agendamentos', agendamentosRoute);
 
 
 // middlewares para rotas nao encontradas & erros internos no server (404 e 500)
