@@ -22,3 +22,23 @@ export interface PayloadAvaliacao {
   observacoes?: string | null;
   respostas: RespostaSintoma[];
 }
+
+export interface CriarAvaliacaoResponse {
+  id_avaliacao: number;
+  id_paciente: number;
+  score: number;
+  limiar_utilizado: number;
+  resultado: 'ENCAMINHAR' | 'NAO_ENCAMINHAR';
+  recomendacao: string;
+}
+
+export interface AvaliacaoResumo {
+  id_avaliacao: number;
+  data_avaliacao: string;
+  score: number;
+  resultado: 'ENCAMINHAR' | 'NAO_ENCAMINHAR';
+  respondente_nome: string;
+  respondente_parentesco: string;
+  paciente_nome: string;
+  paciente_sexo: string;
+}

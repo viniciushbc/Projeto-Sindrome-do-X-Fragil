@@ -7,11 +7,12 @@ import { CardModule } from 'primeng/card';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { FormsModule } from '@angular/forms';
-
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { Sintoma } from '../../../models/sintoma.model';
-import { NovaAvaliacaoInicial, PayloadAvaliacao, RespostaSintoma } from '../../../models/avaliacao.model';
+import { CriarAvaliacaoResponse, NovaAvaliacaoInicial, PayloadAvaliacao, RespostaSintoma } from '../../../models/avaliacao.model';
 import { SintomasService } from '../../../services/sintoma.service';
 import { AvaliacaoService } from '../../../services/avaliacao.service';
 
@@ -31,6 +32,7 @@ interface ItemChecklist {
     CheckboxModule,
     ButtonModule,
     DividerModule,
+    ProgressSpinnerModule,
   ],
   templateUrl: './checklist.component.html',
   styleUrl: './checklist.component.css',
@@ -44,6 +46,8 @@ export class ChecklistComponent implements OnInit {
   carregandoSintomas = false;
   erroCarregamento = false;
   enviando = false;
+
+  resultado: CriarAvaliacaoResponse | null = null;
 
   private readonly ID_MACROORQUIDISMO = 3;
 
@@ -119,6 +123,18 @@ export class ChecklistComponent implements OnInit {
     this.router.navigate(['/avaliacoes/nova']);
   }
 
+  novaAvaliacao(): void {
+    this.resultado = null;
+    this.avaliacaoService.limparAvaliacaoInicial();
+    this.router.navigate(['/avaliacoes/nova']);
+  }
+
+  irParaListagem(): void {
+    this.resultado = null;
+    this.avaliacaoService.limparAvaliacaoInicial();
+    this.router.navigate(['/avaliacoes']);
+  }
+
   enviarAvaliacao(): void {
     if (!this.avaliacaoInicial) return;
 
@@ -147,28 +163,54 @@ export class ChecklistComponent implements OnInit {
 
     this.enviando = true;
 
-    this.avaliacaoService.enviarAvaliacao(payload).subscribe({
-      next: () => {
+    this.avaliacaoService.criarAvaliacao(payload).subscribe({
+      next: (resposta) => {
+        this.enviando = false;
+        this.resultado = resposta;
         this.avaliacaoService.limparAvaliacaoInicial();
-
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Avaliação enviada',
-          detail: 'O checklist clínico foi salvo com sucesso.',
-        });
-
-        setTimeout(() => this.router.navigate(['/avaliacoes']), 1500);
       },
-      error: () => {
+      error: (erro: HttpErrorResponse) => {
         this.enviando = false;
 
+        if (erro.status === 401) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Sessão expirada',
+            detail: 'Sessão expirada. Faça login novamente.',
+            life: 4000,
+          });
+          setTimeout(() => this.router.navigate(['/login']), 2000);
+          return;
+        }
+
+        if (erro.status === 0) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Servidor indisponível',
+            detail: 'Não foi possível conectar ao servidor. Verifique sua conexão.',
+            life: 5000,
+          });
+          return;
+        }
+
+        const detalhe = erro.error?.message || 'Não foi possível salvar a avaliação. Tente novamente.';
         this.messageService.add({
           severity: 'error',
           summary: 'Erro ao enviar',
-          detail: 'Não foi possível salvar a avaliação. Tente novamente.',
+          detail: detalhe,
+          life: 5000,
         });
       },
     });
+  }
+
+  get scorePercent(): number {
+    if (!this.resultado) return 0;
+    return Math.round(this.resultado.score * 100);
+  }
+
+  get deveEncaminhar(): boolean {
+    return this.resultado?.resultado === 'ENCAMINHAR';
   }
 
   trackBySintoma(_: number, item: ItemChecklist): number {

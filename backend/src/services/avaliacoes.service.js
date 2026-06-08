@@ -160,6 +160,26 @@ async function criarAvaliacao(dados, idUsuario) {
   }
 }
 
+
+async function listarAvaliacoes() {
+  const [rows] = await db.execute(`
+    SELECT
+      a.id_avaliacao,
+      a.data_avaliacao,
+      a.score,
+      a.resultado,
+      a.respondente_nome,
+      a.respondente_parentesco,
+      p.nome AS paciente_nome,
+      p.sexo AS paciente_sexo
+    FROM avaliacoes a
+    INNER JOIN pacientes p ON p.id_paciente = a.id_paciente
+    ORDER BY a.data_avaliacao DESC
+  `);
+  return rows;
+}
+
 module.exports = {
-  criarAvaliacao
+  criarAvaliacao,
+  listarAvaliacoes
 };

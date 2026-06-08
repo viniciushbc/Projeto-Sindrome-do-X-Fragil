@@ -1,1 +1,99 @@
-<p>listar-avaliacoes works!</p>
+<p-toast></p-toast>
+
+<div class="listar-page">
+
+  <section class="page-header">
+    <div>
+      <h1>Avaliações clínicas</h1>
+      <p>Histórico de triagens realizadas pelo sistema.</p>
+    </div>
+    <button
+      pButton
+      type="button"
+      label="Nova avaliação"
+      icon="pi pi-plus"
+      iconPos="right"
+      class="continue-button"
+      (click)="novaAvaliacao()"
+    ></button>
+  </section>
+
+  <div *ngIf="carregando" class="loading-state">
+    <p-progressSpinner strokeWidth="4" styleClass="spinner-sm"></p-progressSpinner>
+    <span>Carregando avaliações...</span>
+  </div>
+
+  <div *ngIf="erro && !carregando" class="empty-card">
+    <i class="pi pi-exclamation-circle"></i>
+    <p>Não foi possível carregar as avaliações. Tente novamente.</p>
+  </div>
+
+  <div *ngIf="!carregando && !erro && avaliacoes.length === 0" class="empty-card">
+    <i class="pi pi-clipboard"></i>
+    <p>Nenhuma avaliação registrada ainda.</p>
+    <button pButton type="button" label="Iniciar primeira avaliação" icon="pi pi-plus" (click)="novaAvaliacao()"></button>
+  </div>
+
+  <div *ngIf="!carregando && !erro && avaliacoes.length > 0" class="avaliacoes-grid">
+    <p-card *ngFor="let a of avaliacoes" styleClass="avaliacao-card">
+
+      <div class="card-header">
+        <div class="card-id">#{{ a.id_avaliacao }}</div>
+        <p-tag
+          [value]="getResultadoLabel(a.resultado)"
+          [severity]="getSeverity(a.resultado)"
+          [rounded]="true"
+        ></p-tag>
+      </div>
+
+      <p-divider styleClass="divider-slim"></p-divider>
+
+      <div class="card-body-content">
+        <div class="info-row">
+          <i class="pi pi-user"></i>
+          <div>
+            <span class="info-label">Paciente</span>
+            <strong>{{ a.paciente_nome }}</strong>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <i class="pi pi-id-card"></i>
+          <div>
+            <span class="info-label">Respondente</span>
+            <strong>{{ a.respondente_nome || 'Não informado' }}</strong>
+            <span class="info-sub" *ngIf="a.respondente_parentesco">{{ a.respondente_parentesco }}</span>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <i class="pi pi-calendar"></i>
+          <div>
+            <span class="info-label">Data</span>
+            <strong>{{ formatarData(a.data_avaliacao) }}</strong>
+          </div>
+        </div>
+      </div>
+
+      <p-divider styleClass="divider-slim"></p-divider>
+
+      <div class="score-bar-area">
+        <div class="score-bar-header">
+          <span class="info-label">Score</span>
+          <span class="score-valor" [class.score-alto]="a.resultado === 'ENCAMINHAR'">
+            {{ scorePercent(a.score) }}%
+          </span>
+        </div>
+        <div class="score-bar-bg">
+          <div
+            class="score-bar-fill"
+            [class.score-bar-fill--alto]="a.resultado === 'ENCAMINHAR'"
+            [style.width.%]="scorePercent(a.score)"
+          ></div>
+        </div>
+      </div>
+
+    </p-card>
+  </div>
+
+</div>

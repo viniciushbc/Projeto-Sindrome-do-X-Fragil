@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-
 import { Sintoma } from '../models/sintoma.model';
 
 const SINTOMAS_FALLBACK: Sintoma[] = [
