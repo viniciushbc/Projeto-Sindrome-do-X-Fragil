@@ -168,6 +168,8 @@ export class ChecklistComponent implements OnInit {
         this.enviando = false;
         this.resultado = resposta;
         this.avaliacaoService.limparAvaliacaoInicial();
+        this.avaliacaoService.setResultado(resposta);
+        this.router.navigate(['/avaliacoes/resultado']);
       },
       error: (erro: HttpErrorResponse) => {
         this.enviando = false;

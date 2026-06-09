@@ -1,0 +1,81 @@
+<div class="pagina">
+
+  <div class="topo">
+    <div class="topo-logo">
+      <div class="logo-icon">Σ</div>
+      <div>
+        <span class="logo-title">SIGMA</span>
+        <span class="logo-sub">Resultado da Triagem</span>
+      </div>
+    </div>
+    <div class="slogan">
+      <h1>Sistema de Triagem</h1>
+      <p>Síndrome do X Frágil</p>
+    </div>
+  </div>
+
+  <div class="resultado-card">
+
+    <div class="card-header">
+      <h2>Avaliação clínica</h2>
+    </div>
+
+    <div *ngIf="resultadoReal">
+
+      <div class="dados-grid">
+        <div class="dado">
+          <div class="dado-label">ID avaliação</div>
+          <div class="dado-valor">{{ resultadoReal.id_avaliacao }}</div>
+        </div>
+        <div class="dado">
+          <div class="dado-label">ID paciente</div>
+          <div class="dado-valor">{{ resultadoReal.id_paciente }}</div>
+        </div>
+        <div class="dado">
+          <div class="dado-label">Score calculado</div>
+          <div class="dado-valor">{{ resultadoReal.score }}</div>
+        </div>
+        <div class="dado">
+          <div class="dado-label">Limiar utilizado</div>
+          <div class="dado-valor">{{ resultadoReal.limiar_utilizado }}</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="resultado-box encaminhar" *ngIf="resultadoReal.resultado === 'ENCAMINHAR'">
+        <div class="resultado-icon encaminhar">
+          <i class="pi pi-exclamation-circle"></i>
+        </div>
+        <div class="resultado-texto">
+          <h3>Encaminhar para teste genético</h3>
+          <p>{{ resultadoReal.recomendacao }}</p>
+        </div>
+      </div>
+
+      <div class="resultado-box nao-encaminhar" *ngIf="resultadoReal.resultado === 'NAO_ENCAMINHAR'">
+        <div class="resultado-icon nao-encaminhar">
+          <i class="pi pi-check-circle"></i>
+        </div>
+        <div class="resultado-texto">
+          <h3>Triagem não indica encaminhamento</h3>
+          <p>{{ resultadoReal.recomendacao }}</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="aviso">
+      <i class="pi pi-info-circle aviso-icon"></i>
+      <span>Este resultado não representa diagnóstico definitivo. A avaliação médica deve ser mantida conforme julgamento profissional.</span>
+    </div>
+
+    <div class="acoes">
+      <button pButton type="button" label="Voltar para pacientes" icon="pi pi-arrow-left" severity="secondary" (click)="voltar()"></button>
+      <button pButton type="button" label="Nova avaliação" icon="pi pi-plus" (click)="novaAvaliacao()"></button>
+      <button pButton type="button" label="Ver histórico" icon="pi pi-history" severity="info" (click)="verHistorico()"></button>
+    </div>
+
+  </div>
+
+</div>

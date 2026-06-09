@@ -13,6 +13,9 @@ export class AvaliacaoService {
     private readonly storageKey = 'nova_avaliacao_inicial';
     private readonly apiUrl = environment.apiUrl;
 
+    private resultadoSubject = new BehaviorSubject<CriarAvaliacaoResponse | null>(null);
+    resultado$ = this.resultadoSubject.asObservable();
+
     private avaliacaoInicialSubject = new BehaviorSubject<NovaAvaliacaoInicial | null>(
         this.carregarDoStorage()
     );
@@ -20,6 +23,10 @@ export class AvaliacaoService {
     avaliacaoInicial$ = this.avaliacaoInicialSubject.asObservable();
 
     constructor(private http: HttpClient, private authService: AuthService) {}
+
+     setResultado(dados: CriarAvaliacaoResponse) {
+    this.resultadoSubject.next(dados);
+    }
 
     private getHeaders(): HttpHeaders {
         return new HttpHeaders({

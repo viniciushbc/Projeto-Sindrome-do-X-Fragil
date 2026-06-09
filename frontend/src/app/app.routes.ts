@@ -84,6 +84,14 @@ export const routes: Routes = [
       (m) => m.ChecklistComponent
     ),
 },
+
+{
+  path: 'avaliacoes/resultado',
+  loadComponent: () =>
+    import('./pages/avaliacoes/resultado-triagem/resultado-triagem.component').then(
+      (m) => m.ResultadoTriagemComponent
+    ),
+},
   
   {
     path: 'relatorios',
