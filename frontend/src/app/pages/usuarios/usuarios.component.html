@@ -1,104 +1,229 @@
-<div class="page-wrapper">
-  <app-header
-    userName="Superusuário"
-    userRole="Acesso Total"
-  ></app-header>
+<p-toast></p-toast>
 
-  <!-- Sub-header da página -->
-  <div class="page-subheader">
-    <div class="page-subheader__inner">
-      <div class="page-subheader__icon">
-        <i class="pi pi-shield"></i>
-      </div>
-      <div>
-        <h1 class="page-subheader__title">Gerenciamento de Permissões</h1>
-        <p class="page-subheader__subtitle">Controle de acesso e permissões de usuários</p>
-      </div>
+<div class="sigma-page">
+  <app-header></app-header>
+
+  <!-- Barra de ações -->
+  <div class="sigma-actionbar">
+    <div class="sigma-search">
+      <input pInputText type="text" placeholder="Buscar usuário..."
+        [(ngModel)]="busca" />
+      <button pButton icon="pi pi-search" class="btn-primary btn-icon"></button>
+    </div>
+    <div class="sigma-actionbar-end" *ngIf="isAdmin">
+      <button pButton type="button" label="Novo Usuário" icon="pi pi-plus"
+        class="btn-primary" (click)="abrirNovo()"></button>
     </div>
   </div>
 
-  <main class="page-content">
-    <div class="layout-split">
-      <!-- Painel esquerdo: lista de usuários -->
-      <aside class="users-panel">
-        <h2 class="users-panel__title">Usuários do Sistema</h2>
-        <div class="search-wrapper">
-          <i class="pi pi-search search-icon"></i>
-          <input
-            pInputText
-            [(ngModel)]="busca"
-            placeholder="Buscar usuário..."
-            class="search-input"
-          />
+  <!-- Conteúdo -->
+  <div class="sigma-content">
+
+    <div *ngIf="carregando" class="loading">
+      <p-progressSpinner strokeWidth="4"></p-progressSpinner>
+      <span>Carregando usuários...</span>
+    </div>
+
+    <div *ngIf="!carregando" class="layout">
+
+      <!-- ── Lista ── -->
+      <div class="lista-card">
+        <div class="lista-header">
+          <span class="lista-titulo">Usuários</span>
+          <span class="lista-count">{{ usuariosFiltrados.length }}</span>
         </div>
 
-        <div class="users-list">
-          <div
-            *ngFor="let u of usuariosFiltrados"
-            class="user-item"
-            [class.user-item--active]="usuarioSelecionado?.email === u.email"
-            (click)="selecionarUsuario(u)"
-          >
-            <div class="user-item__name">{{ u.nome }}</div>
-            <div class="user-item__email">{{ u.email }}</div>
-            <div class="user-item__tags">
-              <span class="tag-cargo">{{ u.cargo }}</span>
-              <span class="tag-status" [class.tag-status--inativo]="u.status === 'Inativo'">
-                {{ u.status }}
-              </span>
+        <div *ngFor="let u of usuariosFiltrados" class="u-item"
+          [class.sel]="usuarioSelecionado?.id_usuario === u.id_usuario"
+          (click)="selecionarUsuario(u)">
+          <div class="avatar" [class.inativo]="!u.ativo">
+            {{ u.nome.charAt(0).toUpperCase() }}
+          </div>
+          <div class="u-info">
+            <strong>{{ u.nome }}</strong>
+            <span>{{ u.tipo_usuario === 'ADMIN' ? 'Administrador' : 'Usuário Padrão' }}</span>
+          </div>
+          <p-tag
+            [value]="u.ativo ? 'Ativo' : 'Inativo'"
+            [severity]="u.ativo ? 'success' : 'danger'"
+            [rounded]="true"></p-tag>
+        </div>
+
+        <div *ngIf="usuariosFiltrados.length === 0" class="lista-vazio">
+          <i class="pi pi-search"></i>
+          <p>Nenhum usuário encontrado.</p>
+        </div>
+      </div>
+
+      <!-- ── Detalhe ── -->
+      <div class="detalhe-card">
+
+        <!-- Placeholder -->
+        <div *ngIf="!usuarioSelecionado" class="placeholder">
+          <i class="pi pi-users"></i>
+          <p>Selecione um usuário para ver os detalhes e gerenciar o acesso.</p>
+        </div>
+
+        <!-- Detalhe do usuário -->
+        <div *ngIf="usuarioSelecionado">
+
+          <!-- Cabeçalho -->
+          <div class="d-cabecalho">
+            <div class="d-avatar" [class.inativo]="!usuarioSelecionado.ativo">
+              {{ usuarioSelecionado.nome.charAt(0).toUpperCase() }}
             </div>
+            <div class="d-info">
+              <h2>{{ usuarioSelecionado.nome }}</h2>
+              <span class="d-tipo">{{ usuarioSelecionado.tipo_usuario === 'ADMIN' ? 'Administrador' : 'Usuário Padrão' }}</span>
+            </div>
+            <p-tag
+              [value]="usuarioSelecionado.ativo ? 'Ativo' : 'Inativo'"
+              [severity]="usuarioSelecionado.ativo ? 'success' : 'danger'"
+              [rounded]="true"></p-tag>
           </div>
-        </div>
 
-        <button pButton type="button" label="Novo Usuário" icon="pi pi-user-plus" class="btn-novo-usuario"></button>
-      </aside>
-
-      <!-- Painel direito: permissões do usuário selecionado -->
-      <section class="permissions-panel" *ngIf="usuarioSelecionado">
-        <div class="user-detail-header">
-          <div>
-            <h2 class="user-detail-name">{{ usuarioSelecionado.nome }}</h2>
-            <p class="user-detail-email">{{ usuarioSelecionado.email }}</p>
-            <p class="user-detail-cargo">Cargo: {{ usuarioSelecionado.cargo }}</p>
+          <!-- Dados -->
+          <div class="d-secao">
+            <span class="d-secao-titulo">Informações</span>
+            <div class="d-linha"><span>E-mail</span><strong>{{ usuarioSelecionado.email }}</strong></div>
+            <div class="d-linha" *ngIf="usuarioSelecionado.cpf"><span>CPF</span><strong>{{ usuarioSelecionado.cpf }}</strong></div>
+            <div class="d-linha" *ngIf="usuarioSelecionado.cargo"><span>Cargo</span><strong>{{ usuarioSelecionado.cargo }}</strong></div>
+            <div class="d-linha" *ngIf="usuarioSelecionado.especialidade"><span>Especialidade</span><strong>{{ usuarioSelecionado.especialidade }}</strong></div>
+            <div class="d-linha" *ngIf="usuarioSelecionado.crm"><span>CRM</span><strong>{{ usuarioSelecionado.crm }}</strong></div>
+            <div class="d-linha" *ngIf="usuarioSelecionado.instituicao"><span>Instituição</span><strong>{{ usuarioSelecionado.instituicao }}</strong></div>
           </div>
-          <div class="user-detail-actions">
-            <button class="icon-btn" title="Editar"><i class="pi pi-pencil"></i></button>
-            <button class="icon-btn icon-btn--danger" title="Excluir"><i class="pi pi-trash"></i></button>
-          </div>
-        </div>
 
-        <h3 class="permissions-title">Permissões por Módulo</h3>
-
-        <div class="permissions-list">
-          <div *ngFor="let modulo of modulos" class="permission-item">
-            <div class="permission-item__header">
-              <span class="permission-item__name">{{ modulo.nome }}</span>
-              <div class="permission-item__right">
-                <span class="perm-badge">{{ modulo.total }} permissões</span>
-                <i class="pi pi-chevron-down"></i>
+          <!-- Nível de acesso -->
+          <div class="d-secao">
+            <span class="d-secao-titulo">Nível de acesso</span>
+            <div class="acesso-grid">
+              <div class="acesso-item" [class.liberado]="true">
+                <i class="pi pi-users"></i>
+                <span>Pacientes</span>
+                <i class="pi pi-check acesso-ok"></i>
+              </div>
+              <div class="acesso-item" [class.liberado]="true">
+                <i class="pi pi-clipboard"></i>
+                <span>Avaliações</span>
+                <i class="pi pi-check acesso-ok"></i>
+              </div>
+              <div class="acesso-item" [class.liberado]="true">
+                <i class="pi pi-chart-bar"></i>
+                <span>Relatórios</span>
+                <i class="pi pi-check acesso-ok"></i>
+              </div>
+              <div class="acesso-item" [class.liberado]="true">
+                <i class="pi pi-calendar"></i>
+                <span>Agendamentos</span>
+                <i class="pi pi-check acesso-ok"></i>
+              </div>
+              <div class="acesso-item" [class.liberado]="usuarioSelecionado.tipo_usuario === 'ADMIN'">
+                <i class="pi pi-shield"></i>
+                <span>Usuários</span>
+                <i class="pi" [class.pi-check]="usuarioSelecionado.tipo_usuario === 'ADMIN'"
+                   [class.pi-times]="usuarioSelecionado.tipo_usuario !== 'ADMIN'"
+                   [class.acesso-ok]="usuarioSelecionado.tipo_usuario === 'ADMIN'"
+                   [class.acesso-no]="usuarioSelecionado.tipo_usuario !== 'ADMIN'"></i>
+              </div>
+              <div class="acesso-item" [class.liberado]="usuarioSelecionado.tipo_usuario === 'ADMIN'">
+                <i class="pi pi-list"></i>
+                <span>Logs</span>
+                <i class="pi" [class.pi-check]="usuarioSelecionado.tipo_usuario === 'ADMIN'"
+                   [class.pi-times]="usuarioSelecionado.tipo_usuario !== 'ADMIN'"
+                   [class.acesso-ok]="usuarioSelecionado.tipo_usuario === 'ADMIN'"
+                   [class.acesso-no]="usuarioSelecionado.tipo_usuario !== 'ADMIN'"></i>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="permission-actions">
-          <button pButton type="button" label="Salvar Alterações" class="btn-salvar"></button>
-          <button pButton type="button" label="Cancelar" class="btn-cancelar p-button-text"></button>
-        </div>
-      </section>
+          <!-- Ações (só admin) -->
+          <div class="d-acoes" *ngIf="isAdmin">
+            <button pButton type="button" label="Editar" icon="pi pi-pencil"
+              class="btn-secondary" (click)="abrirEdicao(usuarioSelecionado)"></button>
+            <button pButton type="button"
+              [label]="usuarioSelecionado.ativo ? 'Desativar' : 'Ativar'"
+              [icon]="usuarioSelecionado.ativo ? 'pi pi-ban' : 'pi pi-check'"
+              [class]="usuarioSelecionado.ativo ? 'btn-danger' : 'btn-primary'"
+              (click)="alterarStatus(usuarioSelecionado)"></button>
+          </div>
 
-      <!-- Estado vazio -->
-      <section class="permissions-panel permissions-panel--empty" *ngIf="!usuarioSelecionado">
-        <div class="empty-state">
-          <i class="pi pi-user"></i>
-          <p>Selecione um usuário para gerenciar suas permissões</p>
         </div>
-      </section>
+      </div>
+
     </div>
-
-    <div class="placeholder-notice">
-      <i class="pi pi-info-circle"></i>
-      <span>Funcionalidade completa será implementada nas próximas sprints.</span>
-    </div>
-  </main>
+  </div>
 </div>
+
+<!-- ── Dialog: Criar / Editar usuário ── -->
+<p-dialog [(visible)]="dialogVisivel" [header]="dialogTitulo"
+  [modal]="true" [draggable]="false" [resizable]="false"
+  [style]="{width:'600px'}" [breakpoints]="{'768px':'95vw'}">
+
+  <form [formGroup]="form" class="dialog-form">
+
+    <div class="campo">
+      <label>Nome completo *</label>
+      <input pInputText formControlName="nome" placeholder="Nome completo" class="w-full" />
+      <small *ngIf="campoInvalido('nome')" class="erro">Nome obrigatório (mín. 3 caracteres).</small>
+    </div>
+
+    <div class="linha-dupla">
+      <div class="campo">
+        <label>E-mail *</label>
+        <input pInputText formControlName="email" placeholder="email@exemplo.com" class="w-full" />
+        <small *ngIf="campoInvalido('email')" class="erro">E-mail inválido.</small>
+      </div>
+      <div class="campo">
+        <label>{{ isEdicao ? 'Nova senha (deixe em branco para não alterar)' : 'Senha *' }}</label>
+        <input pInputText formControlName="senha" type="password"
+          [placeholder]="isEdicao ? 'Nova senha...' : 'Mínimo 6 caracteres'" class="w-full" />
+        <small *ngIf="campoInvalido('senha')" class="erro">Senha obrigatória (mín. 6 caracteres).</small>
+      </div>
+    </div>
+
+    <div class="linha-dupla">
+      <div class="campo">
+        <label>CPF</label>
+        <input pInputText formControlName="cpf" placeholder="000.000.000-00" class="w-full" />
+      </div>
+      <div class="campo">
+        <label>Tipo de usuário *</label>
+        <p-dropdown formControlName="tipo_usuario" [options]="tiposUsuario"
+          optionLabel="label" optionValue="value"
+          placeholder="Selecione" styleClass="w-full"></p-dropdown>
+      </div>
+    </div>
+
+    <div class="linha-dupla">
+      <div class="campo">
+        <label>Cargo</label>
+        <input pInputText formControlName="cargo" placeholder="Ex: Médico, Enfermeiro" class="w-full" />
+      </div>
+      <div class="campo">
+        <label>Especialidade</label>
+        <input pInputText formControlName="especialidade" placeholder="Ex: Pediatria" class="w-full" />
+      </div>
+    </div>
+
+    <div class="linha-dupla">
+      <div class="campo">
+        <label>CRM</label>
+        <input pInputText formControlName="crm" placeholder="Ex: 12345-PR" class="w-full" />
+      </div>
+      <div class="campo">
+        <label>Instituição</label>
+        <input pInputText formControlName="instituicao" placeholder="Ex: PUCPR" class="w-full" />
+      </div>
+    </div>
+
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button pButton type="button" label="Cancelar"
+      class="btn-secondary" (click)="dialogVisivel = false"></button>
+    <button pButton type="button"
+      [label]="isEdicao ? 'Salvar alterações' : 'Criar usuário'"
+      icon="pi pi-check" class="btn-primary"
+      [loading]="salvando" (click)="salvar()"></button>
+  </ng-template>
+</p-dialog>

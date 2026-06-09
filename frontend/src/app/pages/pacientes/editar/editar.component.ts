@@ -10,6 +10,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { HeaderComponent } from '../../../layout/header/header.component';
 
 import { PacienteService } from '../../../services/paciente.service';
 
@@ -17,6 +18,7 @@ import { PacienteService } from '../../../services/paciente.service';
   selector: 'app-editar',
   standalone: true,
   imports: [
+    HeaderComponent,
     CommonModule,
     ReactiveFormsModule,
     InputTextModule,

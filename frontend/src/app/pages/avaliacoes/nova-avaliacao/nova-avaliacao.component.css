@@ -1,546 +1,85 @@
-.nova-avaliacao-page {
-  min-height: 100vh;
-  padding: 36px 40px;
-  background:
-    radial-gradient(circle at top left, rgba(31, 59, 115, 0.08), transparent 34%),
-    linear-gradient(180deg, #f8fafc 0%, var(--sigma-bg, #f6f8fb) 100%);
-}
+:host { display: block; }
 
-/* HEADER */
-.page-header {
-  max-width: 1120px;
-  margin: 0 auto 26px auto;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
-
-.page-header h1 {
-  margin: 0 0 8px 0;
-  color: var(--sigma-primary, #1f3b73);
-  font-size: 30px;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-}
-
-.page-header p {
-  margin: 0;
-  max-width: 720px;
-  color: var(--sigma-text-muted, #6b7280);
-  font-size: 15px;
-  line-height: 1.55;
-}
-
-/* CARD PRINCIPAL */
-:host ::ng-deep .avaliacao-card {
-  max-width: 1120px;
+.form-content {
+  padding: 2rem;
+  max-width: 760px;
   margin: 0 auto;
-  border-radius: 22px;
-  overflow: hidden;
-  background: rgba(255, 255, 255, 0.96);
-  border: 1px solid rgba(148, 163, 184, 0.22);
-  box-shadow:
-    0 22px 50px rgba(15, 23, 42, 0.08),
-    0 2px 8px rgba(15, 23, 42, 0.04);
+  box-sizing: border-box;
 }
 
-:host ::ng-deep .avaliacao-card .p-card-body {
-  padding: 30px;
+.form-title {
+  margin-bottom: 1.5rem;
 }
-
-:host ::ng-deep .avaliacao-card .p-card-content {
-  padding: 0;
+.form-title h2 {
+  margin: 0 0 4px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--sigma-primary);
 }
-
-/* FORM */
-.avaliacao-form {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-
-.form-section {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  padding: 22px;
-  border-radius: 18px;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-  border: 1px solid rgba(226, 232, 240, 0.95);
-}
-
-.form-section h2 {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.form-title p {
   margin: 0;
-  color: #0f172a;
-  font-size: 19px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-size: 0.85rem;
+  color: var(--sigma-text-muted);
+  line-height: 1.5;
 }
 
-.form-section h2::before {
-  content: "";
-  width: 5px;
-  height: 22px;
-  border-radius: 999px;
-  background: var(--sigma-primary, #1f3b73);
-  box-shadow: 0 0 0 4px rgba(31, 59, 115, 0.1);
+.form-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(30,58,95,0.08);
+  border: 1px solid rgba(148,163,184,0.18);
 }
 
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.field {
+.campo {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
 }
-
-.field label {
-  color: #334155;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-}
-
-.field label span {
-  color: #dc2626;
-}
-
-/* INPUTS E DROPDOWNS */
-:host ::ng-deep .p-dropdown,
-:host ::ng-deep .p-inputtext,
-:host ::ng-deep input.p-inputtext,
-:host ::ng-deep textarea,
-.field input[pInputText],
-#nomeRespondente,
-#documentoRespondente {
-  width: 100%;
-}
-
-:host ::ng-deep .p-dropdown,
-:host ::ng-deep .p-inputtext,
-:host ::ng-deep input.p-inputtext,
-.field input[pInputText],
-#nomeRespondente,
-#documentoRespondente {
-  min-height: 46px;
-  height: 46px;
-  border-radius: 13px;
-  border: 1px solid #dbe3ef;
-  background: #ffffff;
-  color: #0f172a;
-  font-size: 14px;
-  font-family: inherit;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    background-color 0.2s ease,
-    transform 0.2s ease;
-}
-
-:host ::ng-deep .p-inputtext,
-:host ::ng-deep input.p-inputtext,
-.field input[pInputText],
-#nomeRespondente,
-#documentoRespondente {
-  padding: 0 14px;
-  outline: none;
-}
-
-:host ::ng-deep .p-dropdown {
-  display: flex;
-  align-items: center;
-}
-
-:host ::ng-deep .p-dropdown .p-dropdown-label {
-  display: flex;
-  align-items: center;
-  min-height: 44px;
-  padding: 0 14px;
-  color: #0f172a;
-}
-
-:host ::ng-deep .p-dropdown .p-placeholder,
-:host ::ng-deep .p-inputtext::placeholder,
-:host ::ng-deep input.p-inputtext::placeholder,
-.field input[pInputText]::placeholder,
-#nomeRespondente::placeholder,
-#documentoRespondente::placeholder,
-.textarea-field::placeholder {
-  color: #94a3b8;
-}
-
-:host ::ng-deep .p-dropdown:hover,
-:host ::ng-deep .p-inputtext:enabled:hover,
-:host ::ng-deep input.p-inputtext:enabled:hover,
-.field input[pInputText]:hover,
-#nomeRespondente:hover,
-#documentoRespondente:hover {
-  border-color: rgba(31, 59, 115, 0.45);
-  background: #ffffff;
-}
-
-:host ::ng-deep .p-dropdown.p-focus,
-:host ::ng-deep .p-inputtext:enabled:focus,
-:host ::ng-deep input.p-inputtext:enabled:focus,
-.field input[pInputText]:focus,
-#nomeRespondente:focus,
-#documentoRespondente:focus {
-  border-color: var(--sigma-primary, #1f3b73);
-  box-shadow: 0 0 0 4px rgba(31, 59, 115, 0.12);
-}
-
-:host ::ng-deep .p-dropdown.p-disabled {
-  opacity: 0.7;
-  background: #f1f5f9;
-}
-
-/* ÍCONE DE LIMPAR DO DROPDOWN */
-:host ::ng-deep .p-dropdown .p-dropdown-clear-icon {
-  top: 50%;
-  right: 3.25rem;
-  margin-top: 0;
-  transform: translateY(-50%);
-  color: #94a3b8;
-  font-size: 13px;
-}
-
-:host ::ng-deep .p-dropdown .p-dropdown-clear-icon:hover {
-  color: #64748b;
-}
-
-:host ::ng-deep .p-dropdown .p-dropdown-trigger {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.65rem;
-  color: #64748b;
-}
-
-/* DROPDOWN PANEL */
-:host ::ng-deep .p-dropdown-panel {
-  border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid rgba(226, 232, 240, 0.95);
-  box-shadow:
-    0 18px 42px rgba(15, 23, 42, 0.14),
-    0 4px 12px rgba(15, 23, 42, 0.08);
-}
-
-:host ::ng-deep .p-dropdown-panel .p-dropdown-items {
-  padding: 6px;
-}
-
-:host ::ng-deep .p-dropdown-panel .p-dropdown-item {
-  border-radius: 10px;
-  padding: 11px 12px;
-  color: #334155;
-  font-size: 14px;
-}
-
-:host ::ng-deep .p-dropdown-panel .p-dropdown-item:hover {
-  background: #eef4ff;
-  color: var(--sigma-primary, #1f3b73);
-}
-
-:host ::ng-deep .p-dropdown-panel .p-dropdown-item.p-highlight {
-  background: rgba(31, 59, 115, 0.12);
-  color: var(--sigma-primary, #1f3b73);
-  font-weight: 700;
-}
-
-:host ::ng-deep .p-dropdown-filter {
-  border-radius: 10px;
-}
-
-/* TEXTAREA */
-.textarea-field {
-  width: 100%;
-  min-height: 118px;
-  padding: 14px;
-  border: 1px solid #dbe3ef;
-  border-radius: 13px;
-  font-size: 14px;
-  line-height: 1.5;
-  font-family: inherit;
-  color: #0f172a;
-  background: #ffffff;
-  resize: vertical;
-  outline: none;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    background-color 0.2s ease;
-}
-
-.textarea-field:hover {
-  border-color: rgba(31, 59, 115, 0.45);
-}
-
-.textarea-field:focus {
-  border-color: var(--sigma-primary, #1f3b73);
-  box-shadow: 0 0 0 4px rgba(31, 59, 115, 0.12);
-}
-
-/* ERROS */
-.error-text {
-  color: #dc2626;
-  font-size: 12px;
+.campo label {
+  font-size: 0.82rem;
   font-weight: 600;
+  color: var(--sigma-text-muted);
+  display: block;
 }
+.erro { color: var(--sigma-danger); font-size: 0.78rem; }
 
-:host ::ng-deep .ng-invalid.ng-touched.p-inputtext,
-:host ::ng-deep .ng-invalid.ng-dirty.p-inputtext,
-:host ::ng-deep .p-dropdown.ng-invalid.ng-touched,
-:host ::ng-deep .p-dropdown.ng-invalid.ng-dirty,
-.field input[pInputText].ng-invalid.ng-touched,
-.field input[pInputText].ng-invalid.ng-dirty,
-#nomeRespondente.ng-invalid.ng-touched,
-#nomeRespondente.ng-invalid.ng-dirty,
-#documentoRespondente.ng-invalid.ng-touched,
-#documentoRespondente.ng-invalid.ng-dirty,
-.textarea-field.ng-invalid.ng-touched,
-.textarea-field.ng-invalid.ng-dirty {
-  border-color: #dc2626;
-}
-
-:host ::ng-deep .ng-invalid.ng-touched.p-inputtext:focus,
-:host ::ng-deep .ng-invalid.ng-dirty.p-inputtext:focus,
-:host ::ng-deep .p-dropdown.ng-invalid.ng-touched.p-focus,
-:host ::ng-deep .p-dropdown.ng-invalid.ng-dirty.p-focus,
-.field input[pInputText].ng-invalid.ng-touched:focus,
-.field input[pInputText].ng-invalid.ng-dirty:focus,
-#nomeRespondente.ng-invalid.ng-touched:focus,
-#nomeRespondente.ng-invalid.ng-dirty:focus,
-#documentoRespondente.ng-invalid.ng-touched:focus,
-#documentoRespondente.ng-invalid.ng-dirty:focus,
-.textarea-field.ng-invalid.ng-touched:focus,
-.textarea-field.ng-invalid.ng-dirty:focus {
-  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.12);
-}
-
-/* MENSAGEM VAZIA */
-.empty-message {
-  display: flex;
-  align-items: center;
-  padding: 15px 16px;
-  border-radius: 14px;
-  background: linear-gradient(180deg, #fff7ed 0%, #fffbeb 100%);
-  color: #9a3412;
-  border: 1px solid #fed7aa;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-/* RESUMO DO PACIENTE */
-.paciente-resumo {
-  position: relative;
-  padding: 22px;
-  border-radius: 20px;
-  background:
-    linear-gradient(135deg, rgba(31, 59, 115, 0.08), rgba(255, 255, 255, 0.92)),
-    #f8fafc;
-  border: 1px solid rgba(31, 59, 115, 0.13);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
-}
-
-.paciente-resumo::before {
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 5px;
-  border-radius: 20px 0 0 20px;
-  background: var(--sigma-primary, #1f3b73);
-}
-
-.paciente-resumo h3 {
-  margin: 0 0 18px 0;
-  color: #0f172a;
-  font-size: 17px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-}
-
-.resumo-grid {
+.linha-dupla {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 14px;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
 
-.resumo-grid div {
-  min-height: 82px;
-  padding: 15px;
-  border-radius: 15px;
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(226, 232, 240, 0.95);
-  box-shadow:
-    0 8px 20px rgba(15, 23, 42, 0.04),
-    0 1px 2px rgba(15, 23, 42, 0.04);
-}
-
-.resumo-grid span {
-  display: block;
-  margin-bottom: 7px;
-  color: #64748b;
-  font-size: 11px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.resumo-grid strong {
-  display: block;
-  color: #0f172a;
-  font-size: 14px;
-  font-weight: 800;
-  line-height: 1.35;
-  word-break: break-word;
-}
-
-/* AÇÕES */
-.actions {
+.acoes {
   display: flex;
   justify-content: flex-end;
-  padding-top: 2px;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2eaf3;
+  margin-top: 0.5rem;
 }
 
-:host ::ng-deep .continue-button {
-  min-height: 46px;
-  padding: 0 24px;
-  border-radius: 14px;
-  border: none;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  background: var(--sigma-primary, #1f3b73);
-  box-shadow:
-    0 12px 24px rgba(31, 59, 115, 0.24),
-    0 2px 6px rgba(31, 59, 115, 0.18);
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    filter 0.2s ease;
+.paciente-preview {
+  background: #eef4fb;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  border: 1px solid #c8d8ea;
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  margin-bottom: 1.25rem;
 }
+.paciente-preview span { color: var(--sigma-text-muted); font-size: 0.75rem; display: block; }
+.paciente-preview strong { color: var(--sigma-text); }
 
-:host ::ng-deep .continue-button:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.05);
-  box-shadow:
-    0 16px 30px rgba(31, 59, 115, 0.28),
-    0 4px 10px rgba(31, 59, 115, 0.18);
-}
+::ng-deep .w-full { width: 100% !important; }
+::ng-deep .p-dropdown.w-full { width: 100% !important; }
 
-:host ::ng-deep .continue-button:active {
-  transform: translateY(0);
-  box-shadow:
-    0 8px 18px rgba(31, 59, 115, 0.22),
-    0 2px 6px rgba(31, 59, 115, 0.16);
-}
-
-:host ::ng-deep .continue-button .p-button-icon {
-  font-size: 13px;
-}
-
-/* TOAST */
-:host ::ng-deep .p-toast .p-toast-message {
-  border-radius: 16px;
-  box-shadow:
-    0 18px 44px rgba(15, 23, 42, 0.16),
-    0 4px 12px rgba(15, 23, 42, 0.08);
-}
-
-:host ::ng-deep .p-toast .p-toast-message-content {
-  padding: 14px 16px;
-}
-
-/* RESPONSIVO */
-@media (max-width: 900px) {
-  .nova-avaliacao-page {
-    padding: 26px 18px;
-  }
-
-  .page-header h1 {
-    font-size: 26px;
-  }
-
-  :host ::ng-deep .avaliacao-card .p-card-body {
-    padding: 22px;
-  }
-
-  .form-section {
-    padding: 18px;
-  }
-
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .resumo-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 520px) {
-  .nova-avaliacao-page {
-    padding: 22px 14px;
-  }
-
-  .page-header {
-    margin-bottom: 18px;
-  }
-
-  .page-header h1 {
-    font-size: 24px;
-  }
-
-  .page-header p {
-    font-size: 14px;
-  }
-
-  :host ::ng-deep .avaliacao-card {
-    border-radius: 18px;
-  }
-
-  :host ::ng-deep .avaliacao-card .p-card-body {
-    padding: 16px;
-  }
-
-  .avaliacao-form {
-    gap: 22px;
-  }
-
-  .form-section {
-    padding: 16px;
-    border-radius: 16px;
-  }
-
-  .paciente-resumo {
-    padding: 18px;
-    border-radius: 17px;
-  }
-
-  .resumo-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .resumo-grid div {
-    min-height: auto;
-  }
-
-  .actions {
-    justify-content: stretch;
-  }
-
-  :host ::ng-deep .continue-button {
-    width: 100%;
-  }
+@media (max-width: 600px) {
+  .form-content { padding: 1rem; }
+  .linha-dupla { grid-template-columns: 1fr; }
+  .acoes { flex-direction: column-reverse; }
+  .acoes button { width: 100%; justify-content: center; }
 }

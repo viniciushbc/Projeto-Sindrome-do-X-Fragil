@@ -1,62 +1,24 @@
-<div class="pagina">
+<div class="sigma-page">
+  <app-header></app-header>
 
- 
-
-<div class="topo">
-  <div class="topo-logo">
-    <div class="logo-icon">Σ</div>
-    <div>
-      <span class="logo-title">SIGMA</span>
-      <span class="logo-sub">Cadastro de Pacientes</span>
+  <!-- Barra de busca + ação -->
+  <div class="sigma-actionbar">
+    <div class="sigma-search">
+      <input pInputText type="text" placeholder="Buscar por nome"
+        [(ngModel)]="busca" (input)="filtrarPacientes()" />
+      <button pButton icon="pi pi-search" class="btn-primary btn-icon"
+        (click)="filtrarPacientes()"></button>
+    </div>
+    <div class="sigma-actionbar-end">
+      <button pButton type="button" label="Novo Paciente" icon="pi pi-plus"
+        class="btn-primary" (click)="novoPaciente()"></button>
     </div>
   </div>
 
-
-  <div class="slogan">
-    <h1>Sistema de Triagem</h1>
-    <p>Síndrome do X Frágil</p>
-  </div>
-</div>
-
-
-  <div class="busca-container">
-
-    <div class="busca">
-      <input
-        pInputText
-        type="text"
-        placeholder="Buscar por nome"
-        [(ngModel)]="busca"
-        (input)="filtrarPacientes()"
-        (keydown.enter)="filtrarPacientes()"
-        class="input-busca"
-      />
-      <p-button
-        icon="pi pi-search"
-        (onClick)="filtrarPacientes()"
-        styleClass="btn-lupa"
-      />
-    </div>
-
-    <button
-      pButton
-      type="button"
-      label="Novo Paciente"
-      icon="pi pi-plus"
-      class="btn-novo"
-      (click)="novoPaciente()">
-    </button>
-
-  </div>
-
-  <div class="tabela-container">
-    <p-table
-      [value]="pacientesFiltrados"
-      [loading]="loading"
-      [paginator]="true"
-      [rows]="5"
-      responsiveLayout="scroll">
-
+  <!-- Tabela full-width -->
+  <div class="sigma-content sigma-table-full">
+    <p-table [value]="pacientesFiltrados" [loading]="loading"
+      [paginator]="true" [rows]="10" responsiveLayout="scroll">
       <ng-template pTemplate="header">
         <tr>
           <th>ID</th>
@@ -65,52 +27,33 @@
           <th>Data Nascimento</th>
           <th>Telefone</th>
           <th>Responsável</th>
-          <th>Status</th>
-          <th>Ações</th>
+          <th style="text-align:center">Status</th>
+          <th style="text-align:center">Ações</th>
         </tr>
       </ng-template>
-
-      <ng-template pTemplate="body" let-paciente>
+      <ng-template pTemplate="body" let-p>
         <tr>
-          <td>{{ paciente.id_paciente }}</td>
-          <td>{{ paciente.nome }}</td>
-          <td>{{ paciente.sexo }}</td>
-          <td>{{ paciente.dataNascimento }}</td>
-          <td>{{ paciente.telefone }}</td>
-          <td>{{ paciente.responsavel }}</td>
-          <td>
-            <p-tag
-              [value]="paciente.ativo ? 'Ativo' : 'Inativo'"
-              [severity]="paciente.ativo ? 'success' : 'danger'">
-            </p-tag>
+          <td>{{ p.id_paciente }}</td>
+          <td>{{ p.nome }}</td>
+          <td>{{ p.sexo }}</td>
+          <td>{{ p.dataNascimento || '—' }}</td>
+          <td>{{ p.telefone || '—' }}</td>
+          <td>{{ p.responsavel || '—' }}</td>
+          <td style="text-align:center">
+            <p-tag [value]="p.ativo ? 'Ativo' : 'Inativo'"
+              [severity]="p.ativo ? 'success' : 'danger'"></p-tag>
           </td>
-          <td>
-            <button
-              pButton
-              icon="pi pi-pencil"
-              severity="warning"
-              class="mr-2"
-              (click)="editarPaciente(paciente)">
-            </button>
-            <button
-              pButton
-              icon="pi pi-eye"
-              severity="info"
-              (click)="verDetalhes(paciente)">
-            </button>
+          <td style="text-align:center">
+            <button pButton icon="pi pi-pencil" class="btn-primary btn-icon"
+              style="margin-right:6px" (click)="editarPaciente(p)"></button>
+            <button pButton icon="pi pi-eye" class="btn-secondary btn-icon"
+              (click)="verDetalhes(p)"></button>
           </td>
         </tr>
       </ng-template>
-
       <ng-template pTemplate="emptymessage">
-        <tr>
-          <td colspan="8" class="vazio">
-            Nenhum paciente encontrado.
-          </td>
-        </tr>
+        <tr><td colspan="8" class="vazio">Nenhum paciente encontrado.</td></tr>
       </ng-template>
-
     </p-table>
   </div>
-
 </div>

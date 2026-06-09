@@ -1,186 +1,90 @@
-.pagina {
-  min-height: 100vh;
-  background: #f0f4f8;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-/* ── Topo ── */
-.topo {
-  background: #1e3a5f;
-  padding: 1rem 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.topo-logo {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.logo-icon {
-  width: 38px;
-  height: 38px;
-  background: rgba(255,255,255,0.15);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: 700;
-  font-size: 1.1rem;
-  flex-shrink: 0;
-}
-
-.logo-title {
+/* Layout da página */
+:host {
   display: block;
-  color: white;
-  font-weight: 700;
-  font-size: 1rem;
-  white-space: nowrap;
 }
 
-.logo-sub {
-  display: block;
-  color: rgba(255,255,255,0.6);
-  font-size: 0.8rem;
-  white-space: nowrap;
-}
-
-.slogan {
-  text-align: right;
-}
-
-.slogan h1 {
-  margin: 0;
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: white;
-}
-
-.slogan p {
-  margin: 0;
-  font-size: 0.8rem;
-  color: rgba(255,255,255,0.6);
-}
-
-/* ── Card do formulário ── */
-.form-container {
-  max-width: 720px;
-  margin: 2rem auto;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(30, 58, 95, 0.08);
+/* Conteúdo centralizado */
+.form-content {
   padding: 2rem;
+  max-width: 760px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
-.form-header {
+/* Título */
+.form-title {
   margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #e2eaf3;
 }
-
-.form-header h2 {
-  margin: 0 0 0.25rem;
+.form-title h2 {
+  margin: 0 0 4px;
   font-size: 1.3rem;
   font-weight: 700;
-  color: #1e3a5f;
+  color: var(--sigma-primary);
 }
-
-.form-header p {
+.form-title p {
   margin: 0;
   font-size: 0.85rem;
-  color: #94a3b8;
+  color: var(--sigma-text-muted);
 }
 
-/* ── Campos ── */
+/* Card do formulário */
+.form-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(30,58,95,0.08);
+  border: 1px solid rgba(148,163,184,0.18);
+}
+
+/* Campo */
 .campo {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.25rem;
 }
-
 .campo label {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 600;
-  color: #1e3a5f;
+  color: var(--sigma-text-muted);
+  display: block;
 }
-
 .campo input,
 .campo textarea {
-  border-radius: 8px !important;
-  border: 1.5px solid #cbd5e1 !important;
-  padding: 0.6rem 0.9rem !important;
-  font-size: 14px;
   width: 100%;
-  background: #fff !important;
-  transition: border-color 0.2s;
   box-sizing: border-box;
 }
-
-.campo input:focus,
-.campo textarea:focus {
-  border-color: #2d6a9f !important;
-  box-shadow: 0 0 0 3px rgba(45,106,159,0.12) !important;
-  outline: none;
+.erro {
+  color: var(--sigma-danger);
+  font-size: 0.78rem;
 }
 
-/* ── Linha dupla ── */
+/* Linha dupla */
 .linha-dupla {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
 
-/* ── Dropdown e Calendar ── */
-::ng-deep .campo .p-dropdown,
-::ng-deep .campo .p-calendar {
-  width: 100% !important;
-  border-radius: 8px !important;
-  border: 1.5px solid #cbd5e1 !important;
-}
-
-::ng-deep .campo .p-dropdown:hover,
-::ng-deep .campo .p-calendar:hover {
-  border-color: #2d6a9f !important;
-}
-
-::ng-deep .campo .p-dropdown.p-focus,
-::ng-deep .campo .p-calendar.p-focus {
-  border-color: #2d6a9f !important;
-  box-shadow: 0 0 0 3px rgba(45,106,159,0.12) !important;
-}
-
-/* ── Erro ── */
-.erro {
-  color: #e53e3e;
-  font-size: 0.78rem;
-}
-
-/* ── Botões ── */
+/* Ações */
 .acoes {
   display: flex;
   justify-content: flex-end;
   gap: 0.75rem;
-  margin-top: 1.5rem;
   padding-top: 1rem;
   border-top: 1px solid #e2eaf3;
+  margin-top: 0.5rem;
 }
 
-::ng-deep .acoes .p-button {
-  border-radius: 8px !important;
-  font-weight: 600 !important;
-  padding: 0.6rem 1.4rem !important;
-}
+/* Inputs full width */
+::ng-deep .w-full { width: 100% !important; }
+::ng-deep .p-calendar.w-full,
+::ng-deep .p-dropdown.w-full { width: 100% !important; }
+::ng-deep .p-calendar.w-full .p-inputtext { width: 100% !important; }
 
-::ng-deep .acoes .p-button-secondary {
-  background: transparent !important;
-  border: 1.5px solid #cbd5e1 !important;
-  color: #64748b !important;
-}
-
-::ng-deep .acoes .p-button-secondary:hover {
-  background: #f1f5f9 !important;
+@media (max-width: 600px) {
+  .form-content { padding: 1rem; }
+  .linha-dupla { grid-template-columns: 1fr; }
+  .acoes { flex-direction: column-reverse; }
+  .acoes button { width: 100%; justify-content: center; }
 }

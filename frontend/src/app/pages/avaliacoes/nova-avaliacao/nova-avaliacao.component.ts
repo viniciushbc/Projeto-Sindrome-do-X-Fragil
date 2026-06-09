@@ -7,21 +7,29 @@ import { NovaAvaliacaoInicial } from '../../../models/avaliacao.model';
 import { PacienteService } from '../../../services/paciente.service';
 import { AvaliacaoService } from '../../../services/avaliacao.service';
 import { ToastModule } from 'primeng/toast';
+import { HeaderComponent } from '../../../layout/header/header.component';
 import { CommonModule } from '@angular/common';
 import { DropdownModule } from 'primeng/dropdown';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 @Component({
   selector: 'app-nova-avaliacao',
   standalone: true,
   imports: [
+    HeaderComponent,
     CommonModule,
     ReactiveFormsModule,
     DropdownModule,
     CardModule,
     ButtonModule,
     ToastModule,
+    ProgressSpinnerModule,
+    InputTextModule,
+    InputTextareaModule,
   ],
   templateUrl: './nova-avaliacao.component.html',
   styleUrl: './nova-avaliacao.component.css',
@@ -93,6 +101,10 @@ export class NovaAvaliacaoComponent implements OnInit {
 
   aoSelecionarPaciente(paciente: Paciente): void {
     this.pacienteSelecionado = paciente;
+  }
+
+  voltarParaListagem(): void {
+    this.router.navigate(['/avaliacoes']);
   }
 
   continuarParaChecklist(): void {
@@ -174,6 +186,8 @@ export class NovaAvaliacaoComponent implements OnInit {
 
     return sexo;
   }
+
+  
 
   obterIdadeOuNascimento(paciente: Paciente): string {
     if (paciente.idade !== null && paciente.idade !== undefined) {

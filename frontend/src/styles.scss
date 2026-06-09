@@ -1,92 +1,197 @@
-/* SIGMA – Estilos globais */
-
+/* ══════════════════════════════════════════
+   SIGMA — Design Tokens
+   ══════════════════════════════════════════ */
 :root {
-  --sigma-primary: #1e3a5f;
-  --sigma-primary-dark: #152d4a;
+  --sigma-primary:       #1e3a5f;
+  --sigma-primary-dark:  #152d4a;
   --sigma-primary-light: #2e5080;
-  --sigma-accent: #4a8fcc;
-  --sigma-accent-light: #6ab0e0;
-  --sigma-bg: #eef2f7;
-  --sigma-card-bg: #b8d4e8;
-  --sigma-card-bg-light: #d0e6f5;
-  --sigma-white: #ffffff;
-  --sigma-text: #1e3a5f;
-  --sigma-text-muted: #5a7a99;
-  --sigma-border: #c8dcea;
-  --sigma-success: #28a745;
-  --sigma-warning: #ffc107;
-  --sigma-danger: #dc3545;
-  --sigma-shadow: 0 2px 12px rgba(30, 58, 95, 0.12);
-  --sigma-shadow-lg: 0 8px 32px rgba(30, 58, 95, 0.18);
-  --sigma-radius: 12px;
-  --sigma-radius-sm: 8px;
+  --sigma-accent:        #4a8fcc;
+  --sigma-bg:            #eef2f7;
+  --sigma-white:         #ffffff;
+  --sigma-text:          #1e3a5f;
+  --sigma-text-muted:    #5a7a99;
+  --sigma-border:        #c8dcea;
+  --sigma-success:       #28a745;
+  --sigma-warning:       #ffc107;
+  --sigma-danger:        #dc3545;
+  --sigma-shadow:        0 2px 12px rgba(30,58,95,0.10);
+  --sigma-radius:        12px;
+  --sigma-radius-sm:     8px;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
   height: 100%;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
   background-color: var(--sigma-bg);
   color: var(--sigma-text);
+  font-size: 14px;
 }
 
-/* PrimeNG overrides */
-/* PrimeNG button overrides */
-.p-button,
-.p-button.p-button-primary,
-.p-button:not(.p-button-outlined):not(.p-button-text):not(.p-button-secondary):not(.p-button-success):not(.p-button-danger) {
-  min-height: 2.75rem;
-  padding: 0.75rem 1.25rem !important;
-  border-radius: var(--sigma-radius-sm) !important;
+/* ══ Layout base de todas as páginas internas ══ */
+.sigma-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f0f4f8;
+}
 
-  background: var(--sigma-primary) !important;
-  border-color: var(--sigma-primary) !important;
-  color: #ffffff !important;
-
-  font-weight: 600;
-  font-size: 0.95rem;
-
-  display: inline-flex;
+/* ══ Barra cinza de ações (abaixo do header) ══ */
+.sigma-actionbar {
+  background: #e2eaf3;
+  border-bottom: 1px solid #c8d8ea;
+  padding: 0.9rem 2rem;
+  display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.sigma-actionbar-end {
+  margin-left: auto;
+  display: flex;
   gap: 0.5rem;
-
-  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  align-items: center;
 }
 
-.p-button:hover,
-.p-button.p-button-primary:hover,
-.p-button:not(.p-button-outlined):not(.p-button-text):not(.p-button-secondary):not(.p-button-success):not(.p-button-danger):hover {
+.sigma-search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sigma-search input {
+  border-radius: 10px !important;
+  border: 1.5px solid #b0c4d8 !important;
+  padding: 0.55rem 1rem !important;
+  font-size: 0.875rem;
+  width: 280px;
+  background: #fff !important;
+  outline: none;
+}
+
+.sigma-search input:focus {
+  border-color: var(--sigma-accent) !important;
+  box-shadow: 0 0 0 3px rgba(74,143,204,0.15) !important;
+}
+
+/* ══ Área de conteúdo ══ */
+.sigma-content {
+  padding: 1.5rem 2rem;
+  flex: 1;
+}
+
+/* ══ Botões padronizados ══ */
+.btn-primary {
+  background: var(--sigma-primary) !important;
+  border: none !important;
+  border-radius: var(--sigma-radius-sm) !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  padding: 0.6rem 1.2rem !important;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s !important;
+  white-space: nowrap;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+}
+.btn-primary:hover {
   background: var(--sigma-primary-light) !important;
-  border-color: var(--sigma-primary-light) !important;
   transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+.btn-primary:disabled, .btn-primary.p-disabled {
+  opacity: 0.6 !important;
+  transform: none !important;
 }
 
-.p-button:focus {
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25) !important;
+.btn-secondary {
+  background: transparent !important;
+  border: 1.5px solid var(--sigma-border) !important;
+  border-radius: var(--sigma-radius-sm) !important;
+  color: var(--sigma-text) !important;
+  font-weight: 600 !important;
+  padding: 0.6rem 1.2rem !important;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s !important;
+  white-space: nowrap;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+}
+.btn-secondary:hover {
+  border-color: var(--sigma-accent) !important;
+  background: rgba(74,143,204,0.06) !important;
 }
 
-.p-button:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
+.btn-danger {
+  background: var(--sigma-danger) !important;
+  border: none !important;
+  border-radius: var(--sigma-radius-sm) !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  padding: 0.6rem 1.2rem !important;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+}
+.btn-danger:hover { opacity: 0.88 !important; }
+
+.btn-icon {
+  width: 36px !important;
+  height: 36px !important;
+  padding: 0 !important;
+  justify-content: center !important;
+}
+
+/* ══ Tabela padrão ══ */
+.sigma-table-full .p-datatable-wrapper,
+.sigma-table-full ::ng-deep .p-datatable-wrapper {
+  border-radius: var(--sigma-radius);
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(30,58,95,0.08);
+}
+
+/* Cabeçalho azul escuro em todas as tabelas */
+.p-datatable .p-datatable-thead > tr > th {
+  background: var(--sigma-primary) !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  font-size: 0.8rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  padding: 0.85rem 1rem !important;
+  border: none !important;
+  white-space: nowrap;
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+  padding: 0.75rem 1rem !important;
+  border-bottom: 1px solid #e8f0f8 !important;
+  border-left: none !important;
+  border-right: none !important;
+}
+
+.p-datatable .p-datatable-tbody > tr:hover {
+  background: #eef4fb !important;
+}
+
+/* ══ PrimeNG overrides gerais ══ */
+.p-button {
+  border-radius: var(--sigma-radius-sm) !important;
 }
 
 .p-inputtext {
   border-radius: var(--sigma-radius-sm) !important;
   border-color: var(--sigma-border) !important;
 }
-
 .p-inputtext:focus {
   border-color: var(--sigma-accent) !important;
-  box-shadow: 0 0 0 2px rgba(74, 143, 204, 0.2) !important;
+  box-shadow: 0 0 0 2px rgba(74,143,204,0.2) !important;
 }
 
 .p-card {
@@ -96,4 +201,31 @@ html, body {
 
 .p-toast .p-toast-message {
   border-radius: var(--sigma-radius-sm) !important;
+}
+
+.p-tag { border-radius: 20px !important; font-size: 0.75rem !important; font-weight: 700 !important; }
+
+/* ══ Dialog PrimeNG ══ */
+.p-dialog .p-dialog-header {
+  background: var(--sigma-primary) !important;
+  color: #fff !important;
+  border-radius: var(--sigma-radius) var(--sigma-radius) 0 0 !important;
+  padding: 1rem 1.5rem !important;
+}
+.p-dialog .p-dialog-header .p-dialog-title { font-weight: 700 !important; font-size: 1rem !important; }
+.p-dialog .p-dialog-header .p-dialog-header-icon { color: rgba(255,255,255,0.8) !important; }
+.p-dialog .p-dialog-header .p-dialog-header-icon:hover { background: rgba(255,255,255,0.15) !important; color: #fff !important; }
+.p-dialog .p-dialog-content { padding: 1.5rem !important; }
+.p-dialog .p-dialog-footer { padding: 1rem 1.5rem !important; border-top: 1px solid var(--sigma-border) !important; display: flex; justify-content: flex-end; gap: 0.75rem; }
+
+/* ══ Responsivo ══ */
+@media (max-width: 768px) {
+  .sigma-actionbar { padding: 0.75rem 1rem; }
+  .sigma-search input { width: 180px; }
+  .sigma-content { padding: 1rem; }
+}
+@media (max-width: 480px) {
+  .sigma-actionbar { flex-direction: column; align-items: stretch; }
+  .sigma-actionbar-end { margin-left: 0; }
+  .sigma-search input { width: 100%; }
 }

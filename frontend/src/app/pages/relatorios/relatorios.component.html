@@ -1,179 +1,208 @@
 <p-toast></p-toast>
+<div class="sigma-page">
+  <app-header></app-header>
 
-<div class="relatorios-page">
-
-  <section class="page-header">
-    <div>
-      <h1>Relatórios</h1>
-      <p>Consulte e filtre as avaliações clínicas realizadas no sistema.</p>
-    </div>
-  </section>
-
-  <p-card styleClass="filtros-card">
-    <div class="filtros-header">
-      <h2>Filtros</h2>
-    </div>
-
-    <div class="filtros-grid">
-
-      <div class="field">
-        <label>Data inicial</label>
-        <p-calendar
-          [(ngModel)]="dataInicio"
-          dateFormat="dd/mm/yy"
-          [showIcon]="true"
-          placeholder="dd/mm/aaaa"
-          [readonlyInput]="true"
-        ></p-calendar>
-      </div>
-
-      <div class="field">
-        <label>Data final</label>
-        <p-calendar
-          [(ngModel)]="dataFim"
-          dateFormat="dd/mm/yy"
-          [showIcon]="true"
-          placeholder="dd/mm/aaaa"
-          [readonlyInput]="true"
-        ></p-calendar>
-      </div>
-
-      <div class="field">
-        <label>Paciente</label>
-        <p-dropdown
-          [(ngModel)]="pacienteSelecionado"
-          [options]="pacientes"
-          optionLabel="nome"
-          optionValue="id_paciente"
-          placeholder="Todos os pacientes"
-          [showClear]="true"
-          [filter]="true"
-          filterBy="nome"
-        ></p-dropdown>
-      </div>
-
-      <div class="field" *ngIf="isAdmin">
-        <label>Profissional</label>
-        <p-dropdown
-          [(ngModel)]="usuarioSelecionado"
-          [options]="usuarios"
-          optionLabel="nome"
-          optionValue="id_usuario"
-          placeholder="Todos os profissionais"
-          [showClear]="true"
-        ></p-dropdown>
-      </div>
-
-      <div class="field">
-        <label>Resultado</label>
-        <p-dropdown
-          [(ngModel)]="resultadoSelecionado"
-          [options]="opcoesResultado"
-          optionLabel="label"
-          optionValue="value"
-        ></p-dropdown>
-      </div>
-
-    </div>
-
-    <div class="filtros-actions">
-      <button
-        pButton
-        type="button"
-        label="Limpar"
-        icon="pi pi-times"
-        class="p-button-outlined p-button-secondary"
-        (click)="limparFiltros()"
-      ></button>
-      <button
-        pButton
-        type="button"
-        label="Buscar"
-        icon="pi pi-search"
-        iconPos="right"
-        class="buscar-button"
-        [loading]="carregando"
-        (click)="buscar()"
-      ></button>
-    </div>
-  </p-card>
-
-  <div *ngIf="carregando" class="loading-state">
-    <p-progressSpinner strokeWidth="4" styleClass="spinner-sm"></p-progressSpinner>
-    <span>Buscando registros...</span>
+  <div class="sigma-actionbar">
+    <span style="font-weight:700;font-size:1rem;color:var(--sigma-primary)">Relatórios</span>
   </div>
 
-  <p-card *ngIf="!carregando" styleClass="tabela-card">
+  <div class="sigma-content">
 
-    <div class="tabela-header">
-      <h2>Resultados</h2>
-      <span class="tabela-count">{{ registros.length }} registro(s)</span>
+    <!-- Seletor de tipo -->
+    <div class="tipo-grid" style="margin-bottom:1.25rem">
+      <button *ngFor="let t of tiposRelatorio" class="tipo-btn"
+        [class.ativo]="tipoAtivo === t.value"
+        (click)="selecionarTipo($any(t.value))">
+        <i class="pi {{ t.icon }}"></i>
+        <span class="tl">{{ t.label }}</span>
+        <span class="td">{{ t.desc }}</span>
+      </button>
     </div>
 
-    <p-divider styleClass="divider-slim"></p-divider>
+    <!-- ══ GERAL ══ -->
+    <ng-container *ngIf="tipoAtivo === 'geral'">
+      <div class="card">
+        <div class="res-header"><h3>Filtros</h3></div>
+        <div class="filtros-row">
+          <div class="f-field"><label>Data inicial</label>
+            <p-calendar [(ngModel)]="dataInicio" dateFormat="dd/mm/yy" [showIcon]="true" placeholder="dd/mm/aaaa" [readonlyInput]="true"></p-calendar></div>
+          <div class="f-field"><label>Data final</label>
+            <p-calendar [(ngModel)]="dataFim" dateFormat="dd/mm/yy" [showIcon]="true" placeholder="dd/mm/aaaa" [readonlyInput]="true"></p-calendar></div>
+          <div class="f-field"><label>Paciente</label>
+            <p-dropdown [(ngModel)]="pacienteSelecionado" [options]="pacientes" optionLabel="nome" optionValue="id_paciente" placeholder="Todos" [showClear]="true" [filter]="true" filterBy="nome"></p-dropdown></div>
+          <div class="f-field"><label>Resultado</label>
+            <p-dropdown [(ngModel)]="resultadoSelecionado" [options]="opcoesResultado" optionLabel="label" optionValue="value"></p-dropdown></div>
+          <div class="filtros-actions">
+            <button pButton type="button" label="Limpar" icon="pi pi-times" class="btn-secondary" (click)="limparFiltros()"></button>
+            <button pButton type="button" label="Buscar" icon="pi pi-search" iconPos="right" class="btn-primary" [loading]="carregando" (click)="buscarGeral()"></button>
+          </div>
+        </div>
+      </div>
 
-    <div *ngIf="erro" class="empty-msg">
-      Não foi possível carregar os relatórios.
-    </div>
+      <div *ngIf="carregando" style="display:flex;align-items:center;gap:.75rem;padding:2rem;color:var(--sigma-text-muted)">
+        <p-progressSpinner strokeWidth="4" styleClass="spinner-sm"></p-progressSpinner><span>Buscando...</span>
+      </div>
 
-    <div *ngIf="!erro && registros.length === 0" class="empty-msg">
-      Nenhum registro encontrado para os filtros selecionados.
-    </div>
+      <div class="card" *ngIf="!carregando">
+        <div class="res-header">
+          <h3>Resultados</h3>
+          <span class="res-count">{{ registros.length }} registro(s)</span>
+        </div>
+        <div *ngIf="registros.length === 0" style="text-align:center;padding:2rem;color:var(--sigma-text-muted)">Nenhum registro encontrado.</div>
+        <p-table *ngIf="registros.length > 0" [value]="registros" [paginator]="true" [rows]="10" styleClass="p-datatable-sm">
+          <ng-template pTemplate="header">
+            <tr><th>Data</th><th>Paciente</th><th>Sexo</th><th>Profissional</th><th style="text-align:center">Score</th><th style="text-align:center">Resultado</th></tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-r>
+            <tr>
+              <td>{{ formatarData(r.data_avaliacao) }}</td><td>{{ r.paciente_nome }}</td>
+              <td>{{ formatarSexo(r.paciente_sexo) }}</td><td>{{ r.profissional_nome }}</td>
+              <td style="text-align:center"><span class="sp" [class.a]="r.resultado==='ENCAMINHAR'">{{ scorePercent(r.score) }}%</span></td>
+              <td style="text-align:center"><p-tag [value]="getResultadoLabel(r.resultado)" [severity]="getSeverity(r.resultado)" [rounded]="true"></p-tag></td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </ng-container>
 
-    <p-table
-      *ngIf="!erro && registros.length > 0"
-      [value]="registros"
-      [paginator]="true"
-      [rows]="10"
-      [rowsPerPageOptions]="[10, 25, 50]"
-      styleClass="p-datatable-sm sigma-table"
-      [tableStyle]="{'min-width': '900px'}"
-    >
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Data</th>
-          <th>Paciente</th>
-          <th>Sexo</th>
-          <th>Profissional</th>
-          <th style="text-align:center">Score</th>
-          <th style="text-align:center">Limiar</th>
-          <th style="text-align:center">Resultado</th>
-          <th style="text-align:center">Ações</th>
-        </tr>
-      </ng-template>
+    <!-- ══ POR PACIENTE ══ -->
+    <ng-container *ngIf="tipoAtivo === 'paciente'">
+      <div class="card">
+        <div class="res-header"><h3>Histórico por paciente</h3></div>
+        <div class="filtros-row">
+          <div class="f-field" style="max-width:400px"><label>Paciente</label>
+            <p-dropdown [(ngModel)]="pacienteHistoricoId" [options]="pacientes" optionLabel="nome" optionValue="id_paciente" placeholder="Selecione um paciente" [filter]="true" filterBy="nome"></p-dropdown></div>
+          <div class="filtros-actions">
+            <button pButton type="button" label="Gerar relatório" icon="pi pi-search" iconPos="right" class="btn-primary" [loading]="carregando" (click)="buscarPorPaciente()"></button>
+          </div>
+        </div>
+      </div>
 
-      <ng-template pTemplate="body" let-row>
-        <tr>
-          <td>{{ formatarData(row.data_avaliacao) }}</td>
-          <td>{{ row.paciente_nome }}</td>
-          <td>{{ formatarSexo(row.paciente_sexo) }}</td>
-          <td>{{ row.profissional_nome }}</td>
-          <td style="text-align:center">
-            <span class="score-pill" [class.score-pill--alto]="row.resultado === 'ENCAMINHAR'">
-              {{ scorePercent(row.score) }}%
-            </span>
-          </td>
-          <td style="text-align:center">{{ scorePercent(row.limiar_utilizado) }}%</td>
-          <td style="text-align:center">
-            <p-tag
-              [value]="getResultadoLabel(row.resultado)"
-              [severity]="getSeverity(row.resultado)"
-              [rounded]="true"
-            ></p-tag>
-          </td>
-          <td style="text-align:center">
-            <button
-              pButton
-              type="button"
-              icon="pi pi-eye"
-              class="p-button-text p-button-sm"
-              pTooltip="Ver detalhes"
-            ></button>
-          </td>
-        </tr>
-      </ng-template>
+      <div *ngIf="carregando" style="display:flex;align-items:center;gap:.75rem;padding:2rem;color:var(--sigma-text-muted)">
+        <p-progressSpinner strokeWidth="4" styleClass="spinner-sm"></p-progressSpinner><span>Carregando...</span>
+      </div>
 
-    </p-table>
-  </p-card>
+      <ng-container *ngIf="dadosPaciente && !carregando">
+        <div class="stats-row" style="margin-bottom:1rem">
+          <div class="stat"><span class="stat-val">{{ dadosPaciente.resumo.total_avaliacoes }}</span><span class="stat-lbl">Total avaliações</span></div>
+          <div class="stat d"><span class="stat-val">{{ dadosPaciente.resumo.total_encaminhar }}</span><span class="stat-lbl">Encaminhamentos</span></div>
+          <div class="stat s"><span class="stat-val">{{ dadosPaciente.resumo.total_nao_encaminhar }}</span><span class="stat-lbl">Não encaminhar</span></div>
+          <div class="stat"><span class="stat-val">{{ scorePercent(dadosPaciente.resumo.media_score) }}%</span><span class="stat-lbl">Score médio</span></div>
+        </div>
+        <div class="card">
+          <div class="res-header"><h3>Linha do tempo — {{ dadosPaciente.paciente.nome }}</h3></div>
+          <div class="tl">
+            <div *ngFor="let a of dadosPaciente.avaliacoes" class="tl-row">
+              <div class="tl-dot" [class.e]="a.resultado==='ENCAMINHAR'"></div>
+              <div class="tl-body">
+                <div class="tl-top">
+                  <span class="tl-date">{{ formatarData(a.data_avaliacao) }}</span>
+                  <p-tag [value]="getResultadoLabel(a.resultado)" [severity]="getSeverity(a.resultado)" [rounded]="true"></p-tag>
+                </div>
+                <div class="tl-info">
+                  <span>Score: <strong>{{ scorePercent(a.score) }}%</strong></span>
+                  <span *ngIf="a.respondente_nome">Respondente: {{ a.respondente_nome }}</span>
+                  <span>Profissional: {{ a.profissional_nome }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
 
+    <!-- ══ POR PERÍODO ══ -->
+    <ng-container *ngIf="tipoAtivo === 'periodo'">
+      <div class="card">
+        <div class="res-header"><h3>Relatório por período</h3></div>
+        <div class="filtros-row">
+          <div class="f-field"><label>Data inicial *</label>
+            <p-calendar [(ngModel)]="periodoInicio" dateFormat="dd/mm/yy" [showIcon]="true" placeholder="dd/mm/aaaa" [readonlyInput]="true"></p-calendar></div>
+          <div class="f-field"><label>Data final *</label>
+            <p-calendar [(ngModel)]="periodoFim" dateFormat="dd/mm/yy" [showIcon]="true" placeholder="dd/mm/aaaa" [readonlyInput]="true"></p-calendar></div>
+          <div class="filtros-actions">
+            <button pButton type="button" label="Gerar" icon="pi pi-calendar" iconPos="right" class="btn-primary" [loading]="carregando" (click)="buscarPorPeriodo()"></button>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="carregando" style="display:flex;align-items:center;gap:.75rem;padding:2rem;color:var(--sigma-text-muted)">
+        <p-progressSpinner strokeWidth="4" styleClass="spinner-sm"></p-progressSpinner><span>Carregando...</span>
+      </div>
+
+      <ng-container *ngIf="dadosPeriodo && !carregando">
+        <div class="stats-row" style="margin-bottom:1rem">
+          <div class="stat"><span class="stat-val">{{ dadosPeriodo.resumo.total_avaliacoes }}</span><span class="stat-lbl">Total no período</span></div>
+          <div class="stat d"><span class="stat-val">{{ dadosPeriodo.resumo.total_encaminhar }}</span><span class="stat-lbl">Encaminhamentos</span></div>
+          <div class="stat s"><span class="stat-val">{{ dadosPeriodo.resumo.total_nao_encaminhar }}</span><span class="stat-lbl">Não encaminhar</span></div>
+          <div class="stat a"><span class="stat-val">{{ dadosPeriodo.resumo.taxa_encaminhamento }}%</span><span class="stat-lbl">Taxa encaminhamento</span></div>
+        </div>
+        <div *ngIf="dadosPeriodo.grafico_por_dia?.length" class="card">
+          <div class="res-header"><h3>Distribuição diária</h3></div>
+          <div class="canvas-wrap"><canvas id="graficoPeriodo" width="760" height="250"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="res-header">
+            <h3>Avaliações no período</h3>
+            <span class="res-count">{{ dadosPeriodo.avaliacoes.length }} registro(s)</span>
+          </div>
+          <p-table [value]="dadosPeriodo.avaliacoes" [paginator]="true" [rows]="10" styleClass="p-datatable-sm">
+            <ng-template pTemplate="header">
+              <tr><th>Data</th><th>Paciente</th><th>Sexo</th><th>Profissional</th><th style="text-align:center">Score</th><th style="text-align:center">Resultado</th></tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-r>
+              <tr>
+                <td>{{ formatarDataCurta(r.data_avaliacao) }}</td><td>{{ r.paciente_nome }}</td>
+                <td>{{ formatarSexo(r.paciente_sexo) }}</td><td>{{ r.profissional_nome }}</td>
+                <td style="text-align:center"><span class="sp" [class.a]="r.resultado==='ENCAMINHAR'">{{ scorePercent(r.score) }}%</span></td>
+                <td style="text-align:center"><p-tag [value]="getResultadoLabel(r.resultado)" [severity]="getSeverity(r.resultado)" [rounded]="true"></p-tag></td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <!-- ══ PAINEL GERAL ══ -->
+    <ng-container *ngIf="tipoAtivo === 'resumo'">
+      <div *ngIf="carregando" style="display:flex;align-items:center;gap:.75rem;padding:2rem;color:var(--sigma-text-muted)">
+        <p-progressSpinner strokeWidth="4" styleClass="spinner-sm"></p-progressSpinner><span>Carregando painel...</span>
+      </div>
+      <ng-container *ngIf="dadosResumo && !carregando">
+        <div class="stats-row" style="margin-bottom:1rem">
+          <div class="stat"><i class="pi pi-clipboard" style="font-size:1.1rem;color:var(--sigma-accent);display:block;margin-bottom:.3rem"></i><span class="stat-val">{{ dadosResumo.totais.total_avaliacoes }}</span><span class="stat-lbl">Total avaliações</span></div>
+          <div class="stat d"><i class="pi pi-exclamation-triangle" style="font-size:1.1rem;color:var(--sigma-danger);display:block;margin-bottom:.3rem"></i><span class="stat-val">{{ dadosResumo.totais.total_encaminhar }}</span><span class="stat-lbl">Encaminhamentos</span></div>
+          <div class="stat s"><i class="pi pi-check-circle" style="font-size:1.1rem;color:var(--sigma-success);display:block;margin-bottom:.3rem"></i><span class="stat-val">{{ dadosResumo.totais.total_nao_encaminhar }}</span><span class="stat-lbl">Não encaminhar</span></div>
+          <div class="stat a"><i class="pi pi-chart-bar" style="font-size:1.1rem;color:var(--sigma-accent);display:block;margin-bottom:.3rem"></i><span class="stat-val">{{ scorePercent(dadosResumo.totais.media_score) }}%</span><span class="stat-lbl">Score médio</span></div>
+        </div>
+        <div class="graficos-row">
+          <div class="card" *ngIf="dadosResumo.por_mes?.length">
+            <div class="res-header"><h3>Avaliações por mês</h3></div>
+            <div class="canvas-wrap"><canvas id="graficoMes" width="520" height="240"></canvas></div>
+          </div>
+          <div class="card" *ngIf="dadosResumo.por_sexo?.length" style="min-width:260px">
+            <div class="res-header"><h3>Por sexo</h3></div>
+            <div class="canvas-wrap"><canvas id="graficoSexo" width="260" height="240"></canvas></div>
+          </div>
+        </div>
+        <div class="card" *ngIf="dadosResumo.top5_pacientes?.length">
+          <div class="res-header"><h3>Pacientes com mais avaliações</h3></div>
+          <p-table [value]="dadosResumo.top5_pacientes" styleClass="p-datatable-sm">
+            <ng-template pTemplate="header">
+              <tr><th>#</th><th>Paciente</th><th>Sexo</th><th style="text-align:center">Total</th><th style="text-align:center">Encaminhar</th></tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-r let-i="rowIndex">
+              <tr>
+                <td><span class="rank">{{ i+1 }}</span></td>
+                <td>{{ r.paciente_nome }}</td><td>{{ formatarSexo(r.sexo) }}</td>
+                <td style="text-align:center"><strong>{{ r.total_avaliacoes }}</strong></td>
+                <td style="text-align:center"><span class="sp" [class.a]="r.encaminhar>0">{{ r.encaminhar }}</span></td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </ng-container>
+    </ng-container>
+
+  </div>
 </div>

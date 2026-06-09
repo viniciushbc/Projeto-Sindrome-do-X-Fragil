@@ -8,6 +8,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { HeaderComponent } from '../../../layout/header/header.component';
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -25,6 +26,7 @@ interface ItemChecklist {
   selector: 'app-checklist',
   standalone: true,
   imports: [
+    HeaderComponent,
     CommonModule,
     FormsModule,
     ToastModule,

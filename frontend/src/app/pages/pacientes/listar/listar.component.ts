@@ -9,6 +9,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { InputIconModule } from 'primeng/inputicon';
+import { HeaderComponent } from '../../../layout/header/header.component';
 
 import { PacienteService } from '../../../services/paciente.service';
 import { Paciente } from '../../../models/paciente.model';
@@ -17,6 +18,7 @@ import { Paciente } from '../../../models/paciente.model';
   selector: 'app-pacientes',
   standalone: true,
   imports: [
+    HeaderComponent,
     CommonModule,
     FormsModule,
     TableModule,

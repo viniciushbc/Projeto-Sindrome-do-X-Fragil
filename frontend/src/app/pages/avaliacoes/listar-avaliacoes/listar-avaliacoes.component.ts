@@ -8,6 +8,7 @@ import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { DividerModule } from 'primeng/divider';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { HeaderComponent } from '../../../layout/header/header.component';
 
 import { AvaliacaoService } from '../../../services/avaliacao.service';
 import { AvaliacaoResumo } from '../../../models/avaliacao.model';
@@ -16,6 +17,7 @@ import { AvaliacaoResumo } from '../../../models/avaliacao.model';
   selector: 'app-listar-avaliacoes',
   standalone: true,
   imports: [
+    HeaderComponent,
     CommonModule,
     ToastModule,
     CardModule,

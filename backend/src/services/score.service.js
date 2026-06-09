@@ -1,70 +1,53 @@
-require('dotenv').config();
+const { pool: db } = require('../database/connection');
 
-const limiarMasculino = process.env.LIMIAR_MASCULINO;
-const limiarFeminino = process.env.LIMIAR_FEMININO;
+async function calcularScore({ sexo, respostas }) {
+  const [pesos] = await db.execute(
+    `SELECT id_sintoma, nome, peso FROM pesos_sintomas WHERE sexo = ? AND aplicavel = true`,
+    [sexo]
+  );
 
-function obterLimiarPorSexo(sexo) {
-  if (sexo === 'M') {
-    return limiarMasculino;
+  const [limiares] = await db.execute(
+    `SELECT valor FROM limiares WHERE sexo = ? AND ativo = true LIMIT 1`,
+    [sexo]
+  );
+
+  if (limiares.length === 0) {
+    throw { status: 500, message: `Limiar não encontrado para sexo: ${sexo}` };
   }
 
-  if (sexo === 'F') {
-    return limiarFeminino;
-  }
+  const limiarUtilizado = Number(limiares[0].valor);
 
-  return null;
-}
-
-function calcularScore(sexo, sintomasAtivos, respostas) {
-  const limiarUtilizado = obterLimiarPorSexo(sexo);
-
-  const sintomasPorId = new Map();
-
-  sintomasAtivos.forEach((sintoma) => {
-    sintomasPorId.set(Number(sintoma.id_sintoma), sintoma);
+  const pesosPorId = new Map();
+  pesos.forEach((p) => {
+    pesosPorId.set(Number(p.id_sintoma), Number(p.peso));
   });
 
-  let somaPesosPresentes = 0;
-  let somaPesosTotais = 0;
+  let score = 0;
 
   respostas.forEach((resposta) => {
-    const sintoma = sintomasPorId.get(Number(resposta.id_sintoma));
-
-    if (!sintoma) {
-      return;
-    }
-
-    const peso = Number(sintoma.peso || 0);
-
-    somaPesosTotais += peso;
+    const peso = pesosPorId.get(Number(resposta.id_sintoma));
+    if (peso === undefined) return;
 
     if (resposta.presente === true) {
-      somaPesosPresentes += peso;
+      score += peso;
     }
   });
 
-  const score = somaPesosTotais > 0
-    ? somaPesosPresentes / somaPesosTotais
-    : 0;
+  const scoreArredondado = Number(score.toFixed(3));
 
-  const scoreArredondado = Number(score.toFixed(2));
+  const resultado = scoreArredondado >= limiarUtilizado ? 'ENCAMINHAR' : 'NAO_ENCAMINHAR';
 
-  const resultado = scoreArredondado >= limiarUtilizado
-    ? 'ENCAMINHAR'
-    : 'NAO_ENCAMINHAR';
-
-  const recomendacao = resultado === 'ENCAMINHAR'
-    ? 'Encaminhar para teste genético confirmatório.'
-    : 'Não encaminhar neste momento. Manter acompanhamento clínico se necessário.';
+  const recomendacao =
+    resultado === 'ENCAMINHAR'
+      ? 'Encaminhar para teste genético confirmatório.'
+      : 'Triagem não indica encaminhamento prioritário no momento, sem descartar avaliação médica.';
 
   return {
     score: scoreArredondado,
     limiar_utilizado: limiarUtilizado,
     resultado,
-    recomendacao
+    recomendacao,
   };
 }
 
-module.exports = {
-  calcularScore
-};
+module.exports = { calcularScore };

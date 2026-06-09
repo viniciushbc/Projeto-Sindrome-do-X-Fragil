@@ -29,34 +29,55 @@ function validarBody(body) {
 
 async function criarAvaliacao(req, res) {
   try {
-    if (!req.usuario.id_usuario) {
-      return res.status(401).json({ message: 'Usuário não autenticado.' });
-    }
-
     const erros = validarBody(req.body);
     if (erros.length > 0) {
-      return res.status(400).json({ message: 'Erro de validação.', errors: erros });
+      return res.status(400).json({ message: 'Erro de validação.', details: erros });
     }
 
     const resultado = await avaliacoesService.criarAvaliacao(req.body, req.usuario.id_usuario);
-    return res.status(201).json(resultado);
+    return res.status(201).json({ message: 'Avaliação criada com sucesso.', data: resultado });
   } catch (error) {
     return res.status(error.status || 500).json({
-      message: error.message || 'Erro interno ao criar avaliação.'
+      message: error.message || 'Erro interno ao criar avaliação.',
+      details: [],
     });
   }
 }
 
+// (GET /avaliacoes)
 async function listarAvaliacoes(req, res) {
   try {
-    const avaliacoes = await avaliacoesService.listarAvaliacoes();
+    const avaliacoes = await avaliacoesService.listarAvaliacoes(req.usuario);
     return res.status(200).json(avaliacoes);
   } catch (error) {
-    return res.status(500).json({ message: 'Erro interno ao listar avaliações.' });
+    return res.status(500).json({ message: 'Erro interno ao listar avaliações.', details: [] });
   }
 }
 
-module.exports = {
-  criarAvaliacao,
-  listarAvaliacoes
-};
+async function buscarAvaliacoesPorPaciente(req, res) {
+  try {
+    const { idPaciente } = req.params;
+    const avaliacoes = await avaliacoesService.buscarAvaliacoesPorPaciente(idPaciente, req.usuario);
+    return res.status(200).json(avaliacoes);
+  } catch (error) {
+    return res.status(error.status || 500).json({
+      message: error.message || 'Erro interno ao buscar avaliações.',
+      details: [],
+    });
+  }
+}
+
+async function buscarAvaliacaoPorId(req, res) {
+  try {
+    const { id } = req.params;
+    const avaliacao = await avaliacoesService.buscarAvaliacaoPorId(id, req.usuario);
+    return res.status(200).json(avaliacao);
+  } catch (error) {
+    return res.status(error.status || 500).json({
+      message: error.message || 'Erro interno ao buscar avaliação.',
+      details: [],
+    });
+  }
+}
+
+module.exports = { criarAvaliacao, listarAvaliacoes, buscarAvaliacoesPorPaciente, buscarAvaliacaoPorId };
