@@ -1,5 +1,71 @@
 const { pool: db } = require('../database/connection');
 
+function converterParaJson(valor) {
+  if (valor === null || valor === undefined) {
+    return null;
+  }
+
+  if (typeof valor === 'string') {
+    return JSON.stringify({ valor });
+  }
+
+  return JSON.stringify(valor);
+}
+
+async function registrarAuditoria({
+  id_usuario = null,
+  entidade,
+  id_registro,
+  acao,
+  dados_anteriores = null,
+  dados_novos = null,
+  rota_backend = null,
+  metodo_http = null,
+  ip_origem = null,
+  user_agent = null,
+}) {
+  try {
+    const acaoBanco = acao === 'DESATIVACAO' ? 'EDICAO' : acao;
+
+    await db.execute(
+      `
+      INSERT INTO logs_auditoria (
+        id_usuario,
+        entidade,
+        id_registro,
+        acao,
+        dados_anteriores,
+        dados_novos,
+        rota_backend,
+        metodo_http,
+        ip_origem,
+        user_agent,
+        data_hora
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+      `,
+      [
+        id_usuario,
+        entidade,
+        id_registro,
+        acaoBanco,
+        converterParaJson(dados_anteriores),
+        converterParaJson(dados_novos),
+        rota_backend,
+        metodo_http,
+        ip_origem,
+        user_agent,
+      ]
+    );
+  } catch (err) {
+    console.error('[logs.service] Erro ao registrar auditoria:', err.message);
+  }
+}
+
+/**
+ * Função antiga mantida para compatibilidade.
+ * Se algum arquivo ainda chamar registrarLog(), não vai quebrar.
+ */
 async function registrarLog({
   id_usuario,
   entidade,
@@ -9,25 +75,20 @@ async function registrarLog({
   valor_anterior = null,
   valor_novo = null,
 }) {
-  try {
-    const acaoBanco = acao === 'DESATIVACAO' ? 'EDICAO' : acao;
-
-    await db.execute(
-      `INSERT INTO logs_sistema (id_usuario, entidade, id_registro, acao, campo_alterado, valor_anterior, valor_novo, data_hora)
-       VALUES (?, ?, ?, ?, ?, ?, ?, NOW())`,
-      [
-        id_usuario,
-        entidade,
-        id_registro,
-        acaoBanco,
-        campo_alterado,
-        valor_anterior !== null ? String(valor_anterior) : null,
-        valor_novo !== null ? String(valor_novo) : null,
-      ]
-    );
-  } catch (err) {
-    console.error('[logs.service] Erro ao registrar log:', err.message);
-  }
+  return registrarAuditoria({
+    id_usuario,
+    entidade,
+    id_registro,
+    acao,
+    dados_anteriores: {
+      campo_alterado,
+      valor_anterior,
+    },
+    dados_novos: {
+      campo_alterado,
+      valor_novo,
+    },
+  });
 }
 
 async function listarLogs(filtros = {}) {
@@ -62,35 +123,52 @@ async function listarLogs(filtros = {}) {
   const where = condicoes.length > 0 ? 'WHERE ' + condicoes.join(' AND ') : '';
 
   const [rows] = await db.execute(
-    `SELECT
-       l.id_log,
-       u.id_usuario,
-       u.nome AS usuario_nome,
-       l.entidade,
-       l.id_registro,
-       l.acao,
-       l.campo_alterado,
-       l.valor_anterior,
-       l.valor_novo,
-       l.data_hora
-     FROM logs_sistema l
-     INNER JOIN usuarios u ON u.id_usuario = l.id_usuario
-     ${where}
-     ORDER BY l.data_hora DESC`,
+    `
+    SELECT
+      l.id_log,
+      l.id_usuario,
+      u.nome AS usuario_nome,
+      l.entidade,
+      l.id_registro,
+      l.acao,
+      l.dados_anteriores,
+      l.dados_novos,
+      l.rota_backend,
+      l.metodo_http,
+      l.ip_origem,
+      l.user_agent,
+      l.data_hora
+    FROM logs_auditoria l
+    LEFT JOIN usuarios u ON u.id_usuario = l.id_usuario
+    ${where}
+    ORDER BY l.data_hora DESC
+    `,
     valores
   );
 
   return rows.map((r) => ({
     id_log: r.id_log,
-    usuario: { id_usuario: r.id_usuario, nome: r.usuario_nome },
+    usuario: r.id_usuario
+      ? {
+          id_usuario: r.id_usuario,
+          nome: r.usuario_nome,
+        }
+      : null,
     entidade: r.entidade,
     id_registro: r.id_registro,
     acao: r.acao,
-    campo_alterado: r.campo_alterado,
-    valor_anterior: r.valor_anterior,
-    valor_novo: r.valor_novo,
+    dados_anteriores: r.dados_anteriores,
+    dados_novos: r.dados_novos,
+    rota_backend: r.rota_backend,
+    metodo_http: r.metodo_http,
+    ip_origem: r.ip_origem,
+    user_agent: r.user_agent,
     data_hora: r.data_hora,
   }));
 }
 
-module.exports = { registrarLog, listarLogs };
+module.exports = {
+  registrarAuditoria,
+  registrarLog,
+  listarLogs,
+};

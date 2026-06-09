@@ -35,7 +35,15 @@ async function criarPaciente(req, res) {
     const erros = validarPaciente(req.body);
     if (erros.length > 0) return res.status(400).json({ message: 'Erro de validação.', details: erros });
 
-    const paciente = await pacientesService.criarPaciente(req.body, req.usuario.id_usuario);
+    const paciente = await pacientesService.criarPaciente(req.body,req.usuario.id_usuario,
+      {
+        rotaBackend: req.originalUrl,
+        metodoHttp: req.method,
+        ipOrigem: req.ip,
+        userAgent: req.headers['user-agent'],
+      }
+    );
+
     return res.status(201).json({ message: 'Paciente criado com sucesso.', data: paciente });
   } catch (error) {
     return res.status(500).json({ message: 'Erro interno ao criar paciente.', details: [] });
@@ -48,7 +56,15 @@ async function atualizarPaciente(req, res) {
     const erros = validarPaciente(req.body);
     if (erros.length > 0) return res.status(400).json({ message: 'Erro de validação.', details: erros });
 
-    const paciente = await pacientesService.atualizarPaciente(id, req.body, req.usuario.id_usuario);
+    const paciente = await pacientesService.atualizarPaciente(id,req.body,req.usuario.id_usuario,
+  {
+    rotaBackend: req.originalUrl,
+    metodoHttp: req.method,
+    ipOrigem: req.ip,
+    userAgent: req.headers['user-agent'],
+  }
+);
+
     if (!paciente) return res.status(404).json({ message: 'Paciente não encontrado.', details: [] });
 
     return res.status(200).json({ message: 'Paciente atualizado com sucesso.', data: paciente });
@@ -66,7 +82,15 @@ async function atualizarStatusPaciente(req, res) {
       return res.status(400).json({ message: 'O campo ativo deve ser booleano.', details: [] });
     }
 
-    const paciente = await pacientesService.atualizarStatusPaciente(id, ativo, req.usuario.id_usuario);
+    const paciente = await pacientesService.atualizarStatusPaciente(id,ativo,req.usuario.id_usuario,
+  {
+    rotaBackend: req.originalUrl,
+    metodoHttp: req.method,
+    ipOrigem: req.ip,
+    userAgent: req.headers['user-agent'],
+  }
+);
+
     if (!paciente) return res.status(404).json({ message: 'Paciente não encontrado.', details: [] });
 
     return res.status(200).json({

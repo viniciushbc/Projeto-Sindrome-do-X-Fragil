@@ -16,7 +16,7 @@ async function buscarPacientePorId(id) {
   return rows[0];
 }
 
-async function criarPaciente(dados, idUsuario) {
+async function criarPaciente(dados, idUsuario, contexto = {}) {
   const {
     nome,
     cpf = null,
@@ -29,25 +29,57 @@ async function criarPaciente(dados, idUsuario) {
   } = dados;
 
   const [result] = await db.execute(
-    `INSERT INTO pacientes (nome, cpf, data_nascimento, idade, sexo, telefone, responsavel, observacoes, ativo)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [nome, cpf, data_nascimento, idade, sexo, telefone, responsavel, observacoes, true]
+    `
+    INSERT INTO pacientes (
+      nome,
+      cpf,
+      data_nascimento,
+      idade,
+      sexo,
+      telefone,
+      responsavel,
+      observacoes,
+      ativo
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `,
+    [
+      nome,
+      cpf,
+      data_nascimento,
+      idade,
+      sexo,
+      telefone,
+      responsavel,
+      observacoes,
+      true
+    ]
   );
 
   const paciente = await buscarPacientePorId(result.insertId);
 
-  await logsService.registrarLog({
+  await logsService.registrarAuditoria({
     id_usuario: idUsuario,
     entidade: 'PACIENTE',
     id_registro: result.insertId,
     acao: 'CRIACAO',
+    dados_anteriores: null,
+    dados_novos: paciente,
+    rota_backend: contexto.rotaBackend || null,
+    metodo_http: contexto.metodoHttp || null,
+    ip_origem: contexto.ipOrigem || null,
+    user_agent: contexto.userAgent || null,
   });
 
   return paciente;
 }
 
-async function atualizarPaciente(id, dados, idUsuario) {
+async function atualizarPaciente(id, dados, idUsuario, contexto = {}) {
   const pacienteAnterior = await buscarPacientePorId(id);
+
+  if (!pacienteAnterior) {
+    return null;
+  }
 
   const {
     nome,
@@ -61,9 +93,30 @@ async function atualizarPaciente(id, dados, idUsuario) {
   } = dados;
 
   const [result] = await db.execute(
-    `UPDATE pacientes SET nome=?, cpf=?, data_nascimento=?, idade=?, sexo=?, telefone=?, responsavel=?, observacoes=?
-     WHERE id_paciente=?`,
-    [nome, cpf, data_nascimento, idade, sexo, telefone, responsavel, observacoes, id]
+    `
+    UPDATE pacientes
+    SET nome = ?,
+        cpf = ?,
+        data_nascimento = ?,
+        idade = ?,
+        sexo = ?,
+        telefone = ?,
+        responsavel = ?,
+        observacoes = ?,
+        data_atualizacao = NOW()
+    WHERE id_paciente = ?
+    `,
+    [
+      nome,
+      cpf,
+      data_nascimento,
+      idade,
+      sexo,
+      telefone,
+      responsavel,
+      observacoes,
+      id
+    ]
   );
 
   if (result.affectedRows === 0) {
@@ -72,29 +125,36 @@ async function atualizarPaciente(id, dados, idUsuario) {
 
   const pacienteAtualizado = await buscarPacientePorId(id);
 
-  const campos = ['nome', 'cpf', 'sexo', 'telefone', 'responsavel', 'observacoes'];
-  for (const campo of campos) {
-    const anterior = pacienteAnterior ? pacienteAnterior[campo] : null;
-    const novo = pacienteAtualizado[campo];
-    if (String(anterior) !== String(novo)) {
-      await logsService.registrarLog({
-        id_usuario: idUsuario,
-        entidade: 'PACIENTE',
-        id_registro: id,
-        acao: 'EDICAO',
-        campo_alterado: campo,
-        valor_anterior: anterior,
-        valor_novo: novo,
-      });
-    }
-  }
+  await logsService.registrarAuditoria({
+    id_usuario: idUsuario,
+    entidade: 'PACIENTE',
+    id_registro: id,
+    acao: 'EDICAO',
+    dados_anteriores: pacienteAnterior,
+    dados_novos: pacienteAtualizado,
+    rota_backend: contexto.rotaBackend || null,
+    metodo_http: contexto.metodoHttp || null,
+    ip_origem: contexto.ipOrigem || null,
+    user_agent: contexto.userAgent || null,
+  });
 
   return pacienteAtualizado;
 }
 
-async function atualizarStatusPaciente(id, ativo, idUsuario) {
+async function atualizarStatusPaciente(id, ativo, idUsuario, contexto = {}) {
+  const pacienteAnterior = await buscarPacientePorId(id);
+
+  if (!pacienteAnterior) {
+    return null;
+  }
+
   const [result] = await db.execute(
-    `UPDATE pacientes SET ativo=? WHERE id_paciente=?`,
+    `
+    UPDATE pacientes
+    SET ativo = ?,
+        data_atualizacao = NOW()
+    WHERE id_paciente = ?
+    `,
     [ativo, id]
   );
 
@@ -102,17 +162,22 @@ async function atualizarStatusPaciente(id, ativo, idUsuario) {
     return null;
   }
 
-  await logsService.registrarLog({
+  const pacienteAtualizado = await buscarPacientePorId(id);
+
+  await logsService.registrarAuditoria({
     id_usuario: idUsuario,
     entidade: 'PACIENTE',
     id_registro: id,
-    acao: 'DESATIVACAO',
-    campo_alterado: 'ativo',
-    valor_anterior: !ativo,
-    valor_novo: ativo,
+    acao: ativo ? 'EDICAO' : 'EXCLUSAO',
+    dados_anteriores: pacienteAnterior,
+    dados_novos: pacienteAtualizado,
+    rota_backend: contexto.rotaBackend || null,
+    metodo_http: contexto.metodoHttp || null,
+    ip_origem: contexto.ipOrigem || null,
+    user_agent: contexto.userAgent || null,
   });
 
-  return buscarPacientePorId(id);
+  return pacienteAtualizado;
 }
 
 module.exports = {

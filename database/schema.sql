@@ -83,15 +83,18 @@ CREATE TABLE respostas_avaliacao (
     FOREIGN KEY (id_sintoma) REFERENCES sintomas(id_sintoma)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE logs_sistema (
-    id_log INT AUTO_INCREMENT PRIMARY KEY,
-    id_usuario INT NOT NULL,
+CREATE TABLE logs_auditoria (
+    id_log BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NULL,
     entidade VARCHAR(100) NOT NULL,
     id_registro INT NOT NULL,
     acao ENUM('CRIACAO', 'EDICAO', 'EXCLUSAO') NOT NULL,
-    campo_alterado VARCHAR(100) NULL,
-    valor_anterior TEXT NULL,
-    valor_novo TEXT NULL,
+    dados_anteriores JSON NULL,
+    dados_novos JSON NULL,
+    rota_backend VARCHAR(255) NULL,
+    metodo_http VARCHAR(10) NULL,
+    ip_origem VARCHAR(100) NULL,
+    user_agent TEXT NULL,
     data_hora DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
