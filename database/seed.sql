@@ -189,3 +189,45 @@ ON DUPLICATE KEY UPDATE
     responsavel = novo.responsavel,
     observacoes = novo.observacoes,
     ativo = novo.ativo;
+
+-- 6. Pacientes adicionais de teste
+INSERT INTO pacientes (
+    nome,
+    cpf,
+    data_nascimento,
+    idade,
+    sexo,
+    telefone,
+    responsavel,
+    observacoes,
+    ativo
+)
+SELECT *
+FROM (
+    SELECT 'Mariana Lima Teste' AS nome, '444.444.444-44' AS cpf, '2017-01-15' AS data_nascimento, 9 AS idade, 'F' AS sexo, '(41) 99999-4444' AS telefone, 'Fernanda Lima' AS responsavel, 'Paciente fictício adicional para testes.' AS observacoes, TRUE AS ativo
+    UNION ALL SELECT 'Pedro Santos Teste', '555.555.555-55', '2016-03-22', 10, 'M', '(41) 99999-5555', 'Roberto Santos', 'Paciente fictício adicional para testes.', TRUE
+    UNION ALL SELECT 'Bianca Rocha Teste', '666.666.666-66', '2019-05-08', 7, 'F', '(41) 99999-6666', 'Patrícia Rocha', 'Paciente fictício adicional para testes.', TRUE
+    UNION ALL SELECT 'Lucas Martins Teste', '777.777.777-77', '2014-07-19', 12, 'M', '(41) 99999-7777', 'Ricardo Martins', 'Paciente fictício adicional para testes.', TRUE
+    UNION ALL SELECT 'Helena Costa Teste', '888.888.888-88', '2018-09-30', 8, 'F', '(41) 99999-8888', 'Juliana Costa', 'Paciente fictício adicional para testes.', TRUE
+    UNION ALL SELECT 'Rafael Pereira Teste', '999.999.999-99', '2015-11-12', 11, 'M', '(41) 99999-9999', 'Márcia Pereira', 'Paciente fictício adicional para testes.', TRUE
+    UNION ALL SELECT 'Laura Almeida Teste', '101.101.101-10', '2017-02-04', 9, 'F', '(41) 99999-1010', 'Gustavo Almeida', 'Paciente fictício adicional para testes.', TRUE
+    UNION ALL SELECT 'Gabriel Ferreira Teste', '202.202.202-20', '2016-04-14', 10, 'M', '(41) 99999-2020', 'Aline Ferreira', 'Paciente fictício adicional para testes.', TRUE
+    UNION ALL SELECT 'Isabela Ribeiro Teste', '303.303.303-30', '2019-06-25', 7, 'F', '(41) 99999-3030', 'Eduardo Ribeiro', 'Paciente fictício adicional para testes.', TRUE
+    UNION ALL SELECT 'Matheus Carvalho Teste', '404.404.404-40', '2014-08-17', 12, 'M', '(41) 99999-4040', 'Camila Carvalho', 'Paciente fictício adicional para testes.', TRUE
+    UNION ALL SELECT 'Sofia Mendes Teste', '505.505.505-50', '2018-12-03', 8, 'F', '(41) 99999-5050', 'Bruno Mendes', 'Paciente fictício adicional para testes.', TRUE
+    UNION ALL SELECT 'Guilherme Barbosa Teste', '606.606.606-60', '2015-01-28', 11, 'M', '(41) 99999-6060', 'Renata Barbosa', 'Paciente fictício adicional para testes.', TRUE
+    UNION ALL SELECT 'Valentina Dias Teste', '707.707.707-70', '2017-03-16', 9, 'F', '(41) 99999-7070', 'Marcelo Dias', 'Paciente fictício adicional para testes.', TRUE
+    UNION ALL SELECT 'Enzo Moreira Teste', '808.808.808-80', '2016-05-09', 10, 'M', '(41) 99999-8080', 'Daniela Moreira', 'Paciente fictício adicional para testes.', TRUE
+    UNION ALL SELECT 'Manuela Nunes Teste', '909.909.909-90', '2019-07-21', 7, 'F', '(41) 99999-9090', 'André Nunes', 'Paciente fictício adicional para testes.', TRUE
+    UNION ALL SELECT 'Arthur Gomes Teste', '121.121.121-12', '2014-09-11', 12, 'M', '(41) 99999-1212', 'Paula Gomes', 'Paciente fictício adicional para testes.', TRUE
+    UNION ALL SELECT 'Alice Teixeira Teste', '131.131.131-13', '2018-10-06', 8, 'F', '(41) 99999-1313', 'Felipe Teixeira', 'Paciente fictício adicional para testes.', TRUE
+    UNION ALL SELECT 'Miguel Correia Teste', '141.141.141-14', '2015-12-18', 11, 'M', '(41) 99999-1414', 'Priscila Correia', 'Paciente fictício adicional para testes.', TRUE
+    UNION ALL SELECT 'Lívia Castro Teste', '151.151.151-15', '2017-06-02', 9, 'F', '(41) 99999-1515', 'Rodrigo Castro', 'Paciente fictício adicional para testes.', TRUE
+    UNION ALL SELECT 'Davi Araújo Teste', '161.161.161-16', '2016-11-23', 10, 'M', '(41) 99999-1616', 'Vanessa Araújo', 'Paciente fictício adicional para testes.', TRUE
+) AS novos
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM pacientes p
+    WHERE p.cpf = novos.cpf
+       OR p.nome = novos.nome
+)
