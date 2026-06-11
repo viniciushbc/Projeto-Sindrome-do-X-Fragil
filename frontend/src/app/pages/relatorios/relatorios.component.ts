@@ -19,6 +19,7 @@ import { PacienteService } from '../../services/paciente.service';
 import { AuthService } from '../../services/auth.service';
 import { RelatorioItem } from '../../models/avaliacao.model';
 import { Paciente } from '../../models/paciente.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-relatorios',
@@ -64,6 +65,10 @@ export class RelatoriosComponent implements OnInit {
     { label: 'Não encaminhar', value: 'NAO_ENCAMINHAR' },
   ];
 
+  voltarMenu(): void {
+  this.router.navigate(['/menu']);
+}
+
   get isAdmin(): boolean {
     return this.authService.isAdmin();
   }
@@ -73,6 +78,7 @@ export class RelatoriosComponent implements OnInit {
     private pacienteService: PacienteService,
     private authService: AuthService,
     private messageService: MessageService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
