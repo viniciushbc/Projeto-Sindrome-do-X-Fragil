@@ -348,6 +348,12 @@
   color: #94a3b8;
 }
 
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
 .detalhe-row strong { font-size: 14px; color: #0f172a; font-weight: 700; }
 
 @media (max-width: 900px) {

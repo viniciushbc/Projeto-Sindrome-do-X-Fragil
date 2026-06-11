@@ -17,6 +17,7 @@ import { Agendamento, CriarAgendamentoRequest } from '../../models/agendamento.m
 import { AgendamentoService } from '../../services/agendamento.service';
 import { PacienteService } from '../../services/paciente.service';
 import { Paciente } from '../../models/paciente.model';
+import { Router } from '@angular/router';
 
 interface DiaCalendario {
   data: Date;
@@ -74,6 +75,7 @@ export class CalendarioComponent implements OnInit {
     private agendamentoService: AgendamentoService,
     private pacienteService: PacienteService,
     private messageService: MessageService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -104,6 +106,10 @@ export class CalendarioComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Não foi possível carregar os agendamentos.' });
       },
     });
+  }
+
+  voltarMenu(): void {
+  this.router.navigate(['/menu']);
   }
 
   private gerarCalendario(): void {
@@ -165,6 +171,7 @@ export class CalendarioComponent implements OnInit {
     this.carregarAgendamentos();
   }
 
+  
   abrirModal(dia: DiaCalendario): void {
     if (!dia.mesAtual) return;
     this.dataSelecionada = dia.data;
@@ -247,4 +254,5 @@ export class CalendarioComponent implements OnInit {
   formatarHorario(horario: string): string {
     return horario ? horario.substring(0, 5) : '';
   }
+  
 }
