@@ -229,3 +229,49 @@ html, body {
   .sigma-actionbar-end { margin-left: 0; }
   .sigma-search input { width: 100%; }
 }
+/* ══ Responsividade geral ══ */
+@media (max-width: 768px) {
+  .sigma-actionbar {
+    padding: 0.75rem 1rem;
+  }
+  .sigma-content {
+    padding: 0.75rem 0.75rem;
+  }
+  .sigma-header__nav {
+    display: none !important;
+  }
+  .dados-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .dados-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .acoes {
+    flex-direction: column;
+  }
+}
+
+/* ══ Print global ══ */
+@media print {
+  app-header, .sigma-actionbar, .no-print { display: none !important; }
+  body { background: white; }
+  .sigma-page { min-height: unset; }
+}
+
+/* ══ Empty state ══ */
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: var(--sigma-text-muted);
+}
+.empty-state i { font-size: 3rem; margin-bottom: 1rem; display: block; }
+.empty-state p { font-size: 1rem; margin-bottom: 1.5rem; }
+
+/* ══ Utility classes ══ */
+.w-full { width: 100%; }
+.mb-3 { margin-bottom: 1rem; }
+.mt-3 { margin-top: 1rem; }
+.text-center { text-align: center; }

@@ -1,0 +1,5 @@
+.filtros-card { background: #fff; border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; box-shadow: 0 1px 4px rgba(0,0,0,.07); }
+.filtros-row { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end; }
+.f-field { display: flex; flex-direction: column; gap: .3rem; min-width: 160px; }
+.f-field label { font-size: .8rem; font-weight: 600; color: #444; }
+.filtros-actions { display: flex; gap: .5rem; margin-left: auto; }

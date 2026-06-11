@@ -13,10 +13,10 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DividerModule } from 'primeng/divider';
 import { HeaderComponent } from '../../layout/header/header.component';
-
 import { AvaliacaoService } from '../../services/avaliacao.service';
 import { PacienteService } from '../../services/paciente.service';
 import { AuthService } from '../../services/auth.service';
+import { ExportacaoService, DadosExportacao } from '../../services/exportacao.service';
 import { RelatorioItem } from '../../models/avaliacao.model';
 import { Paciente } from '../../models/paciente.model';
 import { Router } from '@angular/router';
@@ -25,19 +25,9 @@ import { Router } from '@angular/router';
   selector: 'app-relatorios',
   standalone: true,
   imports: [
-    HeaderComponent,
-    CommonModule,
-    FormsModule,
-    ToastModule,
-    CardModule,
-    TableModule,
-    CalendarModule,
-    DropdownModule,
-    ButtonModule,
-    TagModule,
-    ToolbarModule,
-    ProgressSpinnerModule,
-    DividerModule,
+    HeaderComponent, CommonModule, FormsModule, ToastModule, CardModule,
+    TableModule, CalendarModule, DropdownModule, ButtonModule, TagModule,
+    ToolbarModule, ProgressSpinnerModule, DividerModule,
   ],
   templateUrl: './relatorios.component.html',
   styleUrl: './relatorios.component.css',
@@ -52,16 +42,24 @@ export class RelatoriosComponent implements OnInit {
   carregando = false;
   erro = false;
 
-  // Filtros
   dataInicio: Date | null = null;
   dataFim: Date | null = null;
   pacienteSelecionado: number | null = null;
   usuarioSelecionado: number | null = null;
-  resultadoSelecionado: string = 'TODOS';
+  resultadoSelecionado = 'TODOS';
+
+  tipoAtivo: Secao = 'geral';
+
+  tiposRelatorio = [
+    { label: 'Geral',    value: 'geral',    icon: 'pi-list',      desc: 'Relatório com filtros' },
+    { label: 'Paciente', value: 'paciente', icon: 'pi-user',      desc: 'Histórico individual'  },
+    { label: 'Período',  value: 'periodo',  icon: 'pi-calendar',  desc: 'Relatório por datas'   },
+    { label: 'Resumo',   value: 'resumo',   icon: 'pi-chart-bar', desc: 'Painel geral'          },
+  ];
 
   opcoesResultado = [
-    { label: 'Todos', value: 'TODOS' },
-    { label: 'Encaminhar', value: 'ENCAMINHAR' },
+    { label: 'Todos',          value: 'TODOS'          },
+    { label: 'Encaminhar',     value: 'ENCAMINHAR'     },
     { label: 'Não encaminhar', value: 'NAO_ENCAMINHAR' },
   ];
 
@@ -93,12 +91,11 @@ export class RelatoriosComponent implements OnInit {
     });
   }
 
+  // ── Geral ──────────────────────────────────────────────────────────
   buscar(): void {
     this.carregando = true;
     this.erro = false;
-
     const filtros: any = {};
-
     if (this.dataInicio) filtros['dataInicio'] = this.formatarDataParam(this.dataInicio);
     if (this.dataFim)    filtros['dataFim']    = this.formatarDataParam(this.dataFim);
     if (this.pacienteSelecionado) filtros['idPaciente'] = this.pacienteSelecionado;
@@ -107,31 +104,75 @@ export class RelatoriosComponent implements OnInit {
       filtros['resultado'] = this.resultadoSelecionado;
 
     this.avaliacaoService.buscarRelatorios(filtros).subscribe({
-      next: (dados) => {
-        this.registros = dados;
-        this.carregando = false;
-      },
+      next: (dados) => { this.registros = dados; this.carregando = false; },
       error: () => {
-        this.erro = true;
-        this.carregando = false;
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Erro',
-          detail: 'Não foi possível carregar os relatórios.',
-        });
+        this.erro = true; this.carregando = false;
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Não foi possível carregar os relatórios.' });
       },
     });
   }
 
   limparFiltros(): void {
-    this.dataInicio = null;
-    this.dataFim = null;
-    this.pacienteSelecionado = null;
-    this.usuarioSelecionado = null;
+    this.dataInicio = null; this.dataFim = null;
+    this.pacienteSelecionado = null; this.usuarioSelecionado = null;
     this.resultadoSelecionado = 'TODOS';
     this.buscar();
   }
 
+  selecionarTipo(tipo: Secao): void {
+    this.tipoAtivo = tipo;
+    if (tipo === 'geral')  this.buscar();
+    if (tipo === 'resumo') this.buscarResumo();
+  }
+
+  buscarGeral(): void { this.buscar(); }
+
+  // ── Por Paciente ───────────────────────────────────────────────────
+  buscarPorPaciente(): void {
+    if (!this.pacienteHistoricoId) return;
+    this.carregando = true;
+    this.avaliacaoService.buscarRelatorios({ idPaciente: this.pacienteHistoricoId }).subscribe({
+      next: (dados) => {
+        const paciente = this.pacientes.find(p => p.id_paciente === this.pacienteHistoricoId);
+        this.dadosPaciente = { paciente, avaliacoes: dados, resumo: this.montarResumo(dados) };
+        this.carregando = false;
+      },
+      error: () => { this.carregando = false; },
+    });
+  }
+
+  // ── Por Período ────────────────────────────────────────────────────
+  buscarPorPeriodo(): void {
+    this.carregando = true;
+    const filtros: any = {};
+    if (this.periodoInicio) filtros.dataInicio = this.formatarDataParam(this.periodoInicio);
+    if (this.periodoFim)    filtros.dataFim    = this.formatarDataParam(this.periodoFim);
+    this.avaliacaoService.buscarRelatorios(filtros).subscribe({
+      next: (dados) => {
+        this.dadosPeriodo = { avaliacoes: dados, resumo: this.montarResumo(dados), grafico_por_dia: [] };
+        this.carregando = false;
+      },
+      error: () => { this.carregando = false; },
+    });
+  }
+
+  // ── Resumo ─────────────────────────────────────────────────────────
+  buscarResumo(): void {
+    this.carregando = true;
+    this.avaliacaoService.buscarRelatorios().subscribe({
+      next: (dados) => {
+        this.dadosResumo = {
+          totais: this.montarResumo(dados),
+          _avaliacoes: dados, // guardado para exportação
+          por_mes: [], por_sexo: [], top5_pacientes: [],
+        };
+        this.carregando = false;
+      },
+      error: () => { this.carregando = false; },
+    });
+  }
+
+  // ── Utilitários ────────────────────────────────────────────────────
   private formatarDataParam(data: Date): string {
     const y = data.getFullYear();
     const m = String(data.getMonth() + 1).padStart(2, '0');
@@ -141,134 +182,31 @@ export class RelatoriosComponent implements OnInit {
 
   formatarData(data: string): string {
     return new Date(data).toLocaleDateString('pt-BR', {
-      day: '2-digit', month: '2-digit', year: 'numeric',
-      hour: '2-digit', minute: '2-digit',
+      day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit',
     });
   }
 
-tipoAtivo: 'geral' | 'paciente' | 'periodo' | 'resumo' = 'geral';
+  formatarDataCurta(data: string): string {
+    return new Date(data).toLocaleDateString('pt-BR');
+  }
 
-tiposRelatorio = [
-  { label: 'Geral', value: 'geral', icon: 'pi-list', desc: 'Relatório com filtros' },
-  { label: 'Paciente', value: 'paciente', icon: 'pi-user', desc: 'Histórico individual' },
-  { label: 'Período', value: 'periodo', icon: 'pi-calendar', desc: 'Relatório por datas' },
-  { label: 'Resumo', value: 'resumo', icon: 'pi-chart-bar', desc: 'Painel geral' },
-];
-
-pacienteHistoricoId: number | null = null;
-periodoInicio: Date | null = null;
-periodoFim: Date | null = null;
-
-dadosPaciente: any = null;
-dadosPeriodo: any = null;
-dadosResumo: any = null;
-
-selecionarTipo(tipo: 'geral' | 'paciente' | 'periodo' | 'resumo'): void {
-  this.tipoAtivo = tipo;
-
-  if (tipo === 'geral') this.buscarGeral();
-  if (tipo === 'resumo') this.buscarResumo();
-}
-
-buscarGeral(): void {
-  this.buscar();
-}
-
-buscarPorPaciente(): void {
-  if (!this.pacienteHistoricoId) return;
-
-  this.carregando = true;
-
-  this.avaliacaoService.buscarRelatorios({ idPaciente: this.pacienteHistoricoId }).subscribe({
-    next: (dados) => {
-      const paciente = this.pacientes.find(p => p.id_paciente === this.pacienteHistoricoId);
-
-      this.dadosPaciente = {
-        paciente,
-        avaliacoes: dados,
-        resumo: this.montarResumo(dados),
-      };
-
-      this.carregando = false;
-    },
-    error: () => {
-      this.carregando = false;
-    }
-  });
-}
-
-buscarPorPeriodo(): void {
-  this.carregando = true;
-
-  const filtros: any = {};
-
-  if (this.periodoInicio) filtros.dataInicio = this.formatarDataParam(this.periodoInicio);
-  if (this.periodoFim) filtros.dataFim = this.formatarDataParam(this.periodoFim);
-
-  this.avaliacaoService.buscarRelatorios(filtros).subscribe({
-    next: (dados) => {
-      this.dadosPeriodo = {
-        avaliacoes: dados,
-        resumo: this.montarResumo(dados),
-        grafico_por_dia: [],
-      };
-
-      this.carregando = false;
-    },
-    error: () => {
-      this.carregando = false;
-    }
-  });
-}
-
-buscarResumo(): void {
-  this.carregando = true;
-
-  this.avaliacaoService.buscarRelatorios().subscribe({
-    next: (dados) => {
-      this.dadosResumo = {
-        totais: this.montarResumo(dados),
-        por_mes: [],
-        por_sexo: [],
-        top5_pacientes: [],
-      };
-
-      this.carregando = false;
-    },
-    error: () => {
-      this.carregando = false;
-    }
-  });
-}
-
-formatarDataCurta(data: string): string {
-  return new Date(data).toLocaleDateString('pt-BR');
-}
-
-private montarResumo(dados: any[]): any {
-  const total = dados.length;
-  const encaminhar = dados.filter(x => x.resultado === 'ENCAMINHAR').length;
-  const naoEncaminhar = dados.filter(x => x.resultado === 'NAO_ENCAMINHAR').length;
-  const mediaScore = total > 0
-    ? dados.reduce((s, x) => s + Number(x.score || 0), 0) / total
-    : 0;
-
-  return {
-    total_avaliacoes: total,
-    total_encaminhar: encaminhar,
-    total_nao_encaminhar: naoEncaminhar,
-    taxa_encaminhamento: total > 0 ? Math.round((encaminhar / total) * 100) : 0,
-    media_score: mediaScore,
-  };
-}
+  private montarResumo(dados: any[]): any {
+    const total      = dados.length;
+    const encaminhar = dados.filter(x => x.resultado === 'ENCAMINHAR').length;
+    return {
+      total_avaliacoes:     total,
+      total_encaminhar:     encaminhar,
+      total_nao_encaminhar: total - encaminhar,
+      taxa_encaminhamento:  total > 0 ? Math.round((encaminhar / total) * 100) : 0,
+      media_score: total > 0 ? dados.reduce((s, x) => s + Number(x.score || 0), 0) / total : 0,
+    };
+  }
 
   formatarSexo(sexo: string): string {
     return sexo === 'M' ? 'Masculino' : sexo === 'F' ? 'Feminino' : sexo;
   }
 
-  scorePercent(score: number): number {
-    return Math.round(score * 100);
-  }
+  scorePercent(score: number): number { return Math.round(score * 100); }
 
   getSeverity(resultado: string): 'danger' | 'success' {
     return resultado === 'ENCAMINHAR' ? 'danger' : 'success';
@@ -276,5 +214,99 @@ private montarResumo(dados: any[]): any {
 
   getResultadoLabel(resultado: string): string {
     return resultado === 'ENCAMINHAR' ? 'Encaminhar' : 'Não encaminhar';
+  }
+
+  // ── Exportação ─────────────────────────────────────────────────────
+  private buildDados(secao: Secao): DadosExportacao | null {
+    const cab = ['Data', 'Paciente', 'Sexo', 'Profissional', 'Score', 'Limiar', 'Resultado'];
+
+    const toLinhas = (lista: any[]): (string | number)[][] =>
+      lista.map((r: any) => [
+        this.formatarData(r.data_avaliacao),
+        r.paciente_nome  || r.paciente?.nome      || '',
+        this.formatarSexo(r.paciente_sexo || r.paciente?.sexo || ''),
+        r.profissional_nome || r.profissional?.nome || '',
+        `${this.scorePercent(r.score)}%`,
+        r.limiar_utilizado,
+        this.getResultadoLabel(r.resultado),
+      ]);
+
+    const toResumo = (res: any) => [
+      { label: 'Total',          valor: res.total_avaliacoes     },
+      { label: 'Encaminhar',     valor: res.total_encaminhar     },
+      { label: 'Não Encaminhar', valor: res.total_nao_encaminhar },
+      { label: 'Taxa Encam.',    valor: `${res.taxa_encaminhamento}%` },
+      { label: 'Score médio',    valor: `${this.scorePercent(res.media_score)}%` },
+    ];
+
+    switch (secao) {
+      case 'geral':
+        if (!this.registros.length) return null;
+        return {
+          titulo: 'Relatório Geral de Avaliações — SIGMA',
+          subtitulo: `Síndrome do X Frágil — ${new Date().toLocaleString('pt-BR')}`,
+          cabecalho: cab,
+          linhas: toLinhas(this.registros),
+          resumo: toResumo(this.montarResumo(this.registros)),
+        };
+
+      case 'paciente':
+        if (!this.dadosPaciente?.avaliacoes?.length) return null;
+        return {
+          titulo: `Histórico — ${this.dadosPaciente.paciente?.nome ?? 'Paciente'}`,
+          subtitulo: `Síndrome do X Frágil — ${new Date().toLocaleString('pt-BR')}`,
+          cabecalho: cab,
+          linhas: toLinhas(this.dadosPaciente.avaliacoes),
+          resumo: toResumo(this.dadosPaciente.resumo),
+        };
+
+      case 'periodo': {
+        if (!this.dadosPeriodo?.avaliacoes?.length) return null;
+        const ini = this.periodoInicio ? this.formatarDataParam(this.periodoInicio) : '—';
+        const fim = this.periodoFim    ? this.formatarDataParam(this.periodoFim)    : '—';
+        return {
+          titulo: `Relatório por Período — ${ini} a ${fim}`,
+          subtitulo: `Síndrome do X Frágil — ${new Date().toLocaleString('pt-BR')}`,
+          cabecalho: cab,
+          linhas: toLinhas(this.dadosPeriodo.avaliacoes),
+          resumo: toResumo(this.dadosPeriodo.resumo),
+        };
+      }
+
+      case 'resumo':
+        if (!this.dadosResumo?._avaliacoes?.length) return null;
+        return {
+          titulo: 'Resumo Geral — SIGMA',
+          subtitulo: `Síndrome do X Frágil — ${new Date().toLocaleString('pt-BR')}`,
+          cabecalho: cab,
+          linhas: toLinhas(this.dadosResumo._avaliacoes),
+          resumo: toResumo(this.dadosResumo.totais),
+        };
+
+      default:
+        return null;
+    }
+  }
+
+  exportarExcel(secao: Secao): void {
+    const dados = this.buildDados(secao);
+    if (!dados) {
+      this.messageService.add({ severity: 'warn', summary: 'Atenção', detail: 'Nenhum dado para exportar.' });
+      return;
+    }
+    const nome = `relatorio_sigma_${secao}_${new Date().toISOString().split('T')[0]}`;
+    this.exportacaoService.exportarExcel(dados, nome);
+    this.messageService.add({ severity: 'success', summary: 'Excel gerado', detail: `${nome}.xlsx` });
+  }
+
+  exportarPDF(secao: Secao): void {
+    const dados = this.buildDados(secao);
+    if (!dados) {
+      this.messageService.add({ severity: 'warn', summary: 'Atenção', detail: 'Nenhum dado para exportar.' });
+      return;
+    }
+    const nome = `relatorio_sigma_${secao}_${new Date().toISOString().split('T')[0]}`;
+    this.exportacaoService.exportarPDF(dados, nome);
+    this.messageService.add({ severity: 'success', summary: 'PDF gerado', detail: `${nome}.pdf` });
   }
 }

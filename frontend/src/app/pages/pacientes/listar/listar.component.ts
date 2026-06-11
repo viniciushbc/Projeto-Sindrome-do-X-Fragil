@@ -68,19 +68,20 @@ export class PacientesComponent implements OnInit {
     );
   }
 
-novoPaciente(): void {
-  this.router.navigate(['/pacientes/editar']);
-}
+  novoPaciente(): void {
+    this.router.navigate(['/pacientes/editar']);
+  }
 
-editarPaciente(paciente: Paciente): void {
-  this.router.navigate(['/pacientes/editar', paciente.id_paciente]);
-}
+  editarPaciente(paciente: Paciente): void {
+    this.router.navigate(['/pacientes/editar', paciente.id_paciente]);
+  }
 
-verDetalhes(paciente: Paciente): void {
-  this.router.navigate(['/pacientes/visualizar', paciente.id_paciente]);
-}
+  verDetalhes(paciente: Paciente): void {
+    this.router.navigate(['/pacientes', paciente.id_paciente, 'historico']);
+  }
 
-voltarMenu(): void {
-  this.router.navigate(['/menu']);
-  
-}}
+  // Compatibilidade com versões anteriores do template
+  voltarMenu(): void {
+    this.router.navigate(['/menu']);
+  }
+}

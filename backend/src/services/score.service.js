@@ -2,7 +2,7 @@ const { pool: db } = require('../database/connection');
 
 async function calcularScore({ sexo, respostas }) {
   const [pesos] = await db.execute(
-    `SELECT id_sintoma, nome, peso FROM pesos_sintomas WHERE sexo = ? AND aplicavel = true`,
+    `SELECT ps.id_sintoma, ps.peso FROM pesos_sintomas ps WHERE ps.sexo = ? AND ps.aplicavel = true`,
     [sexo]
   );
 

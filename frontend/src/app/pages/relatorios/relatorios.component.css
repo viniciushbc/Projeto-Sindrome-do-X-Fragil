@@ -128,3 +128,9 @@
   .filtros-row { flex-direction: column; }
   .filtros-actions { margin-left: 0; width: 100%; justify-content: flex-end; }
 }
+.export-btns { display: flex; gap: .5rem; margin-left: auto; }
+.btn-export-excel { background: #1d7044 !important; border-color: #1d7044 !important; color: white !important; font-size: .82rem !important; padding: .35rem .75rem !important; }
+.btn-export-excel:hover { background: #155734 !important; }
+.btn-export-pdf { background: #c0392b !important; border-color: #c0392b !important; color: white !important; font-size: .82rem !important; padding: .35rem .75rem !important; }
+.btn-export-pdf:hover { background: #a93226 !important; }
+.res-header { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; }

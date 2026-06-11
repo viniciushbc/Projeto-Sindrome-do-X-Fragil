@@ -1,0 +1,10 @@
+.page-container { padding: 1.5rem; max-width: 1200px; margin: 0 auto; }
+.page-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+.page-header h2 { margin: 0; }
+.loading-center { display: flex; justify-content: center; padding: 3rem; }
+.erro-msg { color: #e53e3e; text-align: center; }
+.paciente-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+.dado { display: flex; flex-direction: column; }
+.label { font-size: 0.8rem; color: #666; margin-bottom: 0.2rem; }
+.valor { font-weight: 600; }
+.mb-3 { margin-bottom: 1rem; }

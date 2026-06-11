@@ -5,6 +5,8 @@ import { ButtonModule } from 'primeng/button';
 import { ToolbarModule } from 'primeng/toolbar';
 import { AuthService } from '../../services/auth.service';
 
+const ACESSO_ADMIN = ['pacientes','avaliacoes','relatorios','agendamentos','usuarios','logs'];
+
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -12,33 +14,44 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-
-
 export class HeaderComponent implements OnInit {
-  @Input() userName = 'Usuário';
-  @Input() userRole = 'Usuário Padrão';
   @Input() showUser = true;
 
-  constructor(
-    private router: Router, 
-    private authService: AuthService
-  ) {}
+  userName = 'Usuário';
+  userRole = 'Usuário Padrão';
 
-  // Esse metodo é executado pelo angular assim q o componente é criado, a ideia é subsituir os dados com os dados do usuáiro que fez login
+  private acessosUsuario: string[] = [];
+
+  constructor(private router: Router, private authService: AuthService) {}
+
   ngOnInit(): void {
-
-    if (this.authService.getUsuarioLogado()) {
+    const u = this.authService.getUsuarioLogado();
+    if (u) {
       this.userName = this.authService.getNomeUsuario();
       this.userRole = this.authService.getTipoUsuarioLabel();
 
+      if (u.tipo_usuario === 'ADMIN') {
+        this.acessosUsuario = [...ACESSO_ADMIN];
+      } else {
+        // permissões armazenadas no token/localStorage
+        this.acessosUsuario = u.permissoes || ['pacientes','avaliacoes'];
+      }
     }
-
   }
 
-  onLogout(): void {
+  temAcesso(modulo: string): boolean {
+    const u = this.authService.getUsuarioLogado();
+    if (!u) return false;
+    if (u.tipo_usuario === 'ADMIN') return true;
+    return this.acessosUsuario.includes(modulo);
+  }
 
+  isAdmin(): boolean { return this.authService.isAdmin(); }
+
+  navigate(path: string): void { this.router.navigate([path]); }
+
+  onLogout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
-
 }

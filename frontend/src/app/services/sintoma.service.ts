@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Sintoma } from '../models/sintoma.model';
+import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment.development';
 
 const SINTOMAS_FALLBACK: Sintoma[] = [
   { id_sintoma: 1,  nome: 'Deficiência intelectual',           descricao: 'Comprometimento cognitivo variável, de leve a grave.', ativo: true },
@@ -22,10 +24,18 @@ const SINTOMAS_FALLBACK: Sintoma[] = [
 @Injectable({ providedIn: 'root' })
 export class SintomasService {
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
+
+  private getHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      Authorization: `Bearer ${this.authService.getToken()}`
+    });
+  }
 
   listarSintomas(): Observable<Sintoma[]> {
-    return this.http.get<Sintoma[]>(`http://localhost:3000/sintomas`).pipe(
+    return this.http.get<Sintoma[]>(`${environment.apiUrl}/sintomas`, {
+      headers: this.getHeaders()
+    }).pipe(
       catchError(() => {
         console.warn('[SintomasService] Endpoint indisponível — usando lista fallback.');
         return of(SINTOMAS_FALLBACK);

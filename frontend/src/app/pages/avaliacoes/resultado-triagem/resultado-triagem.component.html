@@ -22,14 +22,34 @@
 
     <div *ngIf="resultadoReal">
 
+      <!-- Dados do paciente -->
+      <div *ngIf="detalheAvaliacao" class="dados-grid" style="margin-bottom:1rem">
+        <div class="dado">
+          <div class="dado-label">Paciente</div>
+          <div class="dado-valor">{{ detalheAvaliacao.paciente?.nome }}</div>
+        </div>
+        <div class="dado">
+          <div class="dado-label">Sexo</div>
+          <div class="dado-valor">{{ detalheAvaliacao.paciente?.sexo === 'M' ? 'Masculino' : 'Feminino' }}</div>
+        </div>
+        <div class="dado">
+          <div class="dado-label">Data da avaliação</div>
+          <div class="dado-valor">{{ detalheAvaliacao.data_avaliacao | date:'dd/MM/yyyy HH:mm' }}</div>
+        </div>
+        <div class="dado">
+          <div class="dado-label">Profissional</div>
+          <div class="dado-valor">{{ detalheAvaliacao.profissional?.nome }}</div>
+        </div>
+        <div *ngIf="detalheAvaliacao.respondente?.nome" class="dado">
+          <div class="dado-label">Respondente</div>
+          <div class="dado-valor">{{ detalheAvaliacao.respondente.nome }}</div>
+        </div>
+      </div>
+
       <div class="dados-grid">
         <div class="dado">
           <div class="dado-label">ID avaliação</div>
           <div class="dado-valor">{{ resultadoReal.id_avaliacao }}</div>
-        </div>
-        <div class="dado">
-          <div class="dado-label">ID paciente</div>
-          <div class="dado-valor">{{ resultadoReal.id_paciente }}</div>
         </div>
         <div class="dado">
           <div class="dado-label">Score calculado</div>
@@ -48,7 +68,7 @@
           <i class="pi pi-exclamation-circle"></i>
         </div>
         <div class="resultado-texto">
-          <h3>Encaminhar para teste genético</h3>
+          <h3>Encaminhar para teste genético confirmatório</h3>
           <p>{{ resultadoReal.recomendacao }}</p>
         </div>
       </div>
@@ -58,9 +78,17 @@
           <i class="pi pi-check-circle"></i>
         </div>
         <div class="resultado-texto">
-          <h3>Triagem não indica encaminhamento</h3>
+          <h3>Triagem não indica encaminhamento prioritário no momento</h3>
           <p>{{ resultadoReal.recomendacao }}</p>
         </div>
+      </div>
+
+      <!-- Sintomas presentes -->
+      <div *ngIf="getSintomosPresentes().length > 0" style="margin-top:1rem">
+        <h4 style="margin-bottom:0.5rem">Sintomas presentes:</h4>
+        <ul class="sintomas-lista">
+          <li *ngFor="let s of getSintomosPresentes()">{{ s.nome }}</li>
+        </ul>
       </div>
 
     </div>
@@ -73,7 +101,8 @@
     <div class="acoes">
       <button pButton type="button" label="Voltar para pacientes" icon="pi pi-arrow-left" severity="secondary" (click)="voltar()"></button>
       <button pButton type="button" label="Nova avaliação" icon="pi pi-plus" (click)="novaAvaliacao()"></button>
-      <button pButton type="button" label="Ver histórico" icon="pi pi-history" severity="info" (click)="verHistorico()"></button>
+      <button pButton type="button" label="Ver detalhes" icon="pi pi-eye" severity="info" (click)="verDetalhes()"></button>
+      <button pButton type="button" label="Ver histórico do paciente" icon="pi pi-history" severity="info" (click)="verHistorico()"></button>
     </div>
 
   </div>

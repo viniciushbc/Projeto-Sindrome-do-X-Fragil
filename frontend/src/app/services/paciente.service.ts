@@ -22,12 +22,16 @@ export class PacienteService {
 
   listarPacientes(): Observable<Paciente[]> {
     return this.http.get<Paciente[]>(this.apiUrl, { headers: this.getHeaders() }).pipe(
-      map((pacientes) => pacientes.filter((p) => p.ativo === 1))
+      map((pacientes) => pacientes.filter((p) => p.ativo === 1 || p.ativo === true))
     );
   }
 
   buscarPaciente(id: number): Observable<Paciente> {
     return this.http.get<Paciente>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
+  }
+
+  buscarPorId(id: number): Observable<Paciente> {
+    return this.buscarPaciente(id);
   }
 
   cadastrarPaciente(dados: Partial<Paciente>): Observable<Paciente> {
@@ -36,5 +40,9 @@ export class PacienteService {
 
   editarPaciente(id: number, dados: Partial<Paciente>): Observable<Paciente> {
     return this.http.put<Paciente>(`${this.apiUrl}/${id}`, dados, { headers: this.getHeaders() });
+  }
+
+  desativarPaciente(id: number): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/${id}/status`, { ativo: false }, { headers: this.getHeaders() });
   }
 }

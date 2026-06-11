@@ -42,6 +42,7 @@ export interface AvaliacaoResumo {
   paciente_nome: string;
   paciente_sexo: string;
 }
+
 export interface RelatorioItem {
   id_avaliacao: number;
   data_avaliacao: string;
@@ -53,6 +54,8 @@ export interface RelatorioItem {
   paciente_nome: string;
   paciente_sexo: string;
   profissional_nome: string;
+  paciente?: { nome: string; sexo: string; id_paciente?: number };
+  profissional?: { nome: string; id_usuario?: number };
 }
 
 export interface FiltrosRelatorio {

@@ -98,4 +98,8 @@ export class ListarAvaliacoesComponent implements OnInit {
   getResultadoLabel(resultado: string): string {
     return resultado === 'ENCAMINHAR' ? 'Encaminhar' : 'Não encaminhar';
   }
+
+  verDetalhes(idAvaliacao: number): void {
+    this.router.navigate(['/avaliacoes', idAvaliacao]);
+  }
 }

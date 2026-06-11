@@ -9,6 +9,7 @@ export interface Usuario {
   instituicao?: string;
   cargo?: string;
   ativo: boolean;
+  permissoes?: string[];
 }
 
 export interface CriarUsuarioRequest {
@@ -21,4 +22,5 @@ export interface CriarUsuarioRequest {
   especialidade?: string;
   instituicao?: string;
   cargo?: string;
+  permissoes?: string[];
 }

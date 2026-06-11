@@ -1,0 +1,101 @@
+<app-header class="no-print"></app-header>
+
+<div class="page-container">
+  <p-toast class="no-print"></p-toast>
+
+  <div class="page-header no-print">
+    <button pButton icon="pi pi-arrow-left" label="Voltar" severity="secondary" (click)="voltar()"></button>
+    <h2>Detalhe da Avaliação</h2>
+  </div>
+
+  <div *ngIf="carregando" class="loading-center no-print">
+    <p-progressSpinner></p-progressSpinner>
+  </div>
+
+  <div *ngIf="erro && !carregando" class="no-print">
+    <p-card><p class="erro-msg">{{ erro }}</p></p-card>
+  </div>
+
+  <ng-container *ngIf="!carregando && !erro && avaliacao">
+
+    <div class="print-header">
+      <h2>SIGMA — Sistema de Triagem</h2>
+      <p>Síndrome do X Frágil — Avaliação Clínica</p>
+    </div>
+
+    <p-card header="Dados do Paciente" styleClass="mb-3">
+      <div class="dados-grid">
+        <div class="dado"><span class="label">Nome</span><span class="valor">{{ avaliacao.paciente?.nome }}</span></div>
+        <div class="dado"><span class="label">Sexo</span><span class="valor">{{ avaliacao.paciente?.sexo === 'M' ? 'Masculino' : 'Feminino' }}</span></div>
+      </div>
+    </p-card>
+
+    <p-card header="Dados da Avaliação" styleClass="mb-3">
+      <div class="dados-grid">
+        <div class="dado"><span class="label">ID da Avaliação</span><span class="valor">{{ avaliacao.id_avaliacao }}</span></div>
+        <div class="dado"><span class="label">Data</span><span class="valor">{{ avaliacao.data_avaliacao | date:'dd/MM/yyyy HH:mm' }}</span></div>
+        <div class="dado"><span class="label">Profissional</span><span class="valor">{{ avaliacao.profissional?.nome }}</span></div>
+        <div class="dado"><span class="label">Respondente</span><span class="valor">{{ avaliacao.respondente?.nome || '—' }}</span></div>
+        <div class="dado"><span class="label">Relação</span><span class="valor">{{ avaliacao.respondente?.parentesco || '—' }}</span></div>
+        <div class="dado" *ngIf="avaliacao.respondente?.documento"><span class="label">Documento</span><span class="valor">{{ avaliacao.respondente.documento }}</span></div>
+        <div class="dado" *ngIf="avaliacao.observacoes"><span class="label">Observações</span><span class="valor">{{ avaliacao.observacoes }}</span></div>
+      </div>
+    </p-card>
+
+    <p-card header="Resultado da Triagem" styleClass="mb-3">
+      <div class="dados-grid">
+        <div class="dado"><span class="label">Score calculado</span><span class="valor">{{ avaliacao.score }}</span></div>
+        <div class="dado"><span class="label">Limiar utilizado</span><span class="valor">{{ avaliacao.limiar_utilizado }}</span></div>
+        <div class="dado">
+          <span class="label">Resultado</span>
+          <p-tag [value]="getTagLabel(avaliacao.resultado)" [severity]="getTagSeverity(avaliacao.resultado)"></p-tag>
+        </div>
+        <div class="dado">
+          <span class="label">Recomendação</span>
+          <span class="valor">{{ avaliacao.resultado === 'ENCAMINHAR' ? 'Encaminhar para teste genético confirmatório.' : 'Triagem não indica encaminhamento prioritário no momento.' }}</span>
+        </div>
+      </div>
+
+      <p-divider></p-divider>
+
+      <div class="aviso">
+        <i class="pi pi-info-circle"></i>
+        <span>Este resultado representa apenas uma triagem clínica e não substitui diagnóstico médico ou laboratorial.</span>
+      </div>
+    </p-card>
+
+    <p-card header="Sintomas Avaliados" *ngIf="avaliacao.respostas?.length" styleClass="mb-3">
+      <p-table [value]="avaliacao.respostas">
+        <ng-template pTemplate="header">
+          <tr><th>Sintoma</th><th>Presente</th></tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-r>
+          <tr>
+            <td>{{ r.nome }}</td>
+            <td>
+              <p-tag [value]="r.presente ? 'Sim' : 'Não'" [severity]="getSintomaTagSeverity(r.presente)"></p-tag>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
+
+    <div class="acoes no-print">
+      <button pButton icon="pi pi-arrow-left" label="Voltar ao Histórico" severity="secondary" (click)="voltarHistorico()"></button>
+      <button pButton icon="pi pi-users" label="Voltar para Pacientes" severity="secondary" (click)="voltarPacientes()"></button>
+      <button pButton icon="pi pi-plus" label="Nova Avaliação" (click)="novaAvaliacao()"></button>
+      <button pButton icon="pi pi-print" label="Imprimir" severity="info" (click)="imprimir()"></button>
+    </div>
+
+  </ng-container>
+</div>
+
+<style>
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; }
+  .page-container { max-width: 100%; padding: 0; }
+  .print-header { display: block !important; text-align: center; margin-bottom: 1rem; }
+}
+.print-header { display: none; }
+</style>

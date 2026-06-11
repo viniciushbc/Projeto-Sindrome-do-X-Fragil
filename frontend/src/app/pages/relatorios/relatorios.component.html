@@ -37,13 +37,13 @@
           <div class="f-field"><label>Resultado</label>
             <p-dropdown [(ngModel)]="resultadoSelecionado" [options]="opcoesResultado" optionLabel="label" optionValue="value"></p-dropdown></div>
           <div class="filtros-actions">
-            <button pButton type="button" label="Limpar" icon="pi pi-times" class="btn-secondary" (click)="limparFiltros()"></button>
-            <button pButton type="button" label="Buscar" icon="pi pi-search" iconPos="right" class="btn-primary" [loading]="carregando" (click)="buscarGeral()"></button>
+            <button pButton label="Limpar" icon="pi pi-times" class="btn-secondary" (click)="limparFiltros()"></button>
+            <button pButton label="Buscar" icon="pi pi-search" iconPos="right" class="btn-primary" [loading]="carregando" (click)="buscarGeral()"></button>
           </div>
         </div>
       </div>
 
-      <div *ngIf="carregando" style="display:flex;align-items:center;gap:.75rem;padding:2rem;color:var(--sigma-text-muted)">
+      <div *ngIf="carregando" class="loading-row">
         <p-progressSpinner strokeWidth="4" styleClass="spinner-sm"></p-progressSpinner><span>Buscando...</span>
       </div>
 
@@ -51,8 +51,12 @@
         <div class="res-header">
           <h3>Resultados</h3>
           <span class="res-count">{{ registros.length }} registro(s)</span>
+          <div class="export-btns" *ngIf="registros.length > 0">
+            <button pButton label="Excel" icon="pi pi-file-excel" class="btn-export-excel" (click)="exportarExcel('geral')"></button>
+            <button pButton label="PDF"   icon="pi pi-file-pdf"   class="btn-export-pdf"   (click)="exportarPDF('geral')"></button>
+          </div>
         </div>
-        <div *ngIf="registros.length === 0" style="text-align:center;padding:2rem;color:var(--sigma-text-muted)">Nenhum registro encontrado.</div>
+        <div *ngIf="registros.length === 0" class="empty-msg">Nenhum registro encontrado.</div>
         <p-table *ngIf="registros.length > 0" [value]="registros" [paginator]="true" [rows]="10" styleClass="p-datatable-sm">
           <ng-template pTemplate="header">
             <tr><th>Data</th><th>Paciente</th><th>Sexo</th><th>Profissional</th><th style="text-align:center">Score</th><th style="text-align:center">Resultado</th></tr>
@@ -77,12 +81,12 @@
           <div class="f-field" style="max-width:400px"><label>Paciente</label>
             <p-dropdown [(ngModel)]="pacienteHistoricoId" [options]="pacientes" optionLabel="nome" optionValue="id_paciente" placeholder="Selecione um paciente" [filter]="true" filterBy="nome"></p-dropdown></div>
           <div class="filtros-actions">
-            <button pButton type="button" label="Gerar relatório" icon="pi pi-search" iconPos="right" class="btn-primary" [loading]="carregando" (click)="buscarPorPaciente()"></button>
+            <button pButton label="Gerar relatório" icon="pi pi-search" iconPos="right" class="btn-primary" [loading]="carregando" (click)="buscarPorPaciente()"></button>
           </div>
         </div>
       </div>
 
-      <div *ngIf="carregando" style="display:flex;align-items:center;gap:.75rem;padding:2rem;color:var(--sigma-text-muted)">
+      <div *ngIf="carregando" class="loading-row">
         <p-progressSpinner strokeWidth="4" styleClass="spinner-sm"></p-progressSpinner><span>Carregando...</span>
       </div>
 
@@ -94,7 +98,14 @@
           <div class="stat"><span class="stat-val">{{ scorePercent(dadosPaciente.resumo.media_score) }}%</span><span class="stat-lbl">Score médio</span></div>
         </div>
         <div class="card">
-          <div class="res-header"><h3>Linha do tempo — {{ dadosPaciente.paciente.nome }}</h3></div>
+          <div class="res-header">
+            <h3>Linha do tempo — {{ dadosPaciente.paciente?.nome }}</h3>
+            <span class="res-count">{{ dadosPaciente.avaliacoes.length }} avaliação(ões)</span>
+            <div class="export-btns" *ngIf="dadosPaciente.avaliacoes.length > 0">
+              <button pButton label="Excel" icon="pi pi-file-excel" class="btn-export-excel" (click)="exportarExcel('paciente')"></button>
+              <button pButton label="PDF"   icon="pi pi-file-pdf"   class="btn-export-pdf"   (click)="exportarPDF('paciente')"></button>
+            </div>
+          </div>
           <div class="tl">
             <div *ngFor="let a of dadosPaciente.avaliacoes" class="tl-row">
               <div class="tl-dot" [class.e]="a.resultado==='ENCAMINHAR'"></div>
@@ -125,12 +136,12 @@
           <div class="f-field"><label>Data final *</label>
             <p-calendar [(ngModel)]="periodoFim" dateFormat="dd/mm/yy" [showIcon]="true" placeholder="dd/mm/aaaa" [readonlyInput]="true"></p-calendar></div>
           <div class="filtros-actions">
-            <button pButton type="button" label="Gerar" icon="pi pi-calendar" iconPos="right" class="btn-primary" [loading]="carregando" (click)="buscarPorPeriodo()"></button>
+            <button pButton label="Gerar" icon="pi pi-calendar" iconPos="right" class="btn-primary" [loading]="carregando" (click)="buscarPorPeriodo()"></button>
           </div>
         </div>
       </div>
 
-      <div *ngIf="carregando" style="display:flex;align-items:center;gap:.75rem;padding:2rem;color:var(--sigma-text-muted)">
+      <div *ngIf="carregando" class="loading-row">
         <p-progressSpinner strokeWidth="4" styleClass="spinner-sm"></p-progressSpinner><span>Carregando...</span>
       </div>
 
@@ -141,14 +152,14 @@
           <div class="stat s"><span class="stat-val">{{ dadosPeriodo.resumo.total_nao_encaminhar }}</span><span class="stat-lbl">Não encaminhar</span></div>
           <div class="stat a"><span class="stat-val">{{ dadosPeriodo.resumo.taxa_encaminhamento }}%</span><span class="stat-lbl">Taxa encaminhamento</span></div>
         </div>
-        <div *ngIf="dadosPeriodo.grafico_por_dia?.length" class="card">
-          <div class="res-header"><h3>Distribuição diária</h3></div>
-          <div class="canvas-wrap"><canvas id="graficoPeriodo" width="760" height="250"></canvas></div>
-        </div>
         <div class="card">
           <div class="res-header">
             <h3>Avaliações no período</h3>
             <span class="res-count">{{ dadosPeriodo.avaliacoes.length }} registro(s)</span>
+            <div class="export-btns" *ngIf="dadosPeriodo.avaliacoes.length > 0">
+              <button pButton label="Excel" icon="pi pi-file-excel" class="btn-export-excel" (click)="exportarExcel('periodo')"></button>
+              <button pButton label="PDF"   icon="pi pi-file-pdf"   class="btn-export-pdf"   (click)="exportarPDF('periodo')"></button>
+            </div>
           </div>
           <p-table [value]="dadosPeriodo.avaliacoes" [paginator]="true" [rows]="10" styleClass="p-datatable-sm">
             <ng-template pTemplate="header">
@@ -167,9 +178,9 @@
       </ng-container>
     </ng-container>
 
-    <!-- ══ PAINEL GERAL ══ -->
+    <!-- ══ RESUMO GERAL ══ -->
     <ng-container *ngIf="tipoAtivo === 'resumo'">
-      <div *ngIf="carregando" style="display:flex;align-items:center;gap:.75rem;padding:2rem;color:var(--sigma-text-muted)">
+      <div *ngIf="carregando" class="loading-row">
         <p-progressSpinner strokeWidth="4" styleClass="spinner-sm"></p-progressSpinner><span>Carregando painel...</span>
       </div>
       <ng-container *ngIf="dadosResumo && !carregando">
@@ -179,6 +190,18 @@
           <div class="stat s"><i class="pi pi-check-circle" style="font-size:1.1rem;color:var(--sigma-success);display:block;margin-bottom:.3rem"></i><span class="stat-val">{{ dadosResumo.totais.total_nao_encaminhar }}</span><span class="stat-lbl">Não encaminhar</span></div>
           <div class="stat a"><i class="pi pi-chart-bar" style="font-size:1.1rem;color:var(--sigma-accent);display:block;margin-bottom:.3rem"></i><span class="stat-val">{{ scorePercent(dadosResumo.totais.media_score) }}%</span><span class="stat-lbl">Score médio</span></div>
         </div>
+
+        <!-- Botões de exportação do resumo -->
+        <div class="card" style="margin-bottom:1rem" *ngIf="dadosResumo.totais.total_avaliacoes > 0">
+          <div class="res-header">
+            <h3>Exportar resumo geral</h3>
+            <div class="export-btns">
+              <button pButton label="Excel" icon="pi pi-file-excel" class="btn-export-excel" (click)="exportarExcel('resumo')"></button>
+              <button pButton label="PDF"   icon="pi pi-file-pdf"   class="btn-export-pdf"   (click)="exportarPDF('resumo')"></button>
+            </div>
+          </div>
+        </div>
+
         <div class="graficos-row">
           <div class="card" *ngIf="dadosResumo.por_mes?.length">
             <div class="res-header"><h3>Avaliações por mês</h3></div>
@@ -189,6 +212,7 @@
             <div class="canvas-wrap"><canvas id="graficoSexo" width="260" height="240"></canvas></div>
           </div>
         </div>
+
         <div class="card" *ngIf="dadosResumo.top5_pacientes?.length">
           <div class="res-header"><h3>Pacientes com mais avaliações</h3></div>
           <p-table [value]="dadosResumo.top5_pacientes" styleClass="p-datatable-sm">

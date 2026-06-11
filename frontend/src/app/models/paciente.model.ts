@@ -1,12 +1,14 @@
 export interface Paciente {
   id_paciente: number;
   nome: string;
-  cpf: number;
+  cpf?: string | null;
   sexo: string;
-  dataNascimento: string;
-  idade:number;
-  telefone: string;
-  responsavel: string;
+  data_nascimento?: string | null;
+  dataNascimento?: string | null;
+  idade?: number | null;
+  telefone?: string | null;
+  responsavel?: string | null;
+  observacoes?: string | null;
   observacao?: string | null;
-  ativo: number;
+  ativo: number | boolean;
 }

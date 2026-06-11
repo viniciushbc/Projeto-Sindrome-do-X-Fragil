@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule,Validators } from '@angular/forms';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
@@ -29,10 +29,11 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   carregando = false;
   formularioEnviado = false;
+  sessaoExpirada = false;
 
   referencias = [
     {
@@ -53,12 +54,29 @@ export class LoginComponent {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
     private messageService: MessageService
   ) {
     this.loginForm = this.fb.group({
       login: ['', Validators.required],
       senha: ['', Validators.required]
     })
+  }
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params['sessaoExpirada']) {
+        this.sessaoExpirada = true;
+        setTimeout(() => {
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Sessão expirada',
+            detail: 'Sua sessão expirou. Faça login novamente.',
+            life: 6000
+          });
+        }, 100);
+      }
+    });
   }
 
   entrar(): void {

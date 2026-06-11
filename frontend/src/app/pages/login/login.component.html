@@ -71,6 +71,8 @@
         <p>Informe suas credenciais para acessar o menu principal.</p>
       </div>
 
+      <p-message *ngIf="sessaoExpirada" severity="warn" text="Sua sessão expirou. Faça login novamente." styleClass="w-full mb-3"></p-message>
+
       <form [formGroup]="loginForm" (ngSubmit)="entrar()" class="login-form">
         <div class="form-field">
           <label for="login">E-mail ou CPF</label>

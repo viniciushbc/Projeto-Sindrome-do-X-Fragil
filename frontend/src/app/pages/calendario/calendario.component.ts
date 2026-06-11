@@ -42,6 +42,7 @@ interface DiaCalendario {
     TagModule,
     DividerModule,
     ProgressSpinnerModule,
+    HeaderComponent,
   ],
   templateUrl: './calendario.component.html',
   styleUrl: './calendario.component.css',
