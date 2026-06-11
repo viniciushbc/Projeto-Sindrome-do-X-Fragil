@@ -14,6 +14,7 @@ import { HeaderComponent } from '../../layout/header/header.component';
 import { UsuarioService } from '../../services/usuario.service';
 import { AuthService } from '../../services/auth.service';
 import { Usuario, CriarUsuarioRequest } from '../../models/usuario.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-usuarios',
@@ -62,11 +63,15 @@ export class UsuariosComponent implements OnInit {
     private usuarioService: UsuarioService,
     private authService: AuthService,
     private messageService: MessageService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
     this.criarForm();
     this.carregarUsuarios();
+  }
+    voltarMenu(): void {
+  this.router.navigate(['/menu']);
   }
 
   criarForm(): void {
