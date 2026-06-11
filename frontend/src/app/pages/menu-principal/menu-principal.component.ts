@@ -12,7 +12,8 @@ interface MenuItem {
   description: string;
   route: string;
   color: string;
-  adminOnly?: boolean; // se o icone deve ser apenas pra admins
+  permissao?: string;
+  adminOnly?: boolean;
 }
 
 @Component({
@@ -30,12 +31,48 @@ export class MenuPrincipalComponent implements OnInit {
     private authService: AuthService
   ) {}
 
-  menuItems: MenuItem[] = [
-  { icon: 'pi-users', title: 'Pacientes', description: 'Gerenciar informações de pacientes', route: '/pacientes/listar', color: '#3d7ab5' },
-  { icon: 'pi-plus', title: 'Avaliações', description: 'Registrar e consultar avaliações', route: '/avaliacoes', color: '#5a8fc4'},
-  { icon: 'pi-calendar', title: 'Calendário', description: 'Agendar e visualizar consultas', route: '/calendario', color: '#4a90c4' },
-  { icon: 'pi-file', title: 'Relatórios', description: 'Visualizar e gerar relatórios', route: '/relatorios', color: '#4a90c4' },
-  { icon: 'pi-user-edit', title: 'Usuários', description: 'Administrar usuários do sistema', route: '/usuarios', color: '#2a5f8f', adminOnly: true }
+menuItems: MenuItem[] = [
+  {
+    icon: 'pi-users',
+    title: 'Pacientes',
+    description: 'Gerenciar informações de pacientes',
+    route: '/pacientes/listar',
+    color: '#3d7ab5',
+    permissao: 'pacientes'
+  },
+  {
+    icon: 'pi-plus',
+    title: 'Avaliações',
+    description: 'Registrar e consultar avaliações',
+    route: '/avaliacoes',
+    color: '#5a8fc4',
+    permissao: 'avaliacoes'
+  },
+  {
+    icon: 'pi-calendar',
+    title: 'Calendário',
+    description: 'Agendar e visualizar consultas',
+    route: '/calendario',
+    color: '#4a90c4',
+    permissao: 'agendamentos'
+  },
+  {
+    icon: 'pi-file',
+    title: 'Relatórios',
+    description: 'Visualizar e gerar relatórios',
+    route: '/relatorios',
+    color: '#4a90c4',
+    permissao: 'relatorios'
+  },
+  {
+    icon: 'pi-user-edit',
+    title: 'Usuários',
+    description: 'Administrar usuários do sistema',
+    route: '/usuarios',
+    color: '#2a5f8f',
+    adminOnly: true
+  }
+
 ];
 
   mainMenuItems: MenuItem[] =[];
@@ -52,14 +89,38 @@ export class MenuPrincipalComponent implements OnInit {
     this.router.navigate([route]);
   }
 
-  private organizarMenu(): void {
-    const itensVisiveis = this.menuItems.filter((item)=>{
-      return !item.adminOnly || this.authService.isAdmin();
-    });
+private organizarMenu(): void {
 
-    this.mainMenuItems = itensVisiveis.filter((item)=> !item.adminOnly);
-    this.adminMenuItems = itensVisiveis.filter((item)=> item.adminOnly);
+  const usuario = this.authService.getUsuarioLogado();
 
-  }
+  console.log('USUARIO LOGADO:', usuario);
+  console.log('PERMISSOES:', usuario?.permissoes);
+
+  const permissoes = usuario?.permissoes || [];
+
+  const itensVisiveis = this.menuItems.filter(item => {
+
+    if (item.adminOnly) {
+      return this.authService.isAdmin();
+    }
+
+    if (this.authService.isAdmin()) {
+      return true;
+    }
+
+    return item.permissao
+      ? permissoes.includes(item.permissao)
+      : true;
+  });
+
+  console.log('ITENS VISIVEIS:', itensVisiveis);
+
+  this.mainMenuItems = itensVisiveis.filter(item => !item.adminOnly);
+  this.adminMenuItems = itensVisiveis.filter(item => item.adminOnly);
+}
+
+
 
 }
+
+

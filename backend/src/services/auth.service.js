@@ -19,14 +19,19 @@ async function login(login, senha) {
   const senhaValida = await bcrypt.compare(senha, usuario.senha_hash);
   if (!senhaValida) throw { status: 401, message: 'Senha incorreta.' };
 
-  // parse permissoes
   let permissoes = [];
   if (usuario.tipo_usuario === 'ADMIN') {
-    permissoes = ['pacientes','avaliacoes','relatorios','agendamentos','usuarios','logs'];
+    permissoes = ['pacientes', 'avaliacoes', 'relatorios', 'agendamentos', 'usuarios', 'logs'];
   } else if (usuario.permissoes) {
-    try { permissoes = JSON.parse(usuario.permissoes); } catch { permissoes = ['pacientes','avaliacoes']; }
-  } else {
-    permissoes = ['pacientes','avaliacoes'];
+    if (Array.isArray(usuario.permissoes)) {
+      permissoes = usuario.permissoes;
+    } else if (typeof usuario.permissoes === 'string') {
+      try {
+        permissoes = JSON.parse(usuario.permissoes);
+      } catch (e) {
+        permissoes = [];
+      }
+    }
   }
 
   const token = jwt.sign(
