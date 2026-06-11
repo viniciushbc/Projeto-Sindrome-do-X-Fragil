@@ -79,4 +79,8 @@ editarPaciente(paciente: Paciente): void {
 verDetalhes(paciente: Paciente): void {
   this.router.navigate(['/pacientes/visualizar', paciente.id_paciente]);
 }
-}
+
+voltarMenu(): void {
+  this.router.navigate(['/menu']);
+  
+}}
