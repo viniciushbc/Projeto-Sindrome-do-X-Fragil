@@ -89,6 +89,10 @@ export class ListarAvaliacoesComponent implements OnInit {
     return sexo === 'M' ? 'Masculino' : sexo === 'F' ? 'Feminino' : sexo;
   }
 
+  voltarMenu(): void {
+  this.router.navigate(['/menu']);
+}
+
   getSeverity(resultado: string): 'danger' | 'success' {  return resultado === 'ENCAMINHAR' ? 'danger' : 'success';}
 
   getResultadoLabel(resultado: string): string {
