@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 
-
 export const routes: Routes = [
   
    { 
@@ -24,7 +23,6 @@ export const routes: Routes = [
       ),
   },
 
-
 {
   path: 'pacientes',
   children: [
@@ -46,12 +44,14 @@ export const routes: Routes = [
         import('./pages/pacientes/editar/editar.component')
           .then((m) => m.EditarComponent),
     },
+    {
+      path: 'visualizar/:id',   
+      loadComponent: () =>
+        import('./pages/pacientes/editar/editar.component')
+          .then((m) => m.EditarComponent),
+    },
   ]
 },
-
-
-
-
 
   {
     path: 'usuarios',
@@ -109,6 +109,7 @@ export const routes: Routes = [
       ),
   },
 
-  { path: '**', redirectTo: '/login' },
+{ path: '**', redirectTo: '/login' },
 
 ];
+

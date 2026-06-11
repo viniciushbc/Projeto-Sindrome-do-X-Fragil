@@ -76,7 +76,7 @@ editarPaciente(paciente: Paciente): void {
   this.router.navigate(['/pacientes/editar', paciente.id_paciente]);
 }
 
-  verDetalhes(paciente: Paciente): void {
-    console.log('Detalhes', paciente);
-  }
+verDetalhes(paciente: Paciente): void {
+  this.router.navigate(['/pacientes/visualizar', paciente.id_paciente]);
+}
 }
