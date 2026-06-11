@@ -21,6 +21,8 @@ import { RelatorioItem } from '../../models/avaliacao.model';
 import { Paciente } from '../../models/paciente.model';
 import { Router } from '@angular/router';
 
+type Secao = 'geral' | 'paciente' | 'periodo' | 'resumo';
+
 @Component({
   selector: 'app-relatorios',
   standalone: true,
@@ -50,6 +52,21 @@ export class RelatoriosComponent implements OnInit {
 
   tipoAtivo: Secao = 'geral';
 
+  pacienteHistoricoId: number | null = null;
+  dadosPaciente: { paciente: Paciente | undefined; avaliacoes: any[]; resumo: any } | null = null;
+
+  periodoInicio: Date | null = null;
+  periodoFim: Date | null = null;
+  dadosPeriodo: { avaliacoes: any[]; resumo: any; grafico_por_dia: any[] } | null = null;
+
+  dadosResumo: {
+    totais: any;
+    _avaliacoes: any[];
+    por_mes: any[];
+    por_sexo: any[];
+    top5_pacientes: any[];
+  } | null = null;
+
   tiposRelatorio = [
     { label: 'Geral',    value: 'geral',    icon: 'pi-list',      desc: 'Relatório com filtros' },
     { label: 'Paciente', value: 'paciente', icon: 'pi-user',      desc: 'Histórico individual'  },
@@ -64,8 +81,8 @@ export class RelatoriosComponent implements OnInit {
   ];
 
   voltarMenu(): void {
-  this.router.navigate(['/menu']);
-}
+    this.router.navigate(['/menu']);
+  }
 
   get isAdmin(): boolean {
     return this.authService.isAdmin();
@@ -77,6 +94,7 @@ export class RelatoriosComponent implements OnInit {
     private authService: AuthService,
     private messageService: MessageService,
     private router: Router,
+    private exportacaoService: ExportacaoService,
   ) {}
 
   ngOnInit(): void {
@@ -91,7 +109,6 @@ export class RelatoriosComponent implements OnInit {
     });
   }
 
-  // ── Geral ──────────────────────────────────────────────────────────
   buscar(): void {
     this.carregando = true;
     this.erro = false;
@@ -127,7 +144,6 @@ export class RelatoriosComponent implements OnInit {
 
   buscarGeral(): void { this.buscar(); }
 
-  // ── Por Paciente ───────────────────────────────────────────────────
   buscarPorPaciente(): void {
     if (!this.pacienteHistoricoId) return;
     this.carregando = true;
@@ -141,7 +157,6 @@ export class RelatoriosComponent implements OnInit {
     });
   }
 
-  // ── Por Período ────────────────────────────────────────────────────
   buscarPorPeriodo(): void {
     this.carregando = true;
     const filtros: any = {};
@@ -156,14 +171,13 @@ export class RelatoriosComponent implements OnInit {
     });
   }
 
-  // ── Resumo ─────────────────────────────────────────────────────────
   buscarResumo(): void {
     this.carregando = true;
     this.avaliacaoService.buscarRelatorios().subscribe({
       next: (dados) => {
         this.dadosResumo = {
           totais: this.montarResumo(dados),
-          _avaliacoes: dados, // guardado para exportação
+          _avaliacoes: dados,
           por_mes: [], por_sexo: [], top5_pacientes: [],
         };
         this.carregando = false;
@@ -172,7 +186,6 @@ export class RelatoriosComponent implements OnInit {
     });
   }
 
-  // ── Utilitários ────────────────────────────────────────────────────
   private formatarDataParam(data: Date): string {
     const y = data.getFullYear();
     const m = String(data.getMonth() + 1).padStart(2, '0');
@@ -216,7 +229,6 @@ export class RelatoriosComponent implements OnInit {
     return resultado === 'ENCAMINHAR' ? 'Encaminhar' : 'Não encaminhar';
   }
 
-  // ── Exportação ─────────────────────────────────────────────────────
   private buildDados(secao: Secao): DadosExportacao | null {
     const cab = ['Data', 'Paciente', 'Sexo', 'Profissional', 'Score', 'Limiar', 'Resultado'];
 
