@@ -45,4 +45,8 @@ export class PacienteService {
   desativarPaciente(id: number): Observable<any> {
     return this.http.patch(`${this.apiUrl}/${id}/status`, { ativo: false }, { headers: this.getHeaders() });
   }
+
+  alterarStatus(id: number, ativo: boolean): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/${id}/status`, { ativo }, { headers: this.getHeaders() });
+}
 }

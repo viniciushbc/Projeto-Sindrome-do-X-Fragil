@@ -15,6 +15,7 @@
       <button pButton type="button" label="Novo Paciente" icon="pi pi-plus"
         class="btn-primary" (click)="novoPaciente()"></button>
     </div>
+
   </div>
 
   <!-- Tabela full-width -->
@@ -50,7 +51,13 @@
               style="margin-right:6px" (click)="editarPaciente(p)"></button>
             <button pButton icon="pi pi-eye" class="btn-secondary btn-icon"
               (click)="verDetalhes(p)"></button>
-          </td>
+
+            <button pButton 
+            [icon]="p.ativo ? 'pi pi-ban' : 'pi pi-check'"
+            [class]="p.ativo ? 'btn-danger btn-icon' : 'btn-success btn-icon'"
+            [pTooltip]="p.ativo ? 'Desativar paciente' : 'Ativar paciente'"  style="margin-left:6px"
+            (click)="alterarStatus(p)"></button>
+            </td>
         </tr>
       </ng-template>
       <ng-template pTemplate="emptymessage">

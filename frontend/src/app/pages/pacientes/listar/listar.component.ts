@@ -14,6 +14,10 @@ import { HeaderComponent } from '../../../layout/header/header.component';
 import { PacienteService } from '../../../services/paciente.service';
 import { Paciente } from '../../../models/paciente.model';
 
+import { MessageService } from 'primeng/api';
+import { HttpErrorResponse } from '@angular/common/http';
+import { TooltipModule } from 'primeng/tooltip';
+
 @Component({
   selector: 'app-pacientes',
   standalone: true,
@@ -27,9 +31,11 @@ import { Paciente } from '../../../models/paciente.model';
     TagModule,
     ToastModule,
     InputIconModule,
+    TooltipModule, 
   ],
   templateUrl: './listar.component.html',
-  styleUrls: ['./listar.component.css']
+  styleUrls: ['./listar.component.css'],
+  providers: [MessageService]
 })
 export class PacientesComponent implements OnInit {
 
@@ -41,11 +47,13 @@ export class PacientesComponent implements OnInit {
   constructor(
     private pacienteService: PacienteService,
     private router: Router,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
     this.carregarPacientes();
   }
+
 
   carregarPacientes(): void {
     this.loading = true;
@@ -67,6 +75,19 @@ export class PacientesComponent implements OnInit {
       paciente.nome.toLowerCase().includes(this.busca.toLowerCase())
     );
   }
+  alterarStatus(p: Paciente): void {
+  this.pacienteService.alterarStatus(p.id_paciente, !p.ativo).subscribe({
+    next: () => {
+      this.toast('success', `Paciente ${p.ativo ? 'desativado' : 'ativado'} com sucesso.`);
+      this.carregarPacientes();
+    },
+    error: (e: HttpErrorResponse) => this.toast('error', e.error?.message || 'Erro ao alterar status.'),
+  });
+}
+
+private toast(severity: string, detail: string): void {
+  this.messageService.add({ severity, detail, life: 3000 });
+}
 
   novoPaciente(): void {
     this.router.navigate(['/pacientes/editar']);
@@ -84,4 +105,5 @@ export class PacientesComponent implements OnInit {
   voltarMenu(): void {
     this.router.navigate(['/menu']);
   }
+  
 }
