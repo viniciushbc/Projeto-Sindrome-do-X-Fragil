@@ -407,6 +407,205 @@
   color: #fff;
   transform: translateX(2px);
 }
+/* =====================================================
+   GRÁFICO INLINE NO CONTEXT PANEL
+   ===================================================== */
+.context-panel__stats {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 28px;
+  border-top: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.inline-chart {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.inline-chart__title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.inline-chart__legend {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-dot--m { background: #f97316; }
+.legend-dot--f { background: #60a5fa; }
+
+.inline-chart__rows {
+  width: 100%;
+}
+
+.chart-col-group {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  height: 110px;        /* altura total da área de barras + label */
+  padding-bottom: 28px; /* espaço para os labels embaixo */
+  position: relative;
+}
+
+/* Linha de base sutil */
+.chart-col-group::after {
+  content: '';
+  position: absolute;
+  bottom: 28px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.10);
+}
+
+.chart-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.chart-col__bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  flex: 1;
+  width: 100%;
+  justify-content: center;
+}
+
+.bar-v {
+  width: 10px;
+  border-radius: 3px 3px 1px 1px;
+  height: calc(var(--h) * 0.82);  /* 82px máx */
+  position: relative;
+  display: flex;
+  justify-content: center;
+  transition: height 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.bar-v span {
+  position: absolute;
+  top: -16px;
+  font-size: 8.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.45);
+  white-space: nowrap;
+}
+
+.bar-v--m {
+  background: linear-gradient(180deg, #fb923c 0%, #f97316 100%);
+  box-shadow: 0 2px 6px rgba(249, 115, 22, 0.35);
+}
+
+.bar-v--f {
+  background: linear-gradient(180deg, #60a5fa 0%, #3b82f6 100%);
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.30);
+}
+
+.chart-col__label {
+  position: absolute;
+  bottom: 0;
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.40);
+  text-align: center;
+  white-space: nowrap;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+}
+/* Responsivo */
+@media (max-width: 900px) {
+  .inline-chart {
+    padding-right: 0;
+    padding-bottom: 16px;
+  }
+
+  .context-panel__stats {
+    flex-direction: column;
+  }
+
+  .context-stat__divider {
+    width: 100%;
+    height: 1px;
+    margin: 8px 0;
+  }
+
+  .chart-label {
+    width: 110px;
+    font-size: 9.5px;
+  }
+}
+.chart-footer {
+  display: flex;
+  align-items: center;
+  justify-content:left;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.chart-footer .context-stat__icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.chart-footer .context-stat__icon i {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 14px;
+}
+
+.chart-footer__texts {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;   /* centraliza horizontalmente */
+  justify-content: center; /* centraliza verticalmente (se houver altura) */
+  text-align: center;    /* centraliza o texto */
+}
+
+.chart-footer__value {
+  font-family: var(--sigma-font-display, 'Sora', sans-serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.chart-footer__label {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.40);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
 
 /* =====================================================
    ANIMAÇÕES

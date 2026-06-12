@@ -12,66 +12,104 @@
           <span class="hero-dot"></span>
           <span>Sistema de Triagem Clínica — Síndrome do X Frágil</span>
         </div>
+    
+
         <p class="context-desc">
           Ferramenta de apoio à decisão clínica para triagem da SXF. Preencha o checklist de sintomas,
           calcule o score ponderado e obtenha recomendação de encaminhamento para teste genético confirmatório.
           O sistema <strong>não substitui</strong> o diagnóstico médico — sua finalidade é padronizar a
           triagem inicial e indicar a necessidade de exame molecular confirmatório (PCR / Southern Blot).
         </p>
+
+          <div class="chart-footer">
+          <span class="context-stat__icon"><i class="pi pi-users"></i></span>
+          <div class="chart-footer__texts">
+            
+            <span class="chart-footer__label">• Coorte de 419 Indivíduos com Mutação Completa:
+              Maior investigação clínica sobre SXF no
+              Brasil, com 364 homens e 55 mulheres.</span>
+          </div>
+        </div>
+
       </div>
 
-      <!-- Linha inferior: estatísticas distribuídas -->
+      <!-- Gráfico + stats -->
       <div class="context-panel__stats">
 
-        <div class="context-stat">
-          <span class="context-stat__icon"><i class="pi pi-star"></i></span>
-          <span class="context-stat__value">0,56</span>
-          <span class="context-stat__label">Limiar masculino</span>
-        </div>
+        <div class="inline-chart">
+          <div class="inline-chart__title">Sintomas Prevalentes na SXF</div>
+          <div class="inline-chart__legend">
+            <span class="legend-dot legend-dot--m"></span><span>Masculino (n=364)</span>
+            <span class="legend-dot legend-dot--f"></span><span>Feminino (n=55)</span>
+          </div>
 
-        <div class="context-stat__divider"></div>
+          <div class="inline-chart__rows">
+            <div class="chart-col-group">
 
-        <div class="context-stat">
-          <span class="context-stat__icon"><i class="pi pi-star-fill"></i></span>
-          <span class="context-stat__value">0,55</span>
-          <span class="context-stat__label">Limiar feminino</span>
-        </div>
+              <div class="chart-col">
+                <div class="chart-col__bars">
+                  <div class="bar-v bar-v--m" style="--h: 94%"><span>94%</span></div>
+                  <div class="bar-v bar-v--f" style="--h: 90%"><span>90%</span></div>
+                </div>
+                <span class="chart-col__label">Dif. Aprendizagem</span>
+              </div>
 
-        <div class="context-stat__divider"></div>
+              <div class="chart-col">
+                <div class="chart-col__bars">
+                  <div class="bar-v bar-v--m" style="--h: 90%"><span>~90%</span></div>
+                  <div class="bar-v bar-v--f" style="--h: 55%"><span>55%</span></div>
+                </div>
+                <span class="chart-col__label">Def. Intelectual</span>
+              </div>
 
-        <div class="context-stat">
-          <span class="context-stat__icon"><i class="pi pi-verified"></i></span>
-          <span class="context-stat__value">12</span>
-          <span class="context-stat__label">Sintomas avaliados</span>
-        </div>
+              <div class="chart-col">
+                <div class="chart-col__bars">
+                  <div class="bar-v bar-v--m" style="--h: 90%"><span>90%</span></div>
+                  <div class="bar-v bar-v--f" style="--h: 80%"><span>~80%</span></div>
+                </div>
+                <span class="chart-col__label">Déf. Atenção</span>
+              </div>
 
-        <div class="context-stat__divider"></div>
+              <div class="chart-col">
+                <div class="chart-col__bars">
+                  <div class="bar-v bar-v--m" style="--h: 50%"><span>~50%</span></div>
+                  <div class="bar-v bar-v--f" style="--h: 35%"><span>~35%</span></div>
+                </div>
+                <span class="chart-col__label">Hipermob. Articular</span>
+              </div>
 
-        <div class="context-stat">
-          <span class="context-stat__icon"><i class="pi pi-chart-bar"></i></span>
-          <span class="context-stat__value">0,32</span>
-          <span class="context-stat__label">Maior peso (masc.)</span>
-        </div>
+              <div class="chart-col">
+                <div class="chart-col__bars">
+                  <div class="bar-v bar-v--m" style="--h: 40%"><span>~40%</span></div>
+                  <div class="bar-v bar-v--f" style="--h: 30%"><span>~30%</span></div>
+                </div>
+                <span class="chart-col__label">Atraso na Fala</span>
+              </div>
 
-        <div class="context-stat__divider"></div>
+              <div class="chart-col">
+                <div class="chart-col__bars">
+                  <div class="bar-v bar-v--m" style="--h: 55%"><span>~55%</span></div>
+                  <div class="bar-v bar-v--f" style="--h: 20%"><span>~20%</span></div>
+                </div>
+                <span class="chart-col__label">Face Along./Orelhas</span>
+              </div>
 
-        <div class="context-stat">
-          <span class="context-stat__icon"><i class="pi pi-chart-bar"></i></span>
-          <span class="context-stat__value">0,28</span>
-          <span class="context-stat__label">Maior peso (fem.)</span>
-        </div>
+              <div class="chart-col">
+                <div class="chart-col__bars">
+                  <div class="bar-v bar-v--m" style="--h: 45%"><span>~45%</span></div>
+                  <div class="bar-v bar-v--f" style="--h: 0%"><span>0%</span></div>
+                </div>
+                <span class="chart-col__label">Macroorquidismo</span>
+              </div>
 
-        <div class="context-stat__divider"></div>
+            </div>
+          </div><!-- fecha inline-chart__rows -->
+        </div><!-- fecha inline-chart -->
 
-        <div class="context-stat">
-          <span class="context-stat__icon"><i class="pi pi-users"></i></span>
-          <span class="context-stat__value">2</span>
-          <span class="context-stat__label">Perfis de acesso</span>
-        </div>
 
-      </div>
+      </div><!-- fecha context-panel__stats -->
 
-    </section>
+    </section><!-- fecha context-panel -->
 
     <!-- EYEBROW -->
     <section class="menu-hero">
@@ -84,6 +122,7 @@
     <!-- MÓDULOS PRINCIPAIS -->
     <section class="modules-section">
       <div class="modules-grid">
+
         <ng-container *ngFor="let item of mainMenuItems; let i = index">
           <article
             class="module-card"
@@ -97,7 +136,6 @@
             (keydown.enter)="navigate(item.route)"
           >
             <div class="module-card__inner">
-
               <div class="module-card__body">
                 <div class="module-card__icon">
                   <i [class]="'pi ' + item.icon"></i>
@@ -107,19 +145,16 @@
                   <p>{{ item.description }}</p>
                 </div>
               </div>
-
               <div class="module-card__foot">
                 <span class="module-card__cta">Acessar módulo</span>
                 <span class="module-card__arrow">
                   <i class="pi pi-arrow-right"></i>
                 </span>
               </div>
-
             </div>
           </article>
         </ng-container>
 
-        <!-- Cards administrativos inline no mesmo grid -->
         <ng-container *ngFor="let item of adminMenuItems; let i = index">
           <article
             class="module-card module-card--admin"
@@ -132,8 +167,6 @@
             (keydown.enter)="navigate(item.route)"
           >
             <div class="module-card__inner">
-
-              
               <div class="module-card__body">
                 <div class="module-card__icon">
                   <i [class]="'pi ' + item.icon"></i>
@@ -143,19 +176,18 @@
                   <p>{{ item.description }}</p>
                 </div>
               </div>
-
               <div class="module-card__foot">
                 <span class="module-card__cta">Acessar módulo</span>
                 <span class="module-card__arrow">
                   <i class="pi pi-arrow-right"></i>
                 </span>
               </div>
-
             </div>
           </article>
         </ng-container>
-      </div>
-    </section>
+
+      </div><!-- fecha modules-grid -->
+    </section><!-- fecha modules-section -->
 
   </main>
 </div>
