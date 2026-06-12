@@ -38,7 +38,7 @@
           <td>{{ p.id_paciente }}</td>
           <td>{{ p.nome }}</td>
           <td>{{ p.sexo }}</td>
-          <td>{{ p.dataNascimento || '—' }}</td>
+          <td>{{ p.data_nascimento ? (p.data_nascimento | date:'dd/MM/yyyy') : '—' }}</td>
           <td>{{ p.telefone || '—' }}</td>
           <td>{{ p.responsavel || '—' }}</td>
           <td style="text-align:center">
