@@ -22,11 +22,19 @@ CREATE TABLE usuarios (
 CREATE TABLE pacientes (
     id_paciente      INT AUTO_INCREMENT PRIMARY KEY,
     nome             VARCHAR(150) NOT NULL,
-    cpf              VARCHAR(14) NULL UNIQUE,
+    cpf VARCHAR(14) NULL UNIQUE,
+	CONSTRAINT chk_paciente_cpf
+	CHECK (
+		cpf IS NULL
+		OR cpf REGEXP '^([0-9]{11}|[0-9]{3}\\.[0-9]{3}\\.[0-9]{3}-[0-9]{2})$'),
     data_nascimento  DATE NULL,
     idade            INT NULL,
     sexo             ENUM('M', 'F') NOT NULL,
-    telefone         VARCHAR(20) NULL,
+    telefone VARCHAR(15) NULL,
+	CONSTRAINT chk_paciente_telefone
+	CHECK (
+		telefone IS NULL
+		OR telefone REGEXP '^([0-9]{11}|\\([0-9]{2}\\) [0-9]{5}-[0-9]{4})$'),
     responsavel      VARCHAR(150) NULL,
     observacoes      TEXT NULL,
     data_cadastro    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
