@@ -47,8 +47,5 @@ export const routes: Routes = [
   { path: 'relatorios', canActivate: [authGuard],
     loadComponent: () => import('./pages/relatorios/relatorios.component').then(m => m.RelatoriosComponent) },
 
-  { path: 'calendario', canActivate: [authGuard],
-    loadComponent: () => import('./pages/calendario/calendario.component').then(m => m.CalendarioComponent) },
-
   { path: '**', redirectTo: '/login' },
 ];

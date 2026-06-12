@@ -10,7 +10,6 @@ const sintomasRoute = require('./routes/sintomas.routes');
 const avaliacoesRoute = require('./routes/avaliacoes.routes');
 const relatoriosRoute = require('./routes/relatorio.routes');
 const logsRoute = require('./routes/logs.routes');
-const agendamentosRoute = require('./routes/agendamentos.routes');
 
 const app = express();
 
@@ -27,7 +26,6 @@ app.use('/sintomas', sintomasRoute);
 app.use('/avaliacoes', avaliacoesRoute);
 app.use('/relatorios', relatoriosRoute);
 app.use('/logs', logsRoute);
-app.use('/agendamentos', agendamentosRoute);
 
 app.use((req, res) => {
   return res.status(404).json({ message: 'Rota não encontrada.', details: [] });

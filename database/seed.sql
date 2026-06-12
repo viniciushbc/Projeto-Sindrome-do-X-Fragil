@@ -13,7 +13,7 @@ VALUES (
     'admin@sistemaxfragil.com',
     '$2b$10$TkKvo4rPLPOqjmNOey4K5eeuKANEEn7JGiGJxcPxtVs.Afk7V0Tc.',
     'ADMIN',
-    '["pacientes","avaliacoes","relatorios","agendamentos","usuarios","logs"]',
+    '["pacientes","avaliacoes","relatorios","usuarios","logs"]',
     TRUE
 ) AS novo
 ON DUPLICATE KEY UPDATE

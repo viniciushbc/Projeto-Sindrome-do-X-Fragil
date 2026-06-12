@@ -99,16 +99,3 @@ CREATE TABLE logs_auditoria (
     data_hora        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE agendamentos (
-    id_agendamento   INT AUTO_INCREMENT PRIMARY KEY,
-    id_paciente      INT NOT NULL,
-    id_usuario       INT NOT NULL,
-    data_agendamento DATE NOT NULL,
-    horario          TIME NOT NULL,
-    observacao       TEXT NULL,
-    status           ENUM('AGENDADO', 'REALIZADO', 'CANCELADO') NOT NULL DEFAULT 'AGENDADO',
-    data_criacao     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_paciente) REFERENCES pacientes(id_paciente) ON DELETE CASCADE,
-    FOREIGN KEY (id_usuario)  REFERENCES usuarios(id_usuario)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

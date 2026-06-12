@@ -49,14 +49,6 @@ menuItems: MenuItem[] = [
     permissao: 'avaliacoes'
   },
   {
-    icon: 'pi-calendar',
-    title: 'Calendário',
-    description: 'Agendar e visualizar consultas',
-    route: '/calendario',
-    color: '#4a90c4',
-    permissao: 'agendamentos'
-  },
-  {
     icon: 'pi-file',
     title: 'Relatórios',
     description: 'Visualizar e gerar relatórios',
