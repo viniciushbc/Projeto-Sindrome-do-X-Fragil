@@ -75,7 +75,7 @@ export class EditarComponent implements OnInit {
     this.form = this.fb.group({
       nome:           ['', Validators.required],
       cpf:            ['', Validators.required],
-      dataNascimento: [null],
+      data_nascimento: [null],
       idade:          [null],
       sexo:           [''],
       telefone:       ['', Validators.required],
@@ -87,15 +87,17 @@ export class EditarComponent implements OnInit {
   carregarPaciente(id: number): void {
     this.pacienteService.buscarPaciente(id).subscribe({
       next: (paciente) => {
+        const p = paciente as any;
+        
         this.form.patchValue({
-          nome:           paciente.nome,
-          cpf:            paciente.cpf,
-          dataNascimento: paciente.dataNascimento ? new Date(paciente.dataNascimento) : null,
-          idade:          paciente.idade,
-          sexo:           paciente.sexo,
-          telefone:       paciente.telefone,
-          responsavel:    paciente.responsavel,
-          observacao:     paciente.observacao,
+          nome:           p.nome,
+          cpf:            p.cpf,
+          data_nascimento: p.data_nascimento ? new Date(p.data_nascimento) : null,
+          idade:          p.idade,
+          sexo:           p.sexo,
+          telefone:       p.telefone,
+          responsavel:    p.responsavel,
+          observacao:     p.observacoes,
         });
       },
       error: () => this.mostrarErro('Erro ao carregar paciente.')
@@ -114,8 +116,8 @@ export class EditarComponent implements OnInit {
     const dados = {
       nome:            formValue.nome,
       cpf:             formValue.cpf,
-      data_nascimento: formValue.dataNascimento ? (() => {
-        const d = new Date(formValue.dataNascimento);
+      data_nascimento: formValue.data_nascimento ? (() => {
+        const d = new Date(formValue.data_nascimento);
         return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
       })() : null,
       idade:           formValue.idade,
