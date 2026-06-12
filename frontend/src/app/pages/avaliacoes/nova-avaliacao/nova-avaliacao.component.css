@@ -83,3 +83,5 @@
   .acoes { flex-direction: column-reverse; }
   .acoes button { width: 100%; justify-content: center; }
 }
+/* Garante que dropdown fique com a mesma altura dos inputs */
+::ng-deep .campo .p-dropdown { width: 100% !important; }

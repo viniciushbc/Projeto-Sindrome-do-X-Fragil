@@ -88,3 +88,7 @@
   .acoes { flex-direction: column-reverse; }
   .acoes button { width: 100%; justify-content: center; }
 }
+/* Garante que dropdown e calendar fiquem com a mesma altura dos inputs */
+::ng-deep .campo .p-dropdown,
+::ng-deep .campo .p-calendar { width: 100% !important; }
+::ng-deep .campo .p-calendar.p-calendar-w-btn .p-inputtext { border-top-right-radius: 0 !important; border-bottom-right-radius: 0 !important; }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { CardModule } from 'primeng/card';
@@ -12,6 +12,7 @@ import { ToastModule } from 'primeng/toast';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { HeaderComponent } from '../../../layout/header/header.component';
 import { AvaliacaoService } from '../../../services/avaliacao.service';
+import { ExportacaoService } from '../../../services/exportacao.service';
 
 @Component({
   selector: 'app-detalhe-avaliacao',
@@ -22,17 +23,19 @@ import { AvaliacaoService } from '../../../services/avaliacao.service';
   ],
   templateUrl: './detalhe-avaliacao.component.html',
   styleUrl: './detalhe-avaliacao.component.css',
-  providers: [MessageService]
+  providers: [MessageService, DatePipe]
 })
 export class DetalheAvaliacaoComponent implements OnInit {
   avaliacao: any = null;
   carregando = false;
   erro = '';
+  hoje = new Date().toLocaleString('pt-BR');
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private avaliacaoService: AvaliacaoService,
+    private exportacaoService: ExportacaoService,
     private messageService: MessageService
   ) {}
 
@@ -77,5 +80,13 @@ export class DetalheAvaliacaoComponent implements OnInit {
 
   novaAvaliacao(): void { this.router.navigate(['/avaliacoes/nova']); }
   voltarPacientes(): void { this.router.navigate(['/pacientes/listar']); }
-  imprimir(): void { window.print(); }
+
+  imprimir(): void {
+    window.print();
+  }
+
+  exportarPDF(): void {
+    if (!this.avaliacao) return;
+    this.exportacaoService.exportarAvaliacaoPDF(this.avaliacao);
+  }
 }

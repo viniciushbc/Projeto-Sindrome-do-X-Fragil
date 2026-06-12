@@ -293,3 +293,100 @@ input[type="number"],
 textarea {
   padding-left: 0.75rem !important;
 }
+/* ══════════════════════════════════════════
+   Padronização de inputs, botões e p-tag
+   ══════════════════════════════════════════ */
+
+:root {
+  --sigma-input-height: 2.5rem;
+}
+
+/* ── p-tag legível ── */
+.p-tag {
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  border-radius: 6px !important;
+  padding: 0.25rem 0.6rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  white-space: nowrap !important;
+}
+.p-tag .p-tag-value {
+  font-size: 0.75rem !important;
+  line-height: 1 !important;
+}
+
+/* ── Altura uniforme: inputs ── */
+.p-inputtext,
+input.p-inputtext {
+  height: var(--sigma-input-height) !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  font-size: 0.88rem !important;
+  box-sizing: border-box !important;
+}
+
+textarea.p-inputtext {
+  height: auto !important;
+  padding-top: 0.6rem !important;
+  padding-bottom: 0.6rem !important;
+  line-height: 1.5 !important;
+}
+
+/* ── Altura uniforme: dropdown ── */
+.p-dropdown {
+  height: var(--sigma-input-height) !important;
+  box-sizing: border-box !important;
+}
+.p-dropdown .p-dropdown-label {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  font-size: 0.88rem !important;
+  height: 100% !important;
+}
+.p-dropdown .p-dropdown-trigger {
+  width: 2.5rem !important;
+}
+
+/* ── Altura uniforme: calendar ── */
+.p-calendar .p-inputtext {
+  height: var(--sigma-input-height) !important;
+}
+.p-calendar.p-calendar-w-btn .p-datepicker-trigger {
+  height: var(--sigma-input-height) !important;
+  width: 2.5rem !important;
+}
+
+/* ── Botões com texto: altura e padding uniformes ── */
+.p-button:not(.p-button-icon-only),
+.btn-primary,
+.btn-secondary,
+.btn-danger {
+  height: var(--sigma-input-height) !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  padding-left: 1.1rem !important;
+  padding-right: 1.1rem !important;
+  font-size: 0.88rem !important;
+  white-space: nowrap !important;
+  box-sizing: border-box !important;
+}
+
+/* ── Botão pequeno para tabelas ── */
+.btn-sm {
+  height: 2rem !important;
+  padding-left: 0.75rem !important;
+  padding-right: 0.75rem !important;
+  font-size: 0.8rem !important;
+}
+
+/* ── Botões só ícone mantêm quadrado ── */
+.p-button.p-button-icon-only,
+.btn-icon {
+  width: var(--sigma-input-height) !important;
+  height: var(--sigma-input-height) !important;
+  padding: 0 !important;
+  justify-content: center !important;
+}

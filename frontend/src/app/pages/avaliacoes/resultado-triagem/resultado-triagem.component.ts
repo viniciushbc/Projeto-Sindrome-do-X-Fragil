@@ -2,14 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
-import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
-import { MessageModule } from 'primeng/message';
-import { DividerModule } from 'primeng/divider';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
+import { HeaderComponent } from '../../../layout/header/header.component';
 import { CriarAvaliacaoResponse } from '../../../models/avaliacao.model';
 import { AvaliacaoService } from '../../../services/avaliacao.service';
 
@@ -17,11 +16,11 @@ import { AvaliacaoService } from '../../../services/avaliacao.service';
   selector: 'app-resultado-triagem',
   standalone: true,
   imports: [
-    CommonModule, CardModule, TagModule, MessageModule, DividerModule,
-    ButtonModule, TableModule, ProgressSpinnerModule
+    CommonModule, HeaderComponent, TagModule, ButtonModule, TableModule, ToastModule
   ],
   templateUrl: './resultado-triagem.component.html',
-  styleUrls: ['./resultado-triagem.component.css']
+  styleUrls: ['./resultado-triagem.component.css'],
+  providers: [MessageService]
 })
 export class ResultadoTriagemComponent implements OnInit {
   resultadoReal: CriarAvaliacaoResponse | null = null;
@@ -58,7 +57,6 @@ export class ResultadoTriagemComponent implements OnInit {
   }
 
   voltar(): void { this.router.navigate(['/pacientes/listar']); }
-
   novaAvaliacao(): void { this.router.navigate(['/avaliacoes/nova']); }
 
   verHistorico(): void {

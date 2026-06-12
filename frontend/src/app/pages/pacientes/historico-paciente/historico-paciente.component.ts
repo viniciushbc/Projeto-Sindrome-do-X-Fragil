@@ -2,14 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { ButtonModule } from 'primeng/button';
-import { ToolbarModule } from 'primeng/toolbar';
 import { ToastModule } from 'primeng/toast';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { DividerModule } from 'primeng/divider';
 import { HeaderComponent } from '../../../layout/header/header.component';
 import { AvaliacaoService } from '../../../services/avaliacao.service';
 import { PacienteService } from '../../../services/paciente.service';
@@ -19,8 +16,8 @@ import { Paciente } from '../../../models/paciente.model';
   selector: 'app-historico-paciente',
   standalone: true,
   imports: [
-    CommonModule, HeaderComponent, CardModule, TableModule, TagModule,
-    ButtonModule, ToolbarModule, ToastModule, ProgressSpinnerModule, DividerModule
+    CommonModule, HeaderComponent, TableModule, TagModule,
+    ButtonModule, ToastModule, ProgressSpinnerModule
   ],
   templateUrl: './historico-paciente.component.html',
   styleUrl: './historico-paciente.component.css',
@@ -53,7 +50,7 @@ export class HistoricoPacienteComponent implements OnInit {
         this.paciente = p;
         this.avaliacaoService.buscarPorPaciente(id).subscribe({
           next: (avs: any[]) => { this.avaliacoes = avs; this.carregando = false; },
-          error: (_e: any) => { this.erro = 'Não foi possível carregar o histórico de avaliações.'; this.carregando = false; }
+          error: (_e: any) => { this.erro = 'Não foi possível carregar o histórico.'; this.carregando = false; }
         });
       },
       error: (_e: any) => { this.erro = 'Paciente não encontrado.'; this.carregando = false; }
@@ -68,10 +65,7 @@ export class HistoricoPacienteComponent implements OnInit {
     return resultado === 'ENCAMINHAR' ? 'Encaminhar' : 'Não Encaminhar';
   }
 
-  verDetalhes(id: number): void {
-    this.router.navigate(['/avaliacoes', id]);
-  }
-
+  verDetalhes(id: number): void { this.router.navigate(['/avaliacoes', id]); }
   voltar(): void { this.router.navigate(['/pacientes/listar']); }
   novaAvaliacao(): void { this.router.navigate(['/avaliacoes/nova']); }
 }
