@@ -21,10 +21,10 @@ export class PacienteService {
   }
 
   listarPacientes(): Observable<Paciente[]> {
-    return this.http.get<Paciente[]>(this.apiUrl, { headers: this.getHeaders() }).pipe(
-      map((pacientes) => pacientes.filter((p) => p.ativo === 1 || p.ativo === true))
-    );
+    return this.http.get<Paciente[]>(this.apiUrl, { headers: this.getHeaders() });
   }
+
+  
 
   buscarPaciente(id: number): Observable<Paciente> {
     return this.http.get<Paciente>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });

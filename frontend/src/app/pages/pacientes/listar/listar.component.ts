@@ -75,6 +75,8 @@ export class PacientesComponent implements OnInit {
       paciente.nome.toLowerCase().includes(this.busca.toLowerCase())
     );
   }
+  
+
   alterarStatus(p: Paciente): void {
   this.pacienteService.alterarStatus(p.id_paciente, !p.ativo).subscribe({
     next: () => {
