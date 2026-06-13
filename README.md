@@ -53,6 +53,17 @@ Desenvolver uma aplicação web que permita:
 - ClickUp
 - Matrix para comunicação com especialistas
 
+### Visualização do quadro do projeto
+
+Como o projeto foi organizado no **ClickUp** em vez do Trello, não foi possível compartilhar todo o quadro completo em uma única visualização pública no plano atual.
+
+Para facilitar o acesso, criamos uma página com os links das visualizações públicas de cada sprint.
+
+**Acesse aqui:**
+
+[Visualizar quadro do projeto — Síndrome do X Frágil](https://viniciushbc.github.io/Projeto-Sindrome-do-X-Fragil/kanban.html)
+
+
 ---
 
 ## Estrutura planejada do projeto
