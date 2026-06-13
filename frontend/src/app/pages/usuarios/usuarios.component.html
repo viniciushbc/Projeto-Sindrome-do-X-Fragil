@@ -1,104 +1,150 @@
-<div class="page-wrapper">
-  <app-header
-    userName="Superusuário"
-    userRole="Acesso Total"
-  ></app-header>
+<p-toast></p-toast>
+<div class="sigma-page">
+  <app-header></app-header>
 
-  <!-- Sub-header da página -->
-  <div class="page-subheader">
-    <div class="page-subheader__inner">
-      <div class="page-subheader__icon">
-        <i class="pi pi-shield"></i>
-      </div>
-      <div>
-        <h1 class="page-subheader__title">Gerenciamento de Permissões</h1>
-        <p class="page-subheader__subtitle">Controle de acesso e permissões de usuários</p>
-      </div>
+  <div class="sigma-actionbar">
+    <span style="font-weight:700;font-size:1rem;color:var(--sigma-primary)">Usuários</span>
+    <div class="sigma-search">
+      <input pInputText type="text" placeholder="Buscar por nome ou e-mail"
+        [(ngModel)]="busca" />
+    </div>
+    <div class="sigma-actionbar-end" *ngIf="isAdmin">
+      <button pButton type="button" label="Novo Usuário" icon="pi pi-plus"
+        class="btn-primary" (click)="abrirNovo()"></button>
+      <button pButton type="button" label="Voltar" icon="pi pi-arrow-left"
+      class="btn-secondary" (click)="voltarMenu()"></button>
     </div>
   </div>
 
-  <main class="page-content">
-    <div class="layout-split">
-      <!-- Painel esquerdo: lista de usuários -->
-      <aside class="users-panel">
-        <h2 class="users-panel__title">Usuários do Sistema</h2>
-        <div class="search-wrapper">
-          <i class="pi pi-search search-icon"></i>
-          <input
-            pInputText
-            [(ngModel)]="busca"
-            placeholder="Buscar usuário..."
-            class="search-input"
-          />
-        </div>
-
-        <div class="users-list">
-          <div
-            *ngFor="let u of usuariosFiltrados"
-            class="user-item"
-            [class.user-item--active]="usuarioSelecionado?.email === u.email"
-            (click)="selecionarUsuario(u)"
-          >
-            <div class="user-item__name">{{ u.nome }}</div>
-            <div class="user-item__email">{{ u.email }}</div>
-            <div class="user-item__tags">
-              <span class="tag-cargo">{{ u.cargo }}</span>
-              <span class="tag-status" [class.tag-status--inativo]="u.status === 'Inativo'">
-                {{ u.status }}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <button pButton type="button" label="Novo Usuário" icon="pi pi-user-plus" class="btn-novo-usuario"></button>
-      </aside>
-
-      <!-- Painel direito: permissões do usuário selecionado -->
-      <section class="permissions-panel" *ngIf="usuarioSelecionado">
-        <div class="user-detail-header">
-          <div>
-            <h2 class="user-detail-name">{{ usuarioSelecionado.nome }}</h2>
-            <p class="user-detail-email">{{ usuarioSelecionado.email }}</p>
-            <p class="user-detail-cargo">Cargo: {{ usuarioSelecionado.cargo }}</p>
-          </div>
-          <div class="user-detail-actions">
-            <button class="icon-btn" title="Editar"><i class="pi pi-pencil"></i></button>
-            <button class="icon-btn icon-btn--danger" title="Excluir"><i class="pi pi-trash"></i></button>
-          </div>
-        </div>
-
-        <h3 class="permissions-title">Permissões por Módulo</h3>
-
-        <div class="permissions-list">
-          <div *ngFor="let modulo of modulos" class="permission-item">
-            <div class="permission-item__header">
-              <span class="permission-item__name">{{ modulo.nome }}</span>
-              <div class="permission-item__right">
-                <span class="perm-badge">{{ modulo.total }} permissões</span>
-                <i class="pi pi-chevron-down"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="permission-actions">
-          <button pButton type="button" label="Salvar Alterações" class="btn-salvar"></button>
-          <button pButton type="button" label="Cancelar" class="btn-cancelar p-button-text"></button>
-        </div>
-      </section>
-
-      <!-- Estado vazio -->
-      <section class="permissions-panel permissions-panel--empty" *ngIf="!usuarioSelecionado">
-        <div class="empty-state">
-          <i class="pi pi-user"></i>
-          <p>Selecione um usuário para gerenciar suas permissões</p>
-        </div>
-      </section>
+  <div class="sigma-content">
+    <div *ngIf="carregando" style="display:flex;align-items:center;gap:.75rem;padding:3rem;color:var(--sigma-text-muted)">
+      <p-progressSpinner strokeWidth="4" styleClass="spinner-sm"></p-progressSpinner>
+      <span>Carregando usuários...</span>
     </div>
 
-    <div class="placeholder-notice">
-      <i class="pi pi-info-circle"></i>
-      <span>Funcionalidade completa será implementada nas próximas sprints.</span>
-    </div>
-  </main>
+    <p-table *ngIf="!carregando" [value]="usuariosFiltrados" [paginator]="true" [rows]="10"
+      responsiveLayout="scroll" emptyMessage="Nenhum usuário encontrado.">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Nome</th>
+          <th>E-mail</th>
+          <th>Tipo</th>
+          <th>Acessos</th>
+          <th style="text-align:center">Status</th>
+          <th style="text-align:center">Ações</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-u>
+        <tr [class.row-selected]="usuarioSelecionado?.id_usuario === u.id_usuario"
+          (click)="selecionarUsuario(u)">
+          <td>{{ u.nome }}</td>
+          <td>{{ u.email }}</td>
+          <td>
+            <p-tag [value]="u.tipo_usuario === 'ADMIN' ? 'Administrador' : 'Padrão'"
+              [severity]="u.tipo_usuario === 'ADMIN' ? 'danger' : 'info'"></p-tag>
+          </td>
+          <td>
+            <div class="permissoes-chips" *ngIf="u.tipo_usuario === 'ADMIN'">
+              <span class="perm-chip admin">Acesso total</span>
+            </div>
+            <div class="permissoes-chips" *ngIf="u.tipo_usuario !== 'ADMIN'">
+              <span *ngFor="let p of (u.permissoes || [])" class="perm-chip">{{ p }}</span>
+              <span *ngIf="!u.permissoes?.length" style="color:#999;font-size:.8rem">Sem acessos</span>
+            </div>
+          </td>
+          <td style="text-align:center">
+            <p-tag [value]="u.ativo ? 'Ativo' : 'Inativo'"
+              [severity]="u.ativo ? 'success' : 'secondary'"></p-tag>
+          </td>
+          <td style="text-align:center">
+            <button pButton icon="pi pi-pencil" class="btn-primary btn-icon"
+              style="margin-right:6px" (click)="abrirEdicao(u); $event.stopPropagation()"></button>
+            <button pButton [icon]="u.ativo ? 'pi pi-ban' : 'pi pi-check'"
+              [class]="u.ativo ? 'btn-danger btn-icon' : 'btn-secondary btn-icon'"
+              [title]="u.ativo ? 'Desativar' : 'Ativar'"
+              (click)="alterarStatus(u); $event.stopPropagation()"></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
 </div>
+
+<!-- Dialog criar/editar -->
+<p-dialog [(visible)]="dialogVisivel" [header]="dialogTitulo" [modal]="true"
+  [style]="{width: '580px'}" [closable]="true">
+
+  <form [formGroup]="form" class="dialog-form">
+    <div class="form-row">
+      <div class="form-field">
+        <label>Nome *</label>
+        <input pInputText formControlName="nome" placeholder="Nome completo" [class.ng-invalid]="campoInvalido('nome')" />
+        <small *ngIf="campoInvalido('nome')" class="campo-erro">Nome é obrigatório.</small>
+      </div>
+      <div class="form-field">
+        <label>E-mail *</label>
+        <input pInputText formControlName="email" placeholder="email@exemplo.com" [class.ng-invalid]="campoInvalido('email')" />
+        <small *ngIf="campoInvalido('email')" class="campo-erro">E-mail inválido.</small>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label>Senha {{ isEdicao ? '(deixe em branco para manter)' : '*' }}</label>
+        <input pInputText type="password" formControlName="senha" placeholder="Mínimo 6 caracteres" />
+        <small *ngIf="campoInvalido('senha')" class="campo-erro">Senha é obrigatória.</small>
+      </div>
+      <div class="form-field">
+        <label>CPF</label>
+        <input pInputText formControlName="cpf" placeholder="000.000.000-00" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label>Tipo de usuário *</label>
+        <p-dropdown formControlName="tipo_usuario" [options]="tiposUsuario"
+          optionLabel="label" optionValue="value" [style]="{width:'100%'}"></p-dropdown>
+      </div>
+      <div class="form-field">
+        <label>CRM</label>
+        <input pInputText formControlName="crm" placeholder="12345-PR" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label>Especialidade</label>
+        <input pInputText formControlName="especialidade" placeholder="Ex: Pediatria" />
+      </div>
+      <div class="form-field">
+        <label>Cargo</label>
+        <input pInputText formControlName="cargo" placeholder="Ex: Médico" />
+      </div>
+    </div>
+
+    <!-- PERMISSÕES — só para PADRAO -->
+    <div *ngIf="mostrarPermissoes" class="permissoes-section">
+      <p-divider></p-divider>
+      <h4><i class="pi pi-shield"></i> Módulos de Acesso</h4>
+      <p style="font-size:.85rem;color:#666;margin-bottom:.75rem">
+        Selecione quais módulos este usuário poderá acessar:
+      </p>
+      <div class="permissoes-grid">
+        <div *ngFor="let m of modulos" class="perm-item"
+          [class.perm-ativo]="temPermissao(m.key)"
+          (click)="togglePermissao(m.key)">
+          <i class="pi {{ m.icon }}"></i>
+          <span>{{ m.label }}</span>
+          <i class="pi pi-check perm-check" *ngIf="temPermissao(m.key)"></i>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button pButton label="Cancelar" severity="secondary" (click)="dialogVisivel = false"></button>
+    <button pButton [label]="isEdicao ? 'Salvar alterações' : 'Criar usuário'"
+      icon="pi pi-check" [loading]="salvando" (click)="salvar()"></button>
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,94 @@
+/* Layout da página */
+:host {
+  display: block;
+}
+
+/* Conteúdo centralizado */
+.form-content {
+  padding: 2rem;
+  max-width: 760px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Título */
+.form-title {
+  margin-bottom: 1.5rem;
+}
+.form-title h2 {
+  margin: 0 0 4px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--sigma-primary);
+}
+.form-title p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--sigma-text-muted);
+}
+
+/* Card do formulário */
+.form-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(30,58,95,0.08);
+  border: 1px solid rgba(148,163,184,0.18);
+}
+
+/* Campo */
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+}
+.campo label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--sigma-text-muted);
+  display: block;
+}
+.campo input,
+.campo textarea {
+  width: 100%;
+  box-sizing: border-box;
+}
+.erro {
+  color: var(--sigma-danger);
+  font-size: 0.78rem;
+}
+
+/* Linha dupla */
+.linha-dupla {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Ações */
+.acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2eaf3;
+  margin-top: 0.5rem;
+}
+
+/* Inputs full width */
+::ng-deep .w-full { width: 100% !important; }
+::ng-deep .p-calendar.w-full,
+::ng-deep .p-dropdown.w-full { width: 100% !important; }
+::ng-deep .p-calendar.w-full .p-inputtext { width: 100% !important; }
+
+@media (max-width: 600px) {
+  .form-content { padding: 1rem; }
+  .linha-dupla { grid-template-columns: 1fr; }
+  .acoes { flex-direction: column-reverse; }
+  .acoes button { width: 100%; justify-content: center; }
+}
+/* Garante que dropdown e calendar fiquem com a mesma altura dos inputs */
+::ng-deep .campo .p-dropdown,
+::ng-deep .campo .p-calendar { width: 100% !important; }
+::ng-deep .campo .p-calendar.p-calendar-w-btn .p-inputtext { border-top-right-radius: 0 !important; border-bottom-right-radius: 0 !important; }

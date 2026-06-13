@@ -8,6 +8,14 @@ O sistema não tem como objetivo realizar diagnóstico definitivo. Ele atua como
 
 ---
 
+## Demonstração do Sistema
+
+Confira o vídeo de demonstração do sistema:
+
+🔗 **Link direto para o vídeo:** [Tutorial de Funcionalidades do Sistema](https://youtu.be/yVq0VySaihs)
+
+---
+
 ## Objetivo do projeto
 
 Desenvolver uma aplicação web que permita:

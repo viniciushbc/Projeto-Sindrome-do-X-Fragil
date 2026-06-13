@@ -1,0 +1,78 @@
+<p-toast></p-toast>
+
+<div class="sigma-page">
+  <app-header></app-header>
+
+  <div class="sigma-actionbar">
+    <span style="font-weight:700;font-size:1rem;color:var(--sigma-primary)">Histórico de Avaliações</span>
+    <div class="sigma-actionbar-end">
+      <button pButton type="button" label="Voltar" icon="pi pi-arrow-left"
+        class="btn-secondary" (click)="voltar()"></button>
+    </div>
+  </div>
+
+  <div class="sigma-content">
+
+    <div *ngIf="carregando" class="loading-center">
+      <p-progressSpinner></p-progressSpinner>
+    </div>
+
+    <div *ngIf="erro && !carregando">
+      <p class="erro-msg">{{ erro }}</p>
+    </div>
+
+    <ng-container *ngIf="!carregando && !erro">
+
+      <div class="info-card" *ngIf="paciente">
+        <div class="info-card-title">Dados do Paciente</div>
+        <div class="dados-grid">
+          <div class="dado"><span class="dado-label">Nome</span><span class="dado-valor">{{ paciente.nome }}</span></div>
+          <div class="dado"><span class="dado-label">Sexo</span><span class="dado-valor">{{ paciente.sexo === 'M' ? 'Masculino' : 'Feminino' }}</span></div>
+          <div class="dado"><span class="dado-label">Data de Nascimento</span><span class="dado-valor">{{ paciente.data_nascimento || '—' }}</span></div>
+          <div class="dado"><span class="dado-label">Responsável</span><span class="dado-valor">{{ paciente.responsavel || '—' }}</span></div>
+          <div class="dado"><span class="dado-label">Telefone</span><span class="dado-valor">{{ paciente.telefone || '—' }}</span></div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <h3>Avaliações realizadas</h3>
+          <button pButton type="button" label="Nova Avaliação" icon="pi pi-plus"
+            class="btn-primary" (click)="novaAvaliacao()"></button>
+        </div>
+
+        <p-table [value]="avaliacoes" [paginator]="true" [rows]="10"
+          emptyMessage="Nenhuma avaliação encontrada para este paciente.">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>ID</th>
+              <th>Data</th>
+              <th>Profissional</th>
+              <th>Score</th>
+              <th>Limiar</th>
+              <th>Resultado</th>
+              <th>Ações</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-av>
+            <tr>
+              <td>{{ av.id_avaliacao }}</td>
+              <td>{{ av.data_avaliacao | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td>{{ av.profissional?.nome || '—' }}</td>
+              <td>{{ av.score }}</td>
+              <td>{{ av.limiar_utilizado }}</td>
+              <td>
+                <p-tag [value]="getTagLabel(av.resultado)" [severity]="getTagSeverity(av.resultado)"></p-tag>
+              </td>
+              <td>
+                <button pButton type="button" icon="pi pi-eye" label="Ver detalhes"
+                  class="btn-secondary btn-sm" (click)="verDetalhes(av.id_avaliacao)"></button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+
+    </ng-container>
+  </div>
+</div>

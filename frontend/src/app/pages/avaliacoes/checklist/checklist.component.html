@@ -1,0 +1,112 @@
+<p-toast></p-toast>
+<div class="sigma-page">
+  <app-header></app-header>
+
+  <div class="sigma-actionbar">
+    <span style="font-weight:700;font-size:1rem;color:var(--sigma-primary)">
+      {{ resultado ? 'Resultado da Triagem' : 'Checklist Clínico' }}
+    </span>
+  </div>
+
+  <div class="sigma-content">
+    <div class="checklist-wrap">
+
+      <!-- ── RESULTADO ── -->
+      <ng-container *ngIf="resultado">
+        <div class="checklist-card">
+          <div class="resultado-badge" [class.enc]="deveEncaminhar" [class.nenc]="!deveEncaminhar">
+            <i class="pi" [class.pi-exclamation-triangle]="deveEncaminhar"
+              [class.pi-check-circle]="!deveEncaminhar"></i>
+            {{ deveEncaminhar ? 'Encaminhar para teste genético' : 'Não encaminhar neste momento' }}
+          </div>
+
+          <div class="metricas">
+            <div class="metrica">
+              <span class="metrica-label">Score obtido</span>
+              <span class="metrica-valor" [class.alto]="deveEncaminhar">{{ scorePercent }}%</span>
+              <span class="metrica-sub">Limiar: {{ resultado.limiar_utilizado * 100 | number:'1.0-0' }}%</span>
+            </div>
+            <div class="metrica">
+              <span class="metrica-label">ID da avaliação</span>
+              <span class="metrica-valor">#{{ resultado.id_avaliacao }}</span>
+              <span class="metrica-sub">registrada com sucesso</span>
+            </div>
+          </div>
+
+          <div class="recomendacao">
+            <i class="pi pi-info-circle"></i>
+            <p style="margin:0">{{ resultado.recomendacao }}</p>
+          </div>
+
+          <div class="cl-actions">
+            <button pButton type="button" label="Ver avaliações" icon="pi pi-list"
+              class="btn-secondary" (click)="irParaListagem()"></button>
+            <button pButton type="button" label="Nova avaliação" icon="pi pi-plus"
+              class="btn-primary" (click)="novaAvaliacao()"></button>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- ── CHECKLIST ── -->
+      <ng-container *ngIf="!resultado">
+        <div *ngIf="avaliacaoInicial" class="paciente-faixa">
+          <div><span>Paciente</span><strong>{{ avaliacaoInicial.paciente.nome }}</strong></div>
+          <div><span>Respondente</span><strong>{{ avaliacaoInicial.nome_respondente }}</strong></div>
+          <div><span>Relação</span><strong>{{ avaliacaoInicial.relacao_respondente }}</strong></div>
+        </div>
+
+        <div class="checklist-card">
+          <div class="cl-header">
+            <div>
+              <h2>Sintomas</h2>
+              <p>Marque cada sintoma como presente ou ausente.</p>
+            </div>
+            <div class="contador" *ngIf="!carregandoSintomas">
+              <span class="contador-val">{{ contagemPresentes() }}</span>
+              <span class="contador-sub">de {{ totalAplicaveis() }} marcados</span>
+            </div>
+          </div>
+
+          <div *ngIf="carregandoSintomas" style="display:flex;align-items:center;gap:.75rem;padding:2rem;color:var(--sigma-text-muted)">
+            <p-progressSpinner strokeWidth="4" styleClass="spinner-sm"></p-progressSpinner>
+            <span>Carregando sintomas...</span>
+          </div>
+
+          <div *ngIf="erroCarregamento" style="text-align:center;padding:2rem;color:var(--sigma-text-muted)">
+            Não foi possível carregar os sintomas.
+          </div>
+
+          <div *ngIf="!carregandoSintomas && !erroCarregamento" class="sintomas-lista">
+            <div *ngFor="let item of sintomas; trackBy: trackBySintoma"
+              class="sintoma-item"
+              [class.presente]="item.presente && !isNaoAplicavel(item.sintoma)"
+              [class.na]="isNaoAplicavel(item.sintoma)">
+              <p-checkbox [binary]="true" [(ngModel)]="item.presente"
+                [disabled]="isNaoAplicavel(item.sintoma)"
+                [inputId]="'s-' + item.sintoma.id_sintoma"></p-checkbox>
+              <label [for]="'s-' + item.sintoma.id_sintoma" style="flex:1;cursor:pointer">
+                <span class="sintoma-nome">{{ item.sintoma.nome }}</span>
+                <span *ngIf="item.sintoma.descricao && !isNaoAplicavel(item.sintoma)"
+                  class="sintoma-desc">{{ item.sintoma.descricao }}</span>
+                <span *ngIf="isNaoAplicavel(item.sintoma)" class="sintoma-desc">
+                  Não aplicável para pacientes do sexo feminino.
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <div *ngIf="!carregandoSintomas && !erroCarregamento" class="cl-actions">
+            <button pButton type="button" label="Voltar" icon="pi pi-arrow-left"
+              class="btn-secondary" [disabled]="enviando" (click)="voltar()"></button>
+            <button pButton type="button" label="Limpar" icon="pi pi-refresh"
+              class="btn-secondary" [disabled]="enviando" (click)="limparSelecoes()"></button>
+            <button pButton type="button" label="Calcular Triagem"
+              icon="pi pi-check" iconPos="right"
+              class="btn-primary" [loading]="enviando" (click)="enviarAvaliacao()"></button>
+          </div>
+        </div>
+      </ng-container>
+
+    </div>
+  </div>
+</div>

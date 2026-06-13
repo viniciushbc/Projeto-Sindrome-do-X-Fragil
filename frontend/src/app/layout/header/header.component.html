@@ -1,0 +1,47 @@
+<header class="sigma-header">
+  <div class="sigma-header__brand" (click)="navigate('/menu')" style="cursor:pointer" title="Ir para o menu">
+    <div class="sigma-header__logo">
+      <svg viewBox="0 0 64 64" class="butterfly-svg" aria-hidden="true">
+        <path d="M30 30C22 14 11 5 5 12C-1 20 8 33 27 33Z"/>
+        <path d="M34 30C42 14 53 5 59 12C65 20 56 33 37 33Z"/>
+        <path d="M28 35C15 37 7 48 13 56C20 65 31 51 31 38Z"/>
+        <path d="M36 35C49 37 57 48 51 56C44 65 33 51 33 38Z"/>
+        <path d="M32 25C35 30 35 42 32 48C29 42 29 30 32 25Z"/>
+        <path d="M32 22 Q29 18 26 16" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M32 22 Q35 18 38 16" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="sigma-header__title-group">
+      <span class="sigma-header__title">SINXF</span>
+      <span class="sigma-header__subtitle">Sistema Integrado de Gestão Médica</span>
+    </div>
+  </div>
+
+  <nav class="sigma-header__nav" *ngIf="showUser">
+    <button class="nav-btn" (click)="navigate('/pacientes/listar')" *ngIf="temAcesso('pacientes')">
+      <i class="pi pi-users"></i> Pacientes
+    </button>
+    <button class="nav-btn" (click)="navigate('/avaliacoes')" *ngIf="temAcesso('avaliacoes')">
+      <i class="pi pi-clipboard"></i> Avaliações
+    </button>
+    <button class="nav-btn" (click)="navigate('/relatorios')" *ngIf="temAcesso('relatorios')">
+      <i class="pi pi-chart-bar"></i> Relatórios
+    </button>
+    <button class="nav-btn" (click)="navigate('/usuarios')" *ngIf="temAcesso('usuarios')">
+      <i class="pi pi-user-edit"></i> Usuários
+    </button>
+    <button class="nav-btn" (click)="navigate('/logs')" *ngIf="temAcesso('logs')">
+      <i class="pi pi-list"></i> Logs
+    </button>
+  </nav>
+
+  <div class="sigma-header__user" *ngIf="showUser">
+    <div class="sigma-header__user-info">
+      <span class="sigma-header__user-name">{{ userName }}</span>
+      <span class="sigma-header__user-role">{{ userRole }}</span>
+    </div>
+    <button class="sigma-header__logout" (click)="onLogout()" title="Sair">
+      <i class="pi pi-sign-out"></i>
+    </button>
+  </div>
+</header>

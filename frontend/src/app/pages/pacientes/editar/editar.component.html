@@ -1,0 +1,93 @@
+<p-toast></p-toast>
+
+<div class="sigma-page">
+  <app-header></app-header>
+
+  <div class="sigma-actionbar">
+    <span style="font-weight:700;font-size:1rem;color:var(--sigma-primary)">
+      {{ isVisualizacao ? 'Visualizar Paciente' : isEdicao ? 'Editar Paciente' : 'Novo Paciente' }}
+    </span>
+    <div class="sigma-actionbar-end">
+      <button pButton type="button" label="Voltar" icon="pi pi-arrow-left"
+        class="btn-secondary" (click)="cancelar()"></button>
+    </div>
+  </div>
+
+  <div class="form-content">
+
+    <div class="form-title">
+      <h2>
+        {{ isVisualizacao ? 'Dados do paciente' : isEdicao ? 'Editar dados do paciente' : 'Cadastrar novo paciente' }}
+      </h2>
+      <p *ngIf="!isVisualizacao">Campos marcados com * são obrigatórios.</p>
+    </div>
+
+    <div class="form-card">
+      <form [formGroup]="form">
+
+        <div class="campo">
+          <label>Nome completo <span *ngIf="!isVisualizacao">*</span></label>
+          <input pInputText formControlName="nome" placeholder="Nome completo" class="w-full" />
+          <small *ngIf="campoInvalido('nome')" class="erro">Nome é obrigatório.</small>
+        </div>
+
+        <div class="linha-dupla">
+          <div class="campo">
+            <label>CPF <span *ngIf="!isVisualizacao">*</span></label>
+            <input pInputText formControlName="cpf" placeholder="000.000.000-00" class="w-full" />
+            <small *ngIf="campoInvalido('cpf')" class="erro">CPF é obrigatório.</small>
+          </div>
+          <div class="campo">
+            <label>Telefone <span *ngIf="!isVisualizacao">*</span></label>
+            <input pInputText formControlName="telefone" placeholder="(00) 00000-0000" class="w-full" />
+            <small *ngIf="campoInvalido('telefone')" class="erro">Telefone é obrigatório.</small>
+          </div>
+        </div>
+
+        <div class="linha-dupla">
+          <div class="campo">
+            <label>Data de Nascimento</label>
+            <p-calendar formControlName="data_nascimento" dateFormat="dd/mm/yy"
+              [showIcon]="!isVisualizacao" placeholder="dd/mm/aaaa" styleClass="w-full"></p-calendar>
+          </div>
+          <div class="campo">
+            <label>Sexo <span *ngIf="!isVisualizacao">*</span></label>
+            <p-dropdown formControlName="sexo" [options]="sexoOpcoes"
+              optionLabel="label" optionValue="value"
+              placeholder="Selecione" styleClass="w-full"></p-dropdown>
+            <small *ngIf="campoInvalido('sexo')" class="erro">Sexo é obrigatório.</small>
+          </div>
+        </div>
+
+        <div class="linha-dupla">
+          <div class="campo">
+            <label>Responsável</label>
+            <input pInputText formControlName="responsavel"
+              placeholder="Nome do responsável" class="w-full" />
+          </div>
+          <div class="campo">
+            <label>Idade</label>
+            <input pInputText formControlName="idade"
+              placeholder="Ex: 10" type="number" class="w-full" />
+          </div>
+        </div>
+
+        <div class="campo">
+          <label>Observações</label>
+          <textarea pInputTextarea formControlName="observacao"
+            placeholder="Observações adicionais..." rows="3" class="w-full"></textarea>
+        </div>
+
+        <div class="acoes">
+          <button pButton type="button" label="Cancelar"
+            class="btn-secondary" (click)="cancelar()"></button>
+          <button *ngIf="!isVisualizacao"
+            pButton type="button" label="Salvar Paciente" icon="pi pi-check"
+            class="btn-primary" [loading]="loading" (click)="salvar()"></button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>

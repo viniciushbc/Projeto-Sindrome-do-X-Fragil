@@ -1,0 +1,61 @@
+<p-toast></p-toast>
+<div class="sigma-page">
+  <app-header></app-header>
+
+  <div class="sigma-actionbar">
+    <span style="font-weight:700;font-size:1rem;color:var(--sigma-primary)">Logs de Auditoria</span>
+  </div>
+
+  <div class="sigma-content">
+    <div class="filtros-card">
+      <div class="filtros-row">
+        <div class="f-field">
+          <label>Entidade</label>
+          <p-dropdown [(ngModel)]="filtroEntidade" [options]="entidades" optionLabel="label" optionValue="value" [style]="{width:'100%'}"></p-dropdown>
+        </div>
+        <div class="f-field">
+          <label>Ação</label>
+          <p-dropdown [(ngModel)]="filtroAcao" [options]="acoes" optionLabel="label" optionValue="value" [style]="{width:'100%'}"></p-dropdown>
+        </div>
+        <div class="f-field">
+          <label>Data início</label>
+          <p-calendar [(ngModel)]="filtroDataInicio" dateFormat="dd/mm/yy" [showIcon]="true" [readonlyInput]="true"></p-calendar>
+        </div>
+        <div class="f-field">
+          <label>Data fim</label>
+          <p-calendar [(ngModel)]="filtroDataFim" dateFormat="dd/mm/yy" [showIcon]="true" [readonlyInput]="true"></p-calendar>
+        </div>
+        <div class="filtros-actions">
+          <button pButton label="Limpar" icon="pi pi-times" severity="secondary" (click)="limpar()"></button>
+          <button pButton label="Buscar" icon="pi pi-search" [loading]="carregando" (click)="buscar()"></button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="carregando" style="display:flex;align-items:center;gap:.75rem;padding:2rem;color:#666">
+      <p-progressSpinner strokeWidth="4" styleClass="spinner-sm"></p-progressSpinner>
+      <span>Carregando logs...</span>
+    </div>
+
+    <p-table *ngIf="!carregando" [value]="logs" [paginator]="true" [rows]="15"
+      responsiveLayout="scroll" emptyMessage="Nenhum log encontrado.">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>ID</th><th>Data/Hora</th><th>Usuário</th><th>Entidade</th><th>Registro</th><th>Ação</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-log>
+        <tr>
+          <td>{{ log.id_log }}</td>
+          <td>{{ formatarData(log.data_hora) }}</td>
+          <td>{{ log.usuario?.nome || '—' }}</td>
+          <td>{{ log.entidade }}</td>
+          <td>#{{ log.id_registro }}</td>
+          <td>
+            <p-tag [value]="log.acao" [severity]="getAcaoSeverity(log.acao)"></p-tag>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

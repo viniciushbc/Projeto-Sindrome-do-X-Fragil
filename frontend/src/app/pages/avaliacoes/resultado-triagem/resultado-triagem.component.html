@@ -1,0 +1,80 @@
+<p-toast></p-toast>
+
+<div class="sigma-page">
+  <app-header></app-header>
+
+  <div class="sigma-actionbar">
+    <span style="font-weight:700;font-size:1rem;color:var(--sigma-primary)">Resultado da Triagem</span>
+    <div class="sigma-actionbar-end">
+      <button pButton type="button" label="Voltar para Pacientes" icon="pi pi-arrow-left"
+        class="btn-secondary" (click)="voltar()"></button>
+    </div>
+  </div>
+
+  <div class="sigma-content">
+    <div class="resultado-card">
+
+      <div class="card-header">
+        <h2>Avaliação clínica — Síndrome do X Frágil</h2>
+      </div>
+
+      <div *ngIf="resultadoReal">
+
+        <div *ngIf="detalheAvaliacao" class="dados-grid" style="margin-bottom:1.25rem">
+          <div class="dado"><div class="dado-label">Paciente</div><div class="dado-valor">{{ detalheAvaliacao.paciente?.nome }}</div></div>
+          <div class="dado"><div class="dado-label">Sexo</div><div class="dado-valor">{{ detalheAvaliacao.paciente?.sexo === 'M' ? 'Masculino' : 'Feminino' }}</div></div>
+          <div class="dado"><div class="dado-label">Data da avaliação</div><div class="dado-valor">{{ detalheAvaliacao.data_avaliacao | date:'dd/MM/yyyy HH:mm' }}</div></div>
+          <div class="dado"><div class="dado-label">Profissional</div><div class="dado-valor">{{ detalheAvaliacao.profissional?.nome }}</div></div>
+          <div *ngIf="detalheAvaliacao.respondente?.nome" class="dado"><div class="dado-label">Respondente</div><div class="dado-valor">{{ detalheAvaliacao.respondente.nome }}</div></div>
+        </div>
+
+        <div class="dados-grid" style="margin-bottom:1.25rem">
+          <div class="dado"><div class="dado-label">ID avaliação</div><div class="dado-valor">{{ resultadoReal.id_avaliacao }}</div></div>
+          <div class="dado"><div class="dado-label">Score calculado</div><div class="dado-valor">{{ resultadoReal.score }}</div></div>
+          <div class="dado"><div class="dado-label">Limiar utilizado</div><div class="dado-valor">{{ resultadoReal.limiar_utilizado }}</div></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="resultado-box encaminhar" *ngIf="resultadoReal.resultado === 'ENCAMINHAR'">
+          <div class="resultado-icon encaminhar"><i class="pi pi-exclamation-circle"></i></div>
+          <div class="resultado-texto">
+            <h3>Encaminhar para teste genético confirmatório</h3>
+            <p>{{ resultadoReal.recomendacao }}</p>
+          </div>
+        </div>
+
+        <div class="resultado-box nao-encaminhar" *ngIf="resultadoReal.resultado === 'NAO_ENCAMINHAR'">
+          <div class="resultado-icon nao-encaminhar"><i class="pi pi-check-circle"></i></div>
+          <div class="resultado-texto">
+            <h3>Triagem não indica encaminhamento prioritário no momento</h3>
+            <p>{{ resultadoReal.recomendacao }}</p>
+          </div>
+        </div>
+
+        <div *ngIf="getSintomosPresentes().length > 0" style="margin-top:1rem;margin-bottom:1rem">
+          <h4 class="sintomas-titulo">Sintomas presentes</h4>
+          <ul class="sintomas-lista">
+            <li *ngFor="let s of getSintomosPresentes()">{{ s.nome }}</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="aviso">
+        <i class="pi pi-info-circle aviso-icon"></i>
+        <span>Este resultado não representa diagnóstico definitivo. A avaliação médica deve ser mantida conforme julgamento profissional.</span>
+      </div>
+
+      <div class="acoes">
+        <button pButton type="button" label="Nova avaliação" icon="pi pi-plus"
+          class="btn-primary" (click)="novaAvaliacao()"></button>
+        <button pButton type="button" label="Ver detalhes" icon="pi pi-eye"
+          class="btn-secondary" (click)="verDetalhes()"></button>
+        <button pButton type="button" label="Ver histórico do paciente" icon="pi pi-history"
+          class="btn-secondary" (click)="verHistorico()"></button>
+      </div>
+
+    </div>
+  </div>
+</div>

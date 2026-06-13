@@ -1,41 +1,193 @@
 <div class="menu-page">
-  <app-header
-    userName="Dr. João Silva"
-    userRole="Administrador"
-  ></app-header>
+  <app-header></app-header>
 
   <main class="menu-main">
-    <div class="menu-header-section">
-      <h1 class="menu-title">Menu Principal</h1>
-      <p class="menu-subtitle">Selecione <span class="highlight">uma opção</span> para acessar o módulo desejado</p>
-    </div>
 
-    <div class="menu-grid">
-      <div
-        *ngFor="let item of menuItems"
-        class="menu-card"
-        (click)="navigate(item.route)"
-        tabindex="0"
-        (keydown.enter)="navigate(item.route)"
-      >
-        <div class="menu-card__icon-wrapper" [style.background]="item.color">
-          <i [class]="'pi ' + item.icon"></i>
-        </div>
-        <div class="menu-card__content">
-          <h3 class="menu-card__title">{{ item.title }}</h3>
-          <p class="menu-card__desc">{{ item.description }}</p>
-        </div>
-      </div>
-    </div>
+    <!-- PAINEL DE CONTEXTO CLÍNICO -->
+    <section class="context-panel">
 
-    <div class="menu-welcome">
-      <div class="welcome-icon">
-        <i class="pi pi-lightbulb"></i>
+      <!-- Linha superior: tag + descrição -->
+      <div class="context-panel__top">
+        <div class="context-tag">
+          <span class="hero-dot"></span>
+          <span>Sistema de Triagem Clínica — Síndrome do X Frágil</span>
+        </div>
+    
+
+        <p class="context-desc">
+          Ferramenta de apoio à decisão clínica para triagem da SXF. Preencha o checklist de sintomas,
+          calcule o score ponderado e obtenha recomendação de encaminhamento para teste genético confirmatório.
+          O sistema <strong>não substitui</strong> o diagnóstico médico — sua finalidade é padronizar a
+          triagem inicial e indicar a necessidade de exame molecular confirmatório (PCR / Southern Blot).
+        </p>
+
+          <div class="chart-footer">
+          <span class="context-stat__icon"><i class="pi pi-users"></i></span>
+          <div class="chart-footer__texts">
+            
+            <span class="chart-footer__label">• Coorte de 419 Indivíduos com Mutação Completa:
+              Maior investigação clínica sobre SXF no
+              Brasil, com 364 homens e 55 mulheres.</span>
+          </div>
+        </div>
+
       </div>
-      <div>
-        <strong>Bem-vindo ao Sistema SIGMA</strong>
-        <p>Acesse qualquer módulo clicando nos cards acima. O sistema está organizado para facilitar sua navegação e aumentar sua produtividade no dia a dia.</p>
+
+      <!-- Gráfico + stats -->
+      <div class="context-panel__stats">
+
+        <div class="inline-chart">
+          <div class="inline-chart__title">Sintomas Prevalentes na SXF</div>
+          <div class="inline-chart__legend">
+            <span class="legend-dot legend-dot--m"></span><span>Masculino (n=364)</span>
+            <span class="legend-dot legend-dot--f"></span><span>Feminino (n=55)</span>
+          </div>
+
+          <div class="inline-chart__rows">
+            <div class="chart-col-group">
+
+              <div class="chart-col">
+                <div class="chart-col__bars">
+                  <div class="bar-v bar-v--m" style="--h: 94%"><span>94%</span></div>
+                  <div class="bar-v bar-v--f" style="--h: 90%"><span>90%</span></div>
+                </div>
+                <span class="chart-col__label">Dif. Aprendizagem</span>
+              </div>
+
+              <div class="chart-col">
+                <div class="chart-col__bars">
+                  <div class="bar-v bar-v--m" style="--h: 90%"><span>~90%</span></div>
+                  <div class="bar-v bar-v--f" style="--h: 55%"><span>55%</span></div>
+                </div>
+                <span class="chart-col__label">Def. Intelectual</span>
+              </div>
+
+              <div class="chart-col">
+                <div class="chart-col__bars">
+                  <div class="bar-v bar-v--m" style="--h: 90%"><span>90%</span></div>
+                  <div class="bar-v bar-v--f" style="--h: 80%"><span>~80%</span></div>
+                </div>
+                <span class="chart-col__label">Déf. Atenção</span>
+              </div>
+
+              <div class="chart-col">
+                <div class="chart-col__bars">
+                  <div class="bar-v bar-v--m" style="--h: 50%"><span>~50%</span></div>
+                  <div class="bar-v bar-v--f" style="--h: 35%"><span>~35%</span></div>
+                </div>
+                <span class="chart-col__label">Hipermob. Articular</span>
+              </div>
+
+              <div class="chart-col">
+                <div class="chart-col__bars">
+                  <div class="bar-v bar-v--m" style="--h: 40%"><span>~40%</span></div>
+                  <div class="bar-v bar-v--f" style="--h: 30%"><span>~30%</span></div>
+                </div>
+                <span class="chart-col__label">Atraso na Fala</span>
+              </div>
+
+              <div class="chart-col">
+                <div class="chart-col__bars">
+                  <div class="bar-v bar-v--m" style="--h: 55%"><span>~55%</span></div>
+                  <div class="bar-v bar-v--f" style="--h: 20%"><span>~20%</span></div>
+                </div>
+                <span class="chart-col__label">Face Along./Orelhas</span>
+              </div>
+
+              <div class="chart-col">
+                <div class="chart-col__bars">
+                  <div class="bar-v bar-v--m" style="--h: 45%"><span>~45%</span></div>
+                  <div class="bar-v bar-v--f" style="--h: 0%"><span>0%</span></div>
+                </div>
+                <span class="chart-col__label">Macroorquidismo</span>
+              </div>
+
+            </div>
+          </div><!-- fecha inline-chart__rows -->
+        </div><!-- fecha inline-chart -->
+
+
+      </div><!-- fecha context-panel__stats -->
+
+    </section><!-- fecha context-panel -->
+
+    <!-- EYEBROW -->
+    <section class="menu-hero">
+      <div class="hero-eyebrow">
+        <span class="hero-dot"></span>
+        <span>Funcionalidades</span>
       </div>
-    </div>
+    </section>
+
+    <!-- MÓDULOS PRINCIPAIS -->
+    <section class="modules-section">
+      <div class="modules-grid">
+
+        <ng-container *ngFor="let item of mainMenuItems; let i = index">
+          <article
+            class="module-card"
+            [class.module-card--featured]="item.route === '/avaliacoes'"
+            [style.--card-color]="item.color"
+            [style.animation-delay]="(i * 80) + 'ms'"
+            tabindex="0"
+            role="button"
+            [attr.aria-label]="'Acessar módulo ' + item.title"
+            (click)="navigate(item.route)"
+            (keydown.enter)="navigate(item.route)"
+          >
+            <div class="module-card__inner">
+              <div class="module-card__body">
+                <div class="module-card__icon">
+                  <i [class]="'pi ' + item.icon"></i>
+                </div>
+                <div class="module-card__text">
+                  <h3>{{ item.title }}</h3>
+                  <p>{{ item.description }}</p>
+                </div>
+              </div>
+              <div class="module-card__foot">
+                <span class="module-card__cta">Acessar módulo</span>
+                <span class="module-card__arrow">
+                  <i class="pi pi-arrow-right"></i>
+                </span>
+              </div>
+            </div>
+          </article>
+        </ng-container>
+
+        <ng-container *ngFor="let item of adminMenuItems; let i = index">
+          <article
+            class="module-card module-card--admin"
+            [style.--card-color]="item.color"
+            [style.animation-delay]="((mainMenuItems.length + i) * 80) + 'ms'"
+            tabindex="0"
+            role="button"
+            [attr.aria-label]="'Acessar ' + item.title"
+            (click)="navigate(item.route)"
+            (keydown.enter)="navigate(item.route)"
+          >
+            <div class="module-card__inner">
+              <div class="module-card__body">
+                <div class="module-card__icon">
+                  <i [class]="'pi ' + item.icon"></i>
+                </div>
+                <div class="module-card__text">
+                  <h3>{{ item.title }}</h3>
+                  <p>{{ item.description }}</p>
+                </div>
+              </div>
+              <div class="module-card__foot">
+                <span class="module-card__cta">Acessar módulo</span>
+                <span class="module-card__arrow">
+                  <i class="pi pi-arrow-right"></i>
+                </span>
+              </div>
+            </div>
+          </article>
+        </ng-container>
+
+      </div><!-- fecha modules-grid -->
+    </section><!-- fecha modules-section -->
+
   </main>
 </div>

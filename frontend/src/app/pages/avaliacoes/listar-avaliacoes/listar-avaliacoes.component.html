@@ -1,0 +1,85 @@
+<p-toast></p-toast>
+<div class="sigma-page">
+  <app-header></app-header>
+
+  <div class="sigma-actionbar">
+  <span style="font-weight:700;font-size:1rem;color:var(--sigma-primary)">
+    Avaliações Clínicas
+  </span>
+  <div class="sigma-actionbar-end">
+    <button pButton type="button" label="Voltar" icon="pi pi-arrow-left"
+      class="btn-secondary" (click)="voltarMenu()"></button>
+    <button pButton type="button" label="Nova Avaliação" icon="pi pi-plus"
+      class="btn-primary" (click)="novaAvaliacao()"></button>
+  </div>
+</div>
+
+  <div class="sigma-content">
+
+    <div *ngIf="carregando" style="display:flex;align-items:center;justify-content:center;gap:.75rem;padding:4rem;color:var(--sigma-text-muted)">
+      <p-progressSpinner strokeWidth="4" styleClass="spinner-sm"></p-progressSpinner>
+      <span>Carregando avaliações...</span>
+    </div>
+
+    <div *ngIf="erro && !carregando" class="empty-state">
+      <i class="pi pi-exclamation-circle"></i>
+      <p>Não foi possível carregar as avaliações.</p>
+    </div>
+
+    <div *ngIf="!carregando && !erro && avaliacoes.length === 0" class="empty-state">
+      <i class="pi pi-clipboard"></i>
+      <p>Nenhuma avaliação registrada ainda.</p>
+      <button pButton type="button" label="Iniciar primeira avaliação"
+        icon="pi pi-plus" class="btn-primary" (click)="novaAvaliacao()"></button>
+    </div>
+
+    <div *ngIf="!carregando && !erro && avaliacoes.length > 0" class="avaliacoes-grid">
+      <div *ngFor="let a of avaliacoes" class="av-card">
+
+        <div class="av-top">
+          <span class="av-id">#{{ a.id_avaliacao }}</span>
+          <p-tag [value]="getResultadoLabel(a.resultado)"
+            [severity]="getSeverity(a.resultado)" [rounded]="true"></p-tag>
+        </div>
+
+        <div class="av-info">
+          <div class="av-row">
+            <i class="pi pi-user"></i>
+            <strong>{{ a.paciente_nome }}</strong>
+          </div>
+          <div class="av-row" *ngIf="a.respondente_nome">
+            <i class="pi pi-id-card"></i>
+            <div>
+              <strong>{{ a.respondente_nome }}</strong>
+              <span class="av-sub" *ngIf="a.respondente_parentesco">{{ a.respondente_parentesco }}</span>
+            </div>
+          </div>
+          <div class="av-row">
+            <i class="pi pi-calendar"></i>
+            <strong>{{ formatarData(a.data_avaliacao) }}</strong>
+          </div>
+        </div>
+
+        <div class="av-score">
+          <div class="av-score-header">
+            <span>Score obtido</span>
+            <span class="av-score-val" [class.alto]="a.resultado === 'ENCAMINHAR'">
+              {{ scorePercent(a.score) }}%
+            </span>
+          </div>
+          <div class="av-bar-bg">
+            <div class="av-bar-fill" [class.alto]="a.resultado === 'ENCAMINHAR'"
+              [style.width.%]="scorePercent(a.score)"></div>
+          </div>
+        </div>
+
+        <div class="av-acoes">
+          <button pButton icon="pi pi-eye" label="Ver detalhes" size="small" severity="info"
+            (click)="verDetalhes(a.id_avaliacao)"></button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

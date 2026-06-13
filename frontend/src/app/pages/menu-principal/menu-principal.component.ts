@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
-import { HeaderComponent } from '../../layout/header.component';
+import { HeaderComponent } from '../../layout/header/header.component';
+import { AuthService } from '../../services/auth.service';
 
 interface MenuItem {
   icon: string;
@@ -11,6 +12,8 @@ interface MenuItem {
   description: string;
   route: string;
   color: string;
+  permissao?: string;
+  adminOnly?: boolean;
 }
 
 @Component({
@@ -20,21 +23,96 @@ interface MenuItem {
   templateUrl: './menu-principal.component.html',
   styleUrls: ['./menu-principal.component.css']
 })
-export class MenuPrincipalComponent {
-  menuItems: MenuItem[] = [
-    { icon: 'pi-users', title: 'Cadastro de Pacientes', description: 'Gerenciar informações de pacientes', route: '/pacientes', color: '#3d7ab5' },
-    { icon: 'pi-user-edit', title: 'Cadastro de Usuários', description: 'Administrar usuários do sistema', route: '/usuarios', color: '#2a5f8f' },
-    { icon: 'pi-file', title: 'Relatórios', description: 'Visualizar e gerar relatórios', route: '/relatorios', color: '#4a90c4' },
-    { icon: 'pi-clipboard', title: 'Avaliações', description: 'Registrar e consultar avaliações', route: '/avaliacoes', color: '#5a8fc4' },
-    { icon: 'pi-calendar', title: 'Agendamentos', description: 'Gerenciar consultas e procedimentos', route: '/menu', color: '#3a7ab0' },
-    { icon: 'pi-building', title: 'Instituições', description: 'Cadastro de clínicas e hospitais', route: '/menu', color: '#4a8fbf' },
-    { icon: 'pi-chart-bar', title: 'Dashboard', description: 'Visão geral e estatísticas', route: '/menu', color: '#2e6a9e' },
-    { icon: 'pi-cog', title: 'Configurações', description: 'Ajustes e preferências do sistema', route: '/menu', color: '#1e3a5f' },
-  ];
+export class MenuPrincipalComponent implements OnInit {
 
-  constructor(private router: Router) {}
 
-  navigate(route: string) {
+  constructor(
+    private router: Router, 
+    private authService: AuthService
+  ) {}
+
+menuItems: MenuItem[] = [
+  {
+    icon: 'pi-users',
+    title: 'Pacientes',
+    description: 'Gerenciar informações de pacientes',
+    route: '/pacientes/listar',
+    color: '#3d7ab5',
+    permissao: 'pacientes'
+  },
+  {
+    icon: 'pi-plus',
+    title: 'Avaliações',
+    description: 'Registrar e consultar avaliações',
+    route: '/avaliacoes',
+    color: '#5a8fc4',
+    permissao: 'avaliacoes'
+  },
+  {
+    icon: 'pi-file',
+    title: 'Relatórios',
+    description: 'Visualizar e gerar relatórios',
+    route: '/relatorios',
+    color: '#4a90c4',
+    permissao: 'relatorios'
+  },
+  {
+    icon: 'pi-user-edit',
+    title: 'Usuários',
+    description: 'Administrar usuários do sistema',
+    route: '/usuarios',
+    color: '#2a5f8f',
+    adminOnly: true
+  }
+
+];
+
+  mainMenuItems: MenuItem[] =[];
+  adminMenuItems: MenuItem[] =[];
+
+  // executa quando a tela do menu é carregada
+  ngOnInit(): void {
+    this.organizarMenu();
+  }
+
+
+  // navega pra rota do card clicado
+  navigate(route: string): void {
     this.router.navigate([route]);
   }
+
+private organizarMenu(): void {
+
+  const usuario = this.authService.getUsuarioLogado();
+
+  console.log('USUARIO LOGADO:', usuario);
+  console.log('PERMISSOES:', usuario?.permissoes);
+
+  const permissoes = usuario?.permissoes || [];
+
+  const itensVisiveis = this.menuItems.filter(item => {
+
+    if (item.adminOnly) {
+      return this.authService.isAdmin();
+    }
+
+    if (this.authService.isAdmin()) {
+      return true;
+    }
+
+    return item.permissao
+      ? permissoes.includes(item.permissao)
+      : true;
+  });
+
+  console.log('ITENS VISIVEIS:', itensVisiveis);
+
+  this.mainMenuItems = itensVisiveis.filter(item => !item.adminOnly);
+  this.adminMenuItems = itensVisiveis.filter(item => item.adminOnly);
 }
+
+
+
+}
+
+
