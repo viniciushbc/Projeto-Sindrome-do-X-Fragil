@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projeto — Síndrome do X Frágil</title>
+  <meta name="description" content="Links públicos das visualizações do projeto Síndrome do X Frágil no ClickUp." />
+
+  <style>
+    :root {
+      --sigma-primary: #1e3a5f;
+      --sigma-primary-dark: #152d4a;
+      --sigma-primary-light: #2e5080;
+      --sigma-accent: #4a8fcc;
+      --sigma-accent-light: #6ab0e0;
+      --sigma-bg: #eef2f7;
+      --sigma-card-bg: #b8d4e8;
+      --sigma-card-bg-light: #d0e6f5;
+      --sigma-white: #ffffff;
+      --sigma-text: #1e3a5f;
+      --sigma-text-muted: #5a7a99;
+      --sigma-border: #c8dcea;
+      --sigma-success: #28a745;
+      --sigma-warning: #ffc107;
+      --sigma-danger: #dc3545;
+      --sigma-shadow: 0 2px 12px rgba(30, 58, 95, 0.12);
+      --sigma-shadow-lg: 0 8px 32px rgba(30, 58, 95, 0.18);
+      --sigma-radius: 12px;
+      --sigma-radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--sigma-text);
+      background:
+        radial-gradient(circle at top left, rgba(106, 176, 224, 0.28), transparent 32rem),
+        linear-gradient(180deg, var(--sigma-bg) 0%, #f8fbfe 100%);
+      line-height: 1.6;
+    }
+
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 48px 0;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 42px;
+      border-radius: 28px;
+      background:
+        linear-gradient(135deg, var(--sigma-primary-dark), var(--sigma-primary) 52%, var(--sigma-primary-light));
+      color: var(--sigma-white);
+      box-shadow: var(--sigma-shadow-lg);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      right: -80px;
+      top: -90px;
+      border-radius: 999px;
+      background: rgba(106, 176, 224, 0.28);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 820px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+      padding: 8px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.10);
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 0.86rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 1.05;
+      letter-spacing: -0.05em;
+      margin-bottom: 18px;
+    }
+
+    .hero-text {
+      max-width: 760px;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: clamp(1rem, 2vw, 1.15rem);
+    }
+
+    .notice {
+      margin-top: 26px;
+      padding: 18px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-left: 5px solid var(--sigma-accent-light);
+      border-radius: var(--sigma-radius);
+      background: rgba(255, 255, 255, 0.10);
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: end;
+      margin: 42px 0 22px;
+    }
+
+    .section-header h2 {
+      color: var(--sigma-primary);
+      font-size: clamp(1.55rem, 3vw, 2.25rem);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+
+    .section-header p {
+      max-width: 520px;
+      color: var(--sigma-text-muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .sprint-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-height: 190px;
+      padding: 22px;
+      border: 1px solid var(--sigma-border);
+      border-radius: var(--sigma-radius);
+      background: linear-gradient(180deg, var(--sigma-white), var(--sigma-card-bg-light));
+      color: var(--sigma-text);
+      text-decoration: none;
+      box-shadow: var(--sigma-shadow);
+      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+    }
+
+    .sprint-card:hover,
+    .sprint-card:focus-visible {
+      transform: translateY(-4px);
+      border-color: var(--sigma-accent);
+      box-shadow: var(--sigma-shadow-lg);
+      outline: none;
+    }
+
+    .sprint-topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: var(--sigma-primary);
+      color: var(--sigma-white);
+      font-weight: 800;
+      box-shadow: 0 8px 18px rgba(30, 58, 95, 0.22);
+    }
+
+    .status {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(74, 143, 204, 0.13);
+      color: var(--sigma-primary);
+      font-size: 0.76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .sprint-card h3 {
+      margin-bottom: 10px;
+      font-size: 1.08rem;
+      line-height: 1.25;
+      color: var(--sigma-primary-dark);
+    }
+
+    .sprint-card p {
+      color: var(--sigma-text-muted);
+      font-size: 0.95rem;
+    }
+
+    .open-label {
+      margin-top: auto;
+      padding-top: 22px;
+      color: var(--sigma-accent);
+      font-weight: 800;
+    }
+
+    .info-panel {
+      margin-top: 28px;
+      padding: 24px;
+      border: 1px solid var(--sigma-border);
+      border-radius: var(--sigma-radius);
+      background: rgba(255, 255, 255, 0.72);
+      box-shadow: var(--sigma-shadow);
+    }
+
+    .info-panel strong {
+      color: var(--sigma-primary-dark);
+    }
+
+    footer {
+      margin-top: 34px;
+      color: var(--sigma-text-muted);
+      text-align: center;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .section-header {
+        display: block;
+      }
+
+      .section-header p {
+        margin-top: 10px;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .page {
+        width: min(100% - 20px, 1120px);
+        padding: 20px 0;
+      }
+
+      .hero {
+        padding: 28px 22px;
+        border-radius: 22px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sprint-card {
+        min-height: 170px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-content">
+        <div class="eyebrow">Visualizações do projeto</div>
+        <h1 id="page-title">Projeto — Síndrome do X Frágil</h1>
+
+        <p class="hero-text">
+          Esta página reúne os links públicos das visualizações do projeto organizadas por sprint.
+        </p>
+
+        <div class="notice">
+          Devido ao uso do ClickUp no lugar do Trello, não foi possível compartilhar o quadro completo do projeto em uma única visualização pública no plano atual. Para facilitar a navegação, disponibilizamos abaixo um botão para cada visualização.
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="views-title">
+      <div class="section-header">
+        <div>
+          <h2 id="views-title">Acessar visualizações</h2>
+          <p>Selecione uma sprint para abrir o respectivo quadro público do ClickUp em uma nova aba.</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <!-- Troque href="#" pelo link público real da visualização da Sprint 1 -->
+        <a class="sprint-card" href="#" target="_blank" rel="noopener noreferrer">
+          <div class="sprint-topline">
+            <span class="badge">01</span>
+            <span class="status">Sprint 1</span>
+          </div>
+          <h3>Elaboração do MVP</h3>
+          <p>Planejamento inicial, escopo do produto e definição das primeiras entregas.</p>
+          <span class="open-label">Abrir visualização →</span>
+        </a>
+
+        <!-- Troque href="#" pelo link público real da visualização da Sprint 2 -->
+        <a class="sprint-card" href="#" target="_blank" rel="noopener noreferrer">
+          <div class="sprint-topline">
+            <span class="badge">02</span>
+            <span class="status">Sprint 2</span>
+          </div>
+          <h3>Configuração de ambiente</h3>
+          <p>Preparação da base técnica do projeto, organização e estrutura inicial.</p>
+          <span class="open-label">Abrir visualização →</span>
+        </a>
+
+        <!-- Troque href="#" pelo link público real da visualização da Sprint 3 -->
+        <a class="sprint-card" href="#" target="_blank" rel="noopener noreferrer">
+          <div class="sprint-topline">
+            <span class="badge">03</span>
+            <span class="status">Sprint 3</span>
+          </div>
+          <h3>Implementações iniciais</h3>
+          <p>Primeiras funcionalidades, estrutura de código e integrações principais.</p>
+          <span class="open-label">Abrir visualização →</span>
+        </a>
+
+        <!-- Troque href="#" pelo link público real da visualização da Sprint 4 -->
+        <a class="sprint-card" href="#" target="_blank" rel="noopener noreferrer">
+          <div class="sprint-topline">
+            <span class="badge">04</span>
+            <span class="status">Sprint 4</span>
+          </div>
+          <h3>Login, usuários e pacientes</h3>
+          <p>Funcionalidades de autenticação, cadastro, edição e gestão de usuários e pacientes.</p>
+          <span class="open-label">Abrir visualização →</span>
+        </a>
+
+        <!-- Troque href="#" pelo link público real da visualização da Sprint 5 -->
+        <a class="sprint-card" href="#" target="_blank" rel="noopener noreferrer">
+          <div class="sprint-topline">
+            <span class="badge">05</span>
+            <span class="status">Sprint 5</span>
+          </div>
+          <h3>Avaliação clínica, checklist e score</h3>
+          <p>Fluxos de avaliação, checklist clínico, regras de pontuação e resultado da triagem.</p>
+          <span class="open-label">Abrir visualização →</span>
+        </a>
+
+        <!-- Troque href="#" pelo link público real da visualização da Sprint 6 -->
+        <a class="sprint-card" href="#" target="_blank" rel="noopener noreferrer">
+          <div class="sprint-topline">
+            <span class="badge">06</span>
+            <span class="status">Sprint 6</span>
+          </div>
+          <h3>Histórico, relatórios, permissões e logs</h3>
+          <p>Registro de ações, histórico de avaliações, relatórios e controle de permissões.</p>
+          <span class="open-label">Abrir visualização →</span>
+        </a>
+
+        <!-- Troque href="#" pelo link público real da visualização da Sprint 7 -->
+        <a class="sprint-card" href="#" target="_blank" rel="noopener noreferrer">
+          <div class="sprint-topline">
+            <span class="badge">07</span>
+            <span class="status">Sprint 7</span>
+          </div>
+          <h3>Finalização, testes e entrega</h3>
+          <p>Ajustes finais, validação, testes, documentação e entrega do projeto.</p>
+          <span class="open-label">Abrir visualização →</span>
+        </a>
+      </div>
+
+      <div class="info-panel">
+        <p>
+          <strong>Observação:</strong> os botões abrem visualizações públicas individuais do ClickUp.
+          Caso alguma visualização solicite login, o link público correspondente precisa ser revisado dentro do ClickUp.
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      Projeto desenvolvido e acompanhado por meio do ClickUp.
+    </footer>
+  </main>
+
+  <script>
+    // Evita que botões com links ainda não configurados naveguem para "#".
+    document.querySelectorAll('a[href="#"]').forEach((link) => {
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        alert("Link ainda não configurado. Substitua o href deste botão pelo link público da visualização no ClickUp.");
+      });
+    });
+  </script>
+</body>
+</html>
