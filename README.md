@@ -15,7 +15,9 @@ Confira o vídeo de demonstração do sistema:
 🔗 **Link direto para o vídeo:** [Tutorial de Funcionalidades do Sistema](https://youtu.be/yVq0VySaihs)
 
 Confira o vídeo de instalação do sistema:
+
 🔗 **Link direto para o vídeo:** [Tutorial de Instalação](https://youtu.be/plCDE40WiR0)
+
 ---
 
 
